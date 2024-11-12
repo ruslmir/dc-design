@@ -27,7 +27,44 @@ y - порядковый номер (первый номер в сети для 
 ### Проверка
 
 Spine1
+```
+Spine1#
+Spine1#ping 10.0.1.1
+PING 10.0.1.1 (10.0.1.1) 72(100) bytes of data.
+80 bytes from 10.0.1.1: icmp_seq=1 ttl=64 time=11.8 ms
+80 bytes from 10.0.1.1: icmp_seq=2 ttl=64 time=4.31 ms
+80 bytes from 10.0.1.1: icmp_seq=3 ttl=64 time=37.0 ms
+80 bytes from 10.0.1.1: icmp_seq=4 ttl=64 time=28.5 ms
+80 bytes from 10.0.1.1: icmp_seq=5 ttl=64 time=19.6 ms
 
+--- 10.0.1.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 51ms
+rtt min/avg/max/mdev = 4.319/20.293/37.079/11.632 ms, pipe 3, ipg/ewma 12.781/16.442 ms
+Spine1#
+Spine1#ping 10.0.1.3
+PING 10.0.1.3 (10.0.1.3) 72(100) bytes of data.
+80 bytes from 10.0.1.3: icmp_seq=1 ttl=64 time=9.79 ms
+80 bytes from 10.0.1.3: icmp_seq=2 ttl=64 time=4.87 ms
+80 bytes from 10.0.1.3: icmp_seq=3 ttl=64 time=3.80 ms
+80 bytes from 10.0.1.3: icmp_seq=4 ttl=64 time=4.41 ms
+80 bytes from 10.0.1.3: icmp_seq=5 ttl=64 time=4.38 ms
+
+--- 10.0.1.3 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 37ms
+rtt min/avg/max/mdev = 3.801/5.455/9.794/2.196 ms, ipg/ewma 9.437/7.544 ms
+Spine1#
+Spine1#ping 10.0.1.5
+PING 10.0.1.5 (10.0.1.5) 72(100) bytes of data.
+80 bytes from 10.0.1.5: icmp_seq=1 ttl=64 time=33.3 ms
+80 bytes from 10.0.1.5: icmp_seq=2 ttl=64 time=23.5 ms
+80 bytes from 10.0.1.5: icmp_seq=3 ttl=64 time=17.0 ms
+80 bytes from 10.0.1.5: icmp_seq=4 ttl=64 time=4.57 ms
+80 bytes from 10.0.1.5: icmp_seq=5 ttl=64 time=5.25 ms
+
+--- 10.0.1.5 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 80ms
+rtt min/avg/max/mdev = 4.575/16.747/33.355/10.970 ms, pipe 3, ipg/ewma 20.239/24.309 ms
+```
 Spine2
 ```
 Spine2#ping 10.0.2.1
