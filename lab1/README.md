@@ -31,3 +31,11 @@ Spine1
 Spine2
 
 Client3
+```
+Clinet3> ping 10.4.0.4
+84 bytes from 10.4.0.4 icmp_seq=1 ttl=64 time=11.313 ms
+84 bytes from 10.4.0.4 icmp_seq=2 ttl=64 time=6.730 ms
+84 bytes from 10.4.0.4 icmp_seq=3 ttl=64 time=6.406 ms
+84 bytes from 10.4.0.4 icmp_seq=4 ttl=64 time=6.548 ms
+84 bytes from 10.4.0.4 icmp_seq=5 ttl=64 time=7.517 ms
+```
