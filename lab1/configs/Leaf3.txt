@@ -3,12 +3,12 @@ hostname Leaf3
 interface Ethernet1
    description Spine1
    no switchport
-   ip address 10.0.1.4/31
+   ip address 10.0.1.5/31
 !
 interface Ethernet2
    description Spine2
    no switchport
-   ip address 10.0.2.4/31
+   ip address 10.0.2.5/31
 !
 interface Loopback0
    ip address 10.255.252.3/32
