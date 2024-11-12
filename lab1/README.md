@@ -43,9 +43,11 @@ y - порядковый номер (первый номер в сети для 
     <summary>Client3</summary>
     ```
     Clinet3 ping 10.4.0.4  
+    еуые
     ```
 </details>
 
 ```
 test
+test1
 ```
