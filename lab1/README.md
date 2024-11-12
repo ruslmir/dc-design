@@ -25,31 +25,11 @@ y - порядковый номер (первый номер в сети для 
 х - сервис 
 
 ### Проверка
-## title {.tabset .tabset-fade}
-content above tabbed region.
 
-### tab Social-Media
-
-tab content Social-Media
-
-### tab Contact
-
-tab content  Contact
-
-### tab Revisions
-
-tab content  Revisions
-
-### tab Articles
-
-tab content  Articles
-
-### tab Skills
-
-tab content  Skills
-
-### tab Insights
-
-tab content  Insights
-
-content below tabbed region
+<details>
+    <summary>Название</summary>
+    <details>
+    <summary>Название</summary>
+    Какой-нибудь длиинный дополнительный текст, который по умолчанию должен быть скрыт. Его можно показать, нажав на спойлер.
+</details>
+</details>
