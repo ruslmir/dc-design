@@ -62,3 +62,7 @@ Clinet3> ping 10.4.0.4
 84 bytes from 10.4.0.4 icmp_seq=5 ttl=64 time=7.517 ms
 
 ```
+
+## Results {.tabset}
+
+### Plots
