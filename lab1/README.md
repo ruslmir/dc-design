@@ -41,7 +41,7 @@ y - порядковый номер (первый номер в сети для 
 
 <details>
     <summary>Client3</summary>
-```
+
 Clinet3> ping 10.4.0.4
 
 84 bytes from 10.4.0.4 icmp_seq=1 ttl=64 time=11.313 ms
@@ -50,7 +50,7 @@ Clinet3> ping 10.4.0.4
 84 bytes from 10.4.0.4 icmp_seq=4 ttl=64 time=6.548 ms
 84 bytes from 10.4.0.4 icmp_seq=5 ttl=64 time=7.517 ms
 
-```
+
 </details>
 
 ```
