@@ -25,10 +25,31 @@ y - порядковый номер (первый номер в сети для 
 х - сервис 
 
 ### Проверка
-### Вкладки{.tabset}
-#### Первая вкладка
-Содержимое первой вкладки
-#### Вторая вкладка
-Содержимое второй вкладки
-#### Третья вкладка
-Содержимое третей вкладки
+## title {.tabset .tabset-fade}
+content above tabbed region.
+
+### tab Social-Media
+
+tab content Social-Media
+
+### tab Contact
+
+tab content  Contact
+
+### tab Revisions
+
+tab content  Revisions
+
+### tab Articles
+
+tab content  Articles
+
+### tab Skills
+
+tab content  Skills
+
+### tab Insights
+
+tab content  Insights
+
+content below tabbed region
