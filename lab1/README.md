@@ -27,11 +27,15 @@ y - порядковый номер (первый номер в сети для 
 ### Проверка
 
 <details>
-    <summary>Название</summary>
+    <summary>Spine1</summary>
 Spine1#ping 10.0.1.1
 PING 10.0.1.1 (10.0.1.1) 72(100) bytes of data.
 80 bytes from 10.0.1.1: icmp_seq=1 ttl=64 time=15.6 ms
+    
 80 bytes from 10.0.1.1: icmp_seq=2 ttl=64 time=4.48 ms
+
 80 bytes from 10.0.1.1: icmp_seq=3 ttl=64 time=4.50 ms
+
 80 bytes from 10.0.1.1: icmp_seq=4 ttl=64 time=4.63 ms
+
 80 bytes from 10.0.1.1: icmp_seq=5 ttl=64 time=5.72 ms</details>
