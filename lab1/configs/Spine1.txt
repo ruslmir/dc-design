@@ -1,0 +1,24 @@
+hostname Spine1
+!
+!
+interface Ethernet1
+   description Leaf1
+   no switchport
+   ip address 10.0.1.0/31
+!
+interface Ethernet2
+   description Leaf2
+   no switchport
+   ip address 10.0.1.2/31
+!
+interface Ethernet3
+   description Leaf3
+   no switchport
+   ip address 10.0.1.4/31
+
+interface Loopback0
+   ip address 10.255.254.1/32
+!
+interface Loopback1
+   ip address 10.255.255.1/32
+!
