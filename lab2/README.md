@@ -42,7 +42,28 @@ interface Loopback1
 
 Настройка OSPF на Leaf коммутаторах, меняется только router-id в OSPF процессе. Для примера ниже конфигурация коммутатора Leaf1
 ```
- config
+hostname Leaf1
+!   
+ip routing
+!   
+router ospf 1
+   router-id 10.255.252.1
+!
+interface Ethernet1
+   description Spine1
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Ethernet2
+   description Spine2
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Loopback0
+   ip ospf area 0.0.0.0
+!
+interface Loopback1
+   ip ospf area 0.0.0.0
 ```
 
 ### Проверка
