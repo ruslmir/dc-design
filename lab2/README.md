@@ -17,6 +17,11 @@ ip routing
 !
 router ospf 1
    router-id 10.255.254.1
+   passive-interface default
+   no passive-interface Ethernet1
+   no passive-interface Ethernet2
+   no passive-interface Ethernet3
+
 !
 interface Ethernet1
    description Leaf1
