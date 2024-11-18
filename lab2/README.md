@@ -136,6 +136,19 @@ Codes: C - connected, S - static, K - kernel,
  O        10.255.255.1/32 [110/20] via 10.0.1.0, Ethernet1
  O        10.255.255.2/32 [110/20] via 10.0.2.0, Ethernet2
 
+Leaf1#sh bfd peers protocol ospf
+VRF name: default
+-----------------
+DstAddr       MyDisc    YourDisc  Interface/Transport    Type           LastUp
+--------- ----------- ----------- -------------------- ------- ----------------
+10.0.1.0  2375264254  2593360926        Ethernet1(15)  normal   11/18/24 18:17
+10.0.2.0   797055077  2709350710        Ethernet2(16)  normal   11/18/24 18:17
+
+   LastDown            LastDiag    State
+-------------- ------------------- -----
+         NA       No Diagnostic       Up
+         NA       No Diagnostic       Up
+
 
 Leaf1#ping 10.255.252.2 source loopback 0
 PING 10.255.252.2 (10.255.252.2) from 10.255.252.1 : 72(100) bytes of data.
