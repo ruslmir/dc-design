@@ -40,7 +40,7 @@ interface Loopback1
    ip ospf area 0.0.0.0 
 ```
 
-Настройка OSPF на Leaf коммутаторах
+Настройка OSPF на Leaf коммутаторах, меняется только router-id в OSPF процессе. Для примера ниже конфигурация коммутатора Leaf1
 ```
  config
 ```
