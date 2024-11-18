@@ -67,11 +67,27 @@ interface Loopback1
 ```
 
 ### Проверка
-
+OSPF соседство удобнее проверять со стороны Spine коммутаторов
 Spine1
 ```
-config
+Spine1#show ip ospf neighbor
+Neighbor ID     Instance VRF      Pri State                  Dead Time   Address         Interface
+10.255.252.1    1        default  0   FULL                   00:00:37    10.0.1.1        Ethernet1
+10.255.252.2    1        default  0   FULL                   00:00:29    10.0.1.3        Ethernet2
+10.255.252.3    1        default  0   FULL                   00:00:34    10.0.1.5        Ethernet3
 ```
+Spine2
+```
+Spine2#show ip ospf neighbor
+Neighbor ID     Instance VRF      Pri State                  Dead Time   Address         Interface
+10.255.252.1    1        default  0   FULL                   00:00:29    10.0.2.1        Ethernet1
+10.255.252.2    1        default  0   FULL                   00:00:36    10.0.2.3        Ethernet2
+10.255.252.3    1        default  0   FULL                   00:00:32    10.0.2.5        Ethernet3
+
+```
+
+
+
 Leaf1
 ```
 config
