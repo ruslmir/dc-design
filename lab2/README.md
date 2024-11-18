@@ -85,7 +85,7 @@ Neighbor ID     Instance VRF      Pri State                  Dead Time   Address
 10.255.252.3    1        default  0   FULL                   00:00:32    10.0.2.5        Ethernet3
 
 ```
-
+Проверку таблицу маршрутизации и IP доступности будем делать с Leaf1  
 
 
 Leaf1
