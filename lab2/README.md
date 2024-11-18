@@ -67,7 +67,7 @@ interface Loopback1
 ```
 
 ### Проверка
-OSPF соседство удобнее проверять со стороны Spine коммутаторов
+OSPF соседство удобнее проверять со стороны Spine коммутаторов  
 Spine1
 ```
 Spine1#show ip ospf neighbor
