@@ -89,6 +89,22 @@ Neighbor ID     Instance VRF      Pri State                  Dead Time   Address
 10.255.252.1    1        default  0   FULL                   00:00:37    10.0.1.1        Ethernet1
 10.255.252.2    1        default  0   FULL                   00:00:29    10.0.1.3        Ethernet2
 10.255.252.3    1        default  0   FULL                   00:00:34    10.0.1.5        Ethernet3
+
+Spine2#sh bfd peers protocol ospf
+VRF name: default
+-----------------
+DstAddr      MyDisc  YourDisc Interface/Transport   Type         LastUp LastDown
+-------- ---------- --------- ------------------- ------ -------------- --------
+10.0.2.1 2709350710 797055077       Ethernet1(15) normal 11/18/24 18:17       NA
+10.0.2.3 4147222704 985608273       Ethernet2(16) normal 11/18/24 18:17       NA
+10.0.2.5 3515869298 485016955       Ethernet3(17) normal 11/18/24 18:17       NA
+
+        LastDiag    State
+------------------- -----
+   No Diagnostic       Up
+   No Diagnostic       Up
+   No Diagnostic       Up
+
 ```
 Spine2
 ```
