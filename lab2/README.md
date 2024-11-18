@@ -11,7 +11,33 @@
 Топология и адресация представлена выше на схеме.   
 Настройка OSPF на Spine коммутаторах, меняется только router-id в OSPF процессе. Для примера ниже конфигурация коммутатора Spine1
 ```
- config 
+hostname Spine1
+!
+ip routing
+!
+router ospf 1
+   router-id 10.255.254.1
+!
+interface Ethernet1
+   description Leaf1
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Ethernet2
+   description Leaf2
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Ethernet3
+   description Leaf3
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Loopback0
+   ip ospf area 0.0.0.0
+!
+interface Loopback1
+   ip ospf area 0.0.0.0 
 ```
 
 Настройка OSPF на Leaf коммутаторах
