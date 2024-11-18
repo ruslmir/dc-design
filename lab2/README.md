@@ -98,6 +98,22 @@ Neighbor ID     Instance VRF      Pri State                  Dead Time   Address
 10.255.252.2    1        default  0   FULL                   00:00:36    10.0.2.3        Ethernet2
 10.255.252.3    1        default  0   FULL                   00:00:32    10.0.2.5        Ethernet3
 
+Spine1#sh bfd peers protocol ospf
+VRF name: default
+-----------------
+DstAddr       MyDisc    YourDisc  Interface/Transport    Type           LastUp
+--------- ----------- ----------- -------------------- ------- ----------------
+10.0.1.1  2593360926  2375264254        Ethernet1(15)  normal   11/18/24 18:17
+10.0.1.3  3079130178  2357577805        Ethernet2(16)  normal   11/18/24 18:17
+10.0.1.5   710767797   729062328        Ethernet3(17)  normal   11/18/24 18:17
+
+   LastDown            LastDiag    State
+-------------- ------------------- -----
+         NA       No Diagnostic       Up
+         NA       No Diagnostic       Up
+         NA       No Diagnostic       Up
+
+
 ```
 Проверку таблицу маршрутизации и IP доступности будем делать с Leaf1  
 
