@@ -25,16 +25,19 @@ router ospf 1
 !
 interface Ethernet1
    description Leaf1
+   ip ospf neighbor bfd
    ip ospf network point-to-point
    ip ospf area 0.0.0.0
 !
 interface Ethernet2
    description Leaf2
+   ip ospf neighbor bfd
    ip ospf network point-to-point
    ip ospf area 0.0.0.0
 !
 interface Ethernet3
    description Leaf3
+   ip ospf neighbor bfd
    ip ospf network point-to-point
    ip ospf area 0.0.0.0
 !
@@ -60,11 +63,13 @@ router ospf 1
 !
 interface Ethernet1
    description Spine1
+   ip ospf neighbor bfd
    ip ospf network point-to-point
    ip ospf area 0.0.0.0
 !
 interface Ethernet2
    description Spine2
+   ip ospf neighbor bfd
    ip ospf network point-to-point
    ip ospf area 0.0.0.0
 !
