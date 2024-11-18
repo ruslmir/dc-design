@@ -104,7 +104,6 @@ DstAddr      MyDisc  YourDisc Interface/Transport   Type         LastUp LastDown
    No Diagnostic       Up
    No Diagnostic       Up
    No Diagnostic       Up
-
 ```
 Spine2
 ```
@@ -128,8 +127,6 @@ DstAddr       MyDisc    YourDisc  Interface/Transport    Type           LastUp
          NA       No Diagnostic       Up
          NA       No Diagnostic       Up
          NA       No Diagnostic       Up
-
-
 ```
 Проверку таблицу маршрутизации и IP доступности будем делать с Leaf1  
 
