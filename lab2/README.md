@@ -53,6 +53,10 @@ ip routing
 !   
 router ospf 1
    router-id 10.255.252.1
+   passive-interface default
+   no passive-interface Ethernet1
+   no passive-interface Ethernet2
+
 !
 interface Ethernet1
    description Spine1
