@@ -17,6 +17,7 @@ router isis underlay
    is-type level-1
    authentication mode text
    authentication key global-pswd
+   address-family ipv4 unicast
 ```
 ![CSNP](CSNP.png "CSNP")   
 Включаем ISIS на интерфейсах в сторону LEAF. Задаем аутентификацию для Hello пакетов для простоты сбора через wireshark.
@@ -35,7 +36,6 @@ interface Ethernet2
    description Leaf2
    no switchport
    ip address 10.0.1.2/31
-   no ip ospf neighbor bfd
    isis enable underlay
    isis bfd
    isis network point-to-point
@@ -46,7 +46,6 @@ interface Ethernet3
    description Leaf3
    no switchport
    ip address 10.0.1.4/31
-   no ip ospf neighbor bfd
    isis enable underlay
    isis bfd
    isis network point-to-point
@@ -54,9 +53,36 @@ interface Ethernet3
    isis authentication key 0 interface-psw
 ```
 ![Hello](Hello.png "Hello")   
-Настройка OSPF на Leaf коммутаторах, меняется только router-id в OSPF процессе. Для примера ниже конфигурация коммутатора Leaf1
+Настройка ISIS на Leaf коммутаторах одинакова, меняется только net адрес в ISIS. Для примера ниже конфигурация коммутатора Leaf1
 ```
-ddd
+router isis underlay
+   net 49.0001.0000.0000.0000.2521.00
+   is-type level-1
+   authentication mode text
+   authentication key global-pswd
+   address-family ipv4 unicast
+```
+Также настраиваем интерфейсы смотрящие в стороны SPINE коммтутаторов.
+```
+interface Ethernet1
+   description Leaf1
+   no switchport
+   ip address 10.0.1.0/31
+   isis enable underlay
+   isis bfd
+   isis network point-to-point
+   isis authentication mode text
+   isis authentication key 0 interface-pswd
+
+interface Ethernet2
+   description Leaf2
+   no switchport
+   ip address 10.0.1.2/31
+   isis enable underlay
+   isis bfd
+   isis network point-to-point
+   isis authentication mode text
+   isis authentication key 0 interface-pswd
 ```
 
 ### Проверка
