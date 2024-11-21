@@ -53,7 +53,7 @@ interface Ethernet3
    isis authentication key 0 interface-psw
 ```
 ![Hello](Hello.png "Hello")   
-Настройка ISIS на Leaf коммутаторах одинакова, меняется только net адрес в ISIS. Для примера ниже конфигурация коммутатора Leaf1
+Настройка ISIS на Leaf коммутаторах одинакова, меняется только net адрес. Для примера ниже конфигурация коммутатора Leaf1
 ```
 router isis underlay
    net 49.0001.0000.0000.0000.2521.00
