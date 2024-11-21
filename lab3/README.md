@@ -215,8 +215,7 @@ PING 10.255.254.2 (10.255.254.2) from 10.255.252.1 : 72(100) bytes of data.
 5 packets transmitted, 5 received, 0% packet loss, time 29ms
 rtt min/avg/max/mdev = 3.679/4.870/7.289/1.316 ms, ipg/ewma 7.321/6.046 ms
 ```
-
-
+Посмотрим базу LSDB. ISIS переносит hostname устройств, поэтому выглядит она довольно удобно
 ```
 Leaf1#show isis hostname
 IS-IS Instance: underlay VRF: default
@@ -236,6 +235,109 @@ IS-IS Instance: underlay VRF: default
     Leaf3.00-00                   7  44841   521    150 L1 <>
     Spine1.00-00                  8  55799   692    175 L1 <>
     Spine2.00-00                  8  36151   548    175 L1 <>
+
+Leaf1# show isis database detail
+
+IS-IS Instance: underlay VRF: default
+  IS-IS Level 1 Link State Database
+    LSPID                   Seq Num  Cksum  Life Length IS Flags
+    Leaf1.00-00                  12  22681   715    150 L1 <>
+      LSP generation remaining wait time: 0 ms
+      Time remaining until refresh: 415 s
+      NLPID: 0xCC(IPv4)
+      Hostname: Leaf1
+      Authentication mode: Text Length: 12
+      Area addresses: 49.0001.0000
+      Interface address: 10.0.1.1
+      Interface address: 10.0.2.1
+      Interface address: 10.255.253.1
+      Interface address: 10.255.252.1
+      IS Neighbor          : Spine1.00           Metric: 10
+      IS Neighbor          : Spine2.00           Metric: 10
+      Reachability         : 10.0.1.0/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.0.2.0/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.255.253.1/32 Metric: 10 Type: 1 Up
+      Reachability         : 10.255.252.1/32 Metric: 10 Type: 1 Up
+      Router Capabilities: Router Id: 10.255.253.1 Flags: []
+        Area leader priority: 250 algorithm: 0
+    Leaf2.00-00                   9   1249   794    150 L1 <>
+      Remaining lifetime received: 1199 s Modified to: 1200 s
+      NLPID: 0xCC(IPv4)
+      Hostname: Leaf2
+      Authentication mode: Text Length: 12
+      Area addresses: 49.0001.0000
+      Interface address: 10.0.2.3
+      Interface address: 10.0.1.3
+      Interface address: 10.255.253.2
+      Interface address: 10.255.252.2
+      IS Neighbor          : Spine1.00           Metric: 10
+      IS Neighbor          : Spine2.00           Metric: 10
+      Reachability         : 10.0.2.2/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.0.1.2/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.255.253.2/32 Metric: 10 Type: 1 Up
+      Reachability         : 10.255.252.2/32 Metric: 10 Type: 1 Up
+      Router Capabilities: Router Id: 10.255.253.2 Flags: []
+        Area leader priority: 250 algorithm: 0
+    Leaf3.00-00                   9  43819   534    150 L1 <>
+      Remaining lifetime received: 1199 s Modified to: 1200 s
+      NLPID: 0xCC(IPv4)
+      Hostname: Leaf3
+      Authentication mode: Text Length: 12
+      Area addresses: 49.0001.0000
+      Interface address: 10.0.2.5
+      Interface address: 10.0.1.5
+      Interface address: 10.255.253.3
+      Interface address: 10.255.252.3
+      IS Neighbor          : Spine2.00           Metric: 10
+      IS Neighbor          : Spine1.00           Metric: 10
+      Reachability         : 10.0.2.4/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.0.1.4/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.255.253.3/32 Metric: 10 Type: 1 Up
+      Reachability         : 10.255.252.3/32 Metric: 10 Type: 1 Up
+      Router Capabilities: Router Id: 10.255.253.3 Flags: []
+        Area leader priority: 250 algorithm: 0
+    Spine1.00-00                 13   6834   818    175 L1 <>
+      Remaining lifetime received: 1199 s Modified to: 1200 s
+      NLPID: 0xCC(IPv4)
+      Hostname: Spine1
+      Authentication mode: Text Length: 12
+      Area addresses: 49.0001.0000
+      Interface address: 10.0.1.0
+      Interface address: 10.0.1.4
+      Interface address: 10.0.1.2
+      Interface address: 10.255.254.1
+      Interface address: 10.255.255.1
+      IS Neighbor          : Leaf1.00            Metric: 10
+      IS Neighbor          : Leaf3.00            Metric: 10
+      IS Neighbor          : Leaf2.00            Metric: 10
+      Reachability         : 10.0.1.0/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.0.1.4/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.0.1.2/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.255.254.1/32 Metric: 10 Type: 1 Up
+      Reachability         : 10.255.255.1/32 Metric: 10 Type: 1 Up
+      Router Capabilities: Router Id: 10.255.255.1 Flags: []
+        Area leader priority: 250 algorithm: 0
+    Spine2.00-00                 10  35129   505    175 L1 <>
+      Remaining lifetime received: 1199 s Modified to: 1200 s
+      NLPID: 0xCC(IPv4)
+      Hostname: Spine2
+      Authentication mode: Text Length: 12
+      Area addresses: 49.0001.0000
+      Interface address: 10.0.2.2
+      Interface address: 10.0.2.4
+      Interface address: 10.0.2.0
+      Interface address: 10.255.255.2
+      Interface address: 10.255.254.2
+      IS Neighbor          : Leaf3.00            Metric: 10
+      IS Neighbor          : Leaf1.00            Metric: 10
+      IS Neighbor          : Leaf2.00            Metric: 10
+      Reachability         : 10.0.2.2/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.0.2.4/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.0.2.0/31 Metric: 10 Type: 1 Up
+      Reachability         : 10.255.255.2/32 Metric: 10 Type: 1 Up
+      Reachability         : 10.255.254.2/32 Metric: 10 Type: 1 Up
+      Router Capabilities: Router Id: 10.255.255.2 Flags: []
+        Area leader priority: 250 algorithm: 0
 
 ```
 
