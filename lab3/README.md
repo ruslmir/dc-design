@@ -86,14 +86,22 @@ interface Ethernet2
 ```
 
 ### Проверка
-OSPF соседство удобнее проверять со стороны Spine коммутаторов  
+ISIS соседство удобнее проверять со стороны Spine коммутаторов  
 Spine1
 ```
-ddd
+Spine1#sh isis neighbors
+Instance  VRF      System Id        Type Interface          SNPA              State Hold time   Circuit Id
+underlay  default  Leaf1            L1   Ethernet1          P2P               UP    24          0F
+underlay  default  Leaf2            L1   Ethernet2          P2P               UP    22          0F
+underlay  default  Leaf3            L1   Ethernet3          P2P               UP    26          0F
 ```
 Spine2
 ```
-ddd
+Spine2#sh  isis neighbors
+Instance  VRF      System Id        Type Interface          SNPA              State Hold time   Circuit Id
+underlay  default  Leaf1            L1   Ethernet1          P2P               UP    25          10
+underlay  default  Leaf2            L1   Ethernet2          P2P               UP    21          10
+underlay  default  Leaf3            L1   Ethernet3          P2P               UP    28          10
 ```
 Проверку таблицу маршрутизации и IP доступности будем делать с Leaf1  
 
