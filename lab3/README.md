@@ -18,7 +18,7 @@ router isis underlay
    authentication mode text
    authentication key global-pswd
 ```
-
+![CSNP](CSNP.png "CSNP")
 Настройка OSPF на Leaf коммутаторах, меняется только router-id в OSPF процессе. Для примера ниже конфигурация коммутатора Leaf1
 ```
 ddd
