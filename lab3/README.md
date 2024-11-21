@@ -1,4 +1,4 @@
-# Лабораторная работа по теме "Построение Underlay сети(OSPF)"
+# Лабораторная работа по теме "Построение Underlay сети(ISIS)"
 
 ### Цель:
 - Настроить ISIS для Underlay сети;
@@ -94,6 +94,16 @@ Instance  VRF      System Id        Type Interface          SNPA              St
 underlay  default  Leaf1            L1   Ethernet1          P2P               UP    24          0F
 underlay  default  Leaf2            L1   Ethernet2          P2P               UP    22          0F
 underlay  default  Leaf3            L1   Ethernet3          P2P               UP    26          0F
+
+Spine1#show bfd peers protocol isis
+VRF name: default
+-----------------
+DstAddr       MyDisc    YourDisc  Interface/Transport    Type          LastUp  LastDown       LastDiag  State
+--------- ----------- ----------- -------------------- ------- --------------- --------- -------------- -----
+10.0.1.1  2269639566  2267063155        Ethernet1(15)  normal  11/21/24 04:30        NA  No Diagnostic     Up
+10.0.1.3  1288286244  2344210618        Ethernet2(16)  normal  11/21/24 04:30        NA  No Diagnostic     Up
+10.0.1.5  2085804511  2676713411        Ethernet3(17)  normal  11/21/24 04:31        NA  No Diagnostic     Up
+
 ```
 Spine2
 ```
@@ -102,6 +112,16 @@ Instance  VRF      System Id        Type Interface          SNPA              St
 underlay  default  Leaf1            L1   Ethernet1          P2P               UP    25          10
 underlay  default  Leaf2            L1   Ethernet2          P2P               UP    21          10
 underlay  default  Leaf3            L1   Ethernet3          P2P               UP    28          10
+
+Spine2#sh bfd peers protocol isis
+VRF name: default
+-----------------
+DstAddr       MyDisc    YourDisc  Interface/Transport    Type          LastUp  LastDown       LastDiag  State
+--------- ----------- ----------- -------------------- ------- --------------- --------- -------------- -----
+10.0.2.1  4249411532   891249246        Ethernet1(15)  normal  11/21/24 04:30        NA  No Diagnostic     Up
+10.0.2.3  1804296625  3554137351        Ethernet2(16)  normal  11/21/24 04:30        NA  No Diagnostic     Up
+10.0.2.5  3791290555  2299320696        Ethernet3(17)  normal  11/21/24 04:31        NA  No Diagnostic     Up
+
 ```
 Проверку таблицу маршрутизации и IP доступности будем делать с Leaf1  
 
