@@ -218,10 +218,16 @@ rtt min/avg/max/mdev = 3.679/4.870/7.289/1.316 ms, ipg/ewma 7.321/6.046 ms
 
 
 ```
-
+Leaf1#show isis hostname
+IS-IS Instance: underlay VRF: default
+Level  System ID           Hostname
+L1     0000.0000.2521      Leaf1
+L1     0000.0000.2522      Leaf2
+L1     0000.0000.2523      Leaf3
+L1     0000.0000.2541      Spine1
+L1     0000.0000.2542      Spine2
 
 Leaf1#sh isis database
-
 IS-IS Instance: underlay VRF: default
   IS-IS Level 1 Link State Database
     LSPID                   Seq Num  Cksum  Life Length IS Flags
