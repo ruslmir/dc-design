@@ -168,6 +168,17 @@ DstAddr       MyDisc    YourDisc  Interface/Transport    Type          LastUp  L
 10.0.1.0  2267063155  2269639566        Ethernet1(15)  normal  11/21/24 04:30        NA  No Diagnostic     Up
 10.0.2.0   891249246  4249411532        Ethernet2(16)  normal  11/21/24 04:30        NA  No Diagnostic     Up
 
+Leaf1#sh isis database
+
+IS-IS Instance: underlay VRF: default
+  IS-IS Level 1 Link State Database
+    LSPID                   Seq Num  Cksum  Life Length IS Flags
+    Leaf1.00-00                   7  22431   754    150 L1 <>
+    Leaf2.00-00                   7   2271   666    150 L1 <>
+    Leaf3.00-00                   7  44841   521    150 L1 <>
+    Spine1.00-00                  8  55799   692    175 L1 <>
+    Spine2.00-00                  8  36151   548    175 L1 <>
+
 ```
 
 
