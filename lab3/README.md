@@ -18,7 +18,41 @@ router isis underlay
    authentication mode text
    authentication key global-pswd
 ```
-![CSNP](CSNP.png "CSNP")
+![CSNP](CSNP.png "CSNP")   
+Включаем ISIS на интерфейсах в сторону LEAF. Задаем аутентификацию для Hello пакетов
+```
+interface Ethernet1
+   description Leaf1
+   no switchport
+   ip address 10.0.1.0/31
+   isis enable underlay
+   isis bfd
+   isis network point-to-point
+   isis authentication mode text
+   isis authentication key 0 interface-psw
+
+interface Ethernet2
+   description Leaf2
+   no switchport
+   ip address 10.0.1.2/31
+   no ip ospf neighbor bfd
+   isis enable underlay
+   isis bfd
+   isis network point-to-point
+   isis authentication mode text
+   isis authentication key 0 interface-psw
+
+interface Ethernet3
+   description Leaf3
+   no switchport
+   ip address 10.0.1.4/31
+   no ip ospf neighbor bfd
+   isis enable underlay
+   isis bfd
+   isis network point-to-point
+   isis authentication mode text
+   isis authentication key 0 interface-psw
+```
 Настройка OSPF на Leaf коммутаторах, меняется только router-id в OSPF процессе. Для примера ниже конфигурация коммутатора Leaf1
 ```
 ddd
