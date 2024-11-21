@@ -108,7 +108,38 @@ underlay  default  Leaf3            L1   Ethernet3          P2P               UP
 
 Leaf1
 ```
-ddd
+Leaf1#sh ip route isis
+
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+ I L1     10.0.1.2/31 [115/20] via 10.0.1.0, Ethernet1
+ I L1     10.0.1.4/31 [115/20] via 10.0.1.0, Ethernet1
+ I L1     10.0.2.2/31 [115/20] via 10.0.2.0, Ethernet2
+ I L1     10.0.2.4/31 [115/20] via 10.0.2.0, Ethernet2
+ I L1     10.255.252.2/32 [115/30] via 10.0.1.0, Ethernet1
+                                   via 10.0.2.0, Ethernet2
+ I L1     10.255.252.3/32 [115/30] via 10.0.1.0, Ethernet1
+                                   via 10.0.2.0, Ethernet2
+ I L1     10.255.253.2/32 [115/30] via 10.0.1.0, Ethernet1
+                                   via 10.0.2.0, Ethernet2
+ I L1     10.255.253.3/32 [115/30] via 10.0.1.0, Ethernet1
+                                   via 10.0.2.0, Ethernet2
+ I L1     10.255.254.1/32 [115/20] via 10.0.1.0, Ethernet1
+ I L1     10.255.254.2/32 [115/20] via 10.0.2.0, Ethernet2
+ I L1     10.255.255.1/32 [115/20] via 10.0.1.0, Ethernet1
+ I L1     10.255.255.2/32 [115/20] via 10.0.2.0, Ethernet2
+
 ```
 
 
