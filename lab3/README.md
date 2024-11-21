@@ -160,6 +160,56 @@ Codes: C - connected, S - static, K - kernel,
  I L1     10.255.255.1/32 [115/20] via 10.0.1.0, Ethernet1
  I L1     10.255.255.2/32 [115/20] via 10.0.2.0, Ethernet2
 
+Leaf1#ping 10.255.252.2 source loopback 0
+PING 10.255.252.2 (10.255.252.2) from 10.255.252.1 : 72(100) bytes of data.
+80 bytes from 10.255.252.2: icmp_seq=1 ttl=63 time=23.7 ms
+80 bytes from 10.255.252.2: icmp_seq=2 ttl=63 time=16.0 ms
+80 bytes from 10.255.252.2: icmp_seq=3 ttl=63 time=14.0 ms
+80 bytes from 10.255.252.2: icmp_seq=4 ttl=63 time=12.3 ms
+80 bytes from 10.255.252.2: icmp_seq=5 ttl=63 time=10.7 ms
+
+--- 10.255.252.2 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 78ms
+rtt min/avg/max/mdev = 10.765/15.385/23.751/4.543 ms, pipe 2, ipg/ewma 19.636/19.303 ms
+Leaf1#
+Leaf1#ping 10.255.252.3 source loopback 0
+PING 10.255.252.3 (10.255.252.3) from 10.255.252.1 : 72(100) bytes of data.
+80 bytes from 10.255.252.3: icmp_seq=1 ttl=63 time=16.0 ms
+80 bytes from 10.255.252.3: icmp_seq=2 ttl=63 time=10.8 ms
+80 bytes from 10.255.252.3: icmp_seq=3 ttl=63 time=8.92 ms
+80 bytes from 10.255.252.3: icmp_seq=4 ttl=63 time=9.50 ms
+80 bytes from 10.255.252.3: icmp_seq=5 ttl=63 time=9.18 ms
+
+--- 10.255.252.3 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 57ms
+rtt min/avg/max/mdev = 8.926/10.896/16.046/2.658 ms, pipe 2, ipg/ewma 14.335/13.354 ms
+Leaf1#
+Leaf1#ping 10.255.254.1 source loopback 0
+PING 10.255.254.1 (10.255.254.1) from 10.255.252.1 : 72(100) bytes of data.
+80 bytes from 10.255.254.1: icmp_seq=1 ttl=64 time=8.28 ms
+80 bytes from 10.255.254.1: icmp_seq=2 ttl=64 time=4.38 ms
+80 bytes from 10.255.254.1: icmp_seq=3 ttl=64 time=4.36 ms
+80 bytes from 10.255.254.1: icmp_seq=4 ttl=64 time=4.70 ms
+80 bytes from 10.255.254.1: icmp_seq=5 ttl=64 time=5.83 ms
+
+--- 10.255.254.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 30ms
+rtt min/avg/max/mdev = 4.367/5.517/8.289/1.487 ms, ipg/ewma 7.692/6.888 ms
+Leaf1#ping 10.255.254.2 source loopback 0
+PING 10.255.254.2 (10.255.254.2) from 10.255.252.1 : 72(100) bytes of data.
+80 bytes from 10.255.254.2: icmp_seq=1 ttl=64 time=7.28 ms
+80 bytes from 10.255.254.2: icmp_seq=2 ttl=64 time=3.67 ms
+80 bytes from 10.255.254.2: icmp_seq=3 ttl=64 time=5.08 ms
+80 bytes from 10.255.254.2: icmp_seq=4 ttl=64 time=3.76 ms
+80 bytes from 10.255.254.2: icmp_seq=5 ttl=64 time=4.53 ms
+
+--- 10.255.254.2 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 29ms
+rtt min/avg/max/mdev = 3.679/4.870/7.289/1.316 ms, ipg/ewma 7.321/6.046 ms
+```
+
+
+```
 Leaf1#sh bfd peer protocol isis
 VRF name: default
 -----------------
