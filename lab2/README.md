@@ -98,6 +98,15 @@ DstAddr       MyDisc    YourDisc  Interface/Transport    Type          LastUp  L
 10.0.1.1  2593360926  2375264254        Ethernet1(15)  normal  11/18/24 18:17        NA  No Diagnostic     Up
 10.0.1.3  3079130178  2357577805        Ethernet2(16)  normal  11/18/24 18:17        NA  No Diagnostic     Up
 10.0.1.5   710767797   729062328        Ethernet3(17)  normal  11/18/24 18:17        NA  No Diagnostic     Up
+
+Spine1#show bfd peers protocol isis
+VRF name: default
+-----------------
+DstAddr       MyDisc    YourDisc  Interface/Transport    Type          LastUp  LastDown       LastDiag  State
+--------- ----------- ----------- -------------------- ------- --------------- --------- -------------- -----
+10.0.1.1  2269639566  2267063155        Ethernet1(15)  normal  11/21/24 04:30        NA  No Diagnostic     Up
+10.0.1.3  1288286244  2344210618        Ethernet2(16)  normal  11/21/24 04:30        NA  No Diagnostic     Up
+10.0.1.5  2085804511  2676713411        Ethernet3(17)  normal  11/21/24 04:31        NA  No Diagnostic     Up
 ```
 Spine2
 ```
@@ -115,6 +124,15 @@ DstAddr      MyDisc  YourDisc Interface/Transport   Type         LastUp LastDown
 10.0.2.1 2709350710 797055077       Ethernet1(15) normal 11/18/24 18:17       NA No Diagnostic    Up
 10.0.2.3 4147222704 985608273       Ethernet2(16) normal 11/18/24 18:17       NA No Diagnostic    Up
 10.0.2.5 3515869298 485016955       Ethernet3(17) normal 11/18/24 18:17       NA No Diagnostic    Up
+
+Spine2#sh bfd peers protocol isis
+VRF name: default
+-----------------
+DstAddr       MyDisc    YourDisc  Interface/Transport    Type          LastUp  LastDown       LastDiag  State
+--------- ----------- ----------- -------------------- ------- --------------- --------- -------------- -----
+10.0.2.1  4249411532   891249246        Ethernet1(15)  normal  11/21/24 04:30        NA  No Diagnostic     Up
+10.0.2.3  1804296625  3554137351        Ethernet2(16)  normal  11/21/24 04:30        NA  No Diagnostic     Up
+10.0.2.5  3791290555  2299320696        Ethernet3(17)  normal  11/21/24 04:31        NA  No Diagnostic     Up
 ```
 Проверку таблицу маршрутизации и IP доступности будем делать с Leaf1  
 
