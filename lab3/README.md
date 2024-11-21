@@ -53,7 +53,7 @@ interface Ethernet3
    isis authentication mode text
    isis authentication key 0 interface-psw
 ```
-![Hello](HELLO.png "Hello")   
+![Hello](Hello.png "Hello")   
 Настройка OSPF на Leaf коммутаторах, меняется только router-id в OSPF процессе. Для примера ниже конфигурация коммутатора Leaf1
 ```
 ddd
