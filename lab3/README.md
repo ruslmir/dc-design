@@ -160,6 +160,14 @@ Codes: C - connected, S - static, K - kernel,
  I L1     10.255.255.1/32 [115/20] via 10.0.1.0, Ethernet1
  I L1     10.255.255.2/32 [115/20] via 10.0.2.0, Ethernet2
 
+Leaf1#sh bfd peer protocol isis
+VRF name: default
+-----------------
+DstAddr       MyDisc    YourDisc  Interface/Transport    Type          LastUp  LastDown       LastDiag  State
+--------- ----------- ----------- -------------------- ------- --------------- --------- -------------- -----
+10.0.1.0  2267063155  2269639566        Ethernet1(15)  normal  11/21/24 04:30        NA  No Diagnostic     Up
+10.0.2.0   891249246  4249411532        Ethernet2(16)  normal  11/21/24 04:30        NA  No Diagnostic     Up
+
 Leaf1#ping 10.255.252.2 source loopback 0
 PING 10.255.252.2 (10.255.252.2) from 10.255.252.1 : 72(100) bytes of data.
 80 bytes from 10.255.252.2: icmp_seq=1 ttl=63 time=23.7 ms
@@ -210,13 +218,7 @@ rtt min/avg/max/mdev = 3.679/4.870/7.289/1.316 ms, ipg/ewma 7.321/6.046 ms
 
 
 ```
-Leaf1#sh bfd peer protocol isis
-VRF name: default
------------------
-DstAddr       MyDisc    YourDisc  Interface/Transport    Type          LastUp  LastDown       LastDiag  State
---------- ----------- ----------- -------------------- ------- --------------- --------- -------------- -----
-10.0.1.0  2267063155  2269639566        Ethernet1(15)  normal  11/21/24 04:30        NA  No Diagnostic     Up
-10.0.2.0   891249246  4249411532        Ethernet2(16)  normal  11/21/24 04:30        NA  No Diagnostic     Up
+
 
 Leaf1#sh isis database
 
