@@ -340,5 +340,15 @@ IS-IS Instance: underlay VRF: default
         Area leader priority: 250 algorithm: 0
 
 ```
-
+Не нашел как включить passive interface default для ISIS. Насколько понимаю надо каждый интерфейс либо включать, либо выключать. Loopback интерфейсы автоматом в passive
+```
+Leaf1#sh isis interface brief
+IS-IS Instance: underlay VRF: default
+Interface Level IPv4 Metric IPv6 Metric Type           Adjacency
+--------- ----- ----------- ----------- -------------- ---------
+Loopback0 L1             10          10 loopback       (passive)
+Loopback1 L1             10          10 loopback       (passive)
+Ethernet1 L1             10          10 point-to-point         1
+Ethernet2 L1             10          10 point-to-point         1
+```
 
