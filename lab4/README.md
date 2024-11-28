@@ -85,7 +85,6 @@ Peer Addr 10.0.2.5, Intf Ethernet3, Type normal, Role active, State Up
 Registered protocols: bgp
 ```
 Проверку таблицу маршрутизации и IP доступности будем делать с Leaf1  
-Leaf1
 ```
 Leaf1#sh ip route bgp
 
