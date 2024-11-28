@@ -115,132 +115,80 @@ Codes: C - connected, S - static, K - kernel,
  B E      10.255.255.1/32 [200/0] via 10.0.1.0, Ethernet1
  B E      10.255.255.2/32 [200/0] via 10.0.2.0, Ethernet2
 
+Leaf1#ping 10.255.252.2 source 10.255.252.1
+PING 10.255.252.2 (10.255.252.2) from 10.255.252.1 : 72(100) bytes of data.
+80 bytes from 10.255.252.2: icmp_seq=1 ttl=63 time=29.4 ms
+80 bytes from 10.255.252.2: icmp_seq=2 ttl=63 time=21.5 ms
+80 bytes from 10.255.252.2: icmp_seq=3 ttl=63 time=14.1 ms
+80 bytes from 10.255.252.2: icmp_seq=4 ttl=63 time=14.0 ms
+80 bytes from 10.255.252.2: icmp_seq=5 ttl=63 time=14.7 ms
+
+--- 10.255.252.2 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 94ms
+rtt min/avg/max/mdev = 14.017/18.767/29.407/6.016 ms, pipe 2, ipg/ewma 23.505/23.769 ms
+Leaf1#ping 10.255.252.3 source 10.255.253.1
+PING 10.255.252.3 (10.255.252.3) from 10.255.253.1 : 72(100) bytes of data.
+80 bytes from 10.255.252.3: icmp_seq=1 ttl=63 time=10.5 ms
+80 bytes from 10.255.252.3: icmp_seq=2 ttl=63 time=10.5 ms
+80 bytes from 10.255.252.3: icmp_seq=3 ttl=63 time=12.8 ms
+80 bytes from 10.255.252.3: icmp_seq=4 ttl=63 time=23.4 ms
+80 bytes from 10.255.252.3: icmp_seq=5 ttl=63 time=13.1 ms
+
+--- 10.255.252.3 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 49ms
+rtt min/avg/max/mdev = 10.521/14.110/23.461/4.805 ms, pipe 2, ipg/ewma 12.294/12.510 ms
 
 
+Leaf1#ping 10.255.253.2 source 10.255.253.1
+PING 10.255.253.2 (10.255.253.2) from 10.255.253.1 : 72(100) bytes of data.
+80 bytes from 10.255.253.2: icmp_seq=1 ttl=63 time=14.1 ms
+80 bytes from 10.255.253.2: icmp_seq=2 ttl=63 time=19.1 ms
+80 bytes from 10.255.253.2: icmp_seq=3 ttl=63 time=15.2 ms
+80 bytes from 10.255.253.2: icmp_seq=4 ttl=63 time=11.2 ms
+80 bytes from 10.255.253.2: icmp_seq=5 ttl=63 time=12.2 ms
 
+--- 10.255.253.2 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 59ms
+rtt min/avg/max/mdev = 11.211/14.407/19.163/2.771 ms, pipe 2, ipg/ewma 14.863/14.117 ms
+Leaf1#
+Leaf1#
+Leaf1#
+Leaf1#ping 10.255.253.3 source 10.255.253.1
+PING 10.255.253.3 (10.255.253.3) from 10.255.253.1 : 72(100) bytes of data.
+80 bytes from 10.255.253.3: icmp_seq=1 ttl=63 time=13.2 ms
+80 bytes from 10.255.253.3: icmp_seq=2 ttl=63 time=10.3 ms
+80 bytes from 10.255.253.3: icmp_seq=3 ttl=63 time=39.2 ms
+80 bytes from 10.255.253.3: icmp_seq=4 ttl=63 time=35.3 ms
+80 bytes from 10.255.253.3: icmp_seq=5 ttl=63 time=22.9 ms
+
+--- 10.255.253.3 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 90ms
+rtt min/avg/max/mdev = 10.397/24.240/39.263/11.520 ms, pipe 2, ipg/ewma 22.702/19.117 ms
 ```
-Посмотрим базу LSDB. ISIS переносит hostname устройств, поэтому выглядит она довольно удобно
+Посмотрим таблицу BGP.
 ```
-Leaf1#show isis hostname
-IS-IS Instance: underlay VRF: default
-Level  System ID           Hostname
-L1     0000.0000.2521      Leaf1
-L1     0000.0000.2522      Leaf2
-L1     0000.0000.2523      Leaf3
-L1     0000.0000.2541      Spine1
-L1     0000.0000.2542      Spine2
+Leaf1#sh ip bgp
+BGP routing table information for VRF default
+Router identifier 10.255.252.1, local AS number 65001
+Route status codes: * - valid, > - active, # - not installed, E - ECMP head, e - ECMP
+                    S - Stale, c - Contributing to ECMP, b - backup, L - labeled-unicast
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
 
-Leaf1#sh isis database
-IS-IS Instance: underlay VRF: default
-  IS-IS Level 1 Link State Database
-    LSPID                   Seq Num  Cksum  Life Length IS Flags
-    Leaf1.00-00                   7  22431   754    150 L1 <>
-    Leaf2.00-00                   7   2271   666    150 L1 <>
-    Leaf3.00-00                   7  44841   521    150 L1 <>
-    Spine1.00-00                  8  55799   692    175 L1 <>
-    Spine2.00-00                  8  36151   548    175 L1 <>
-
-Leaf1# show isis database detail
-
-IS-IS Instance: underlay VRF: default
-  IS-IS Level 1 Link State Database
-    LSPID                   Seq Num  Cksum  Life Length IS Flags
-    Leaf1.00-00                  12  22681   715    150 L1 <>
-      LSP generation remaining wait time: 0 ms
-      Time remaining until refresh: 415 s
-      NLPID: 0xCC(IPv4)
-      Hostname: Leaf1
-      Authentication mode: Text Length: 12
-      Area addresses: 49.0001.0000
-      Interface address: 10.0.1.1
-      Interface address: 10.0.2.1
-      Interface address: 10.255.253.1
-      Interface address: 10.255.252.1
-      IS Neighbor          : Spine1.00           Metric: 10
-      IS Neighbor          : Spine2.00           Metric: 10
-      Reachability         : 10.0.1.0/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.0.2.0/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.255.253.1/32 Metric: 10 Type: 1 Up
-      Reachability         : 10.255.252.1/32 Metric: 10 Type: 1 Up
-      Router Capabilities: Router Id: 10.255.253.1 Flags: []
-        Area leader priority: 250 algorithm: 0
-    Leaf2.00-00                   9   1249   794    150 L1 <>
-      Remaining lifetime received: 1199 s Modified to: 1200 s
-      NLPID: 0xCC(IPv4)
-      Hostname: Leaf2
-      Authentication mode: Text Length: 12
-      Area addresses: 49.0001.0000
-      Interface address: 10.0.2.3
-      Interface address: 10.0.1.3
-      Interface address: 10.255.253.2
-      Interface address: 10.255.252.2
-      IS Neighbor          : Spine1.00           Metric: 10
-      IS Neighbor          : Spine2.00           Metric: 10
-      Reachability         : 10.0.2.2/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.0.1.2/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.255.253.2/32 Metric: 10 Type: 1 Up
-      Reachability         : 10.255.252.2/32 Metric: 10 Type: 1 Up
-      Router Capabilities: Router Id: 10.255.253.2 Flags: []
-        Area leader priority: 250 algorithm: 0
-    Leaf3.00-00                   9  43819   534    150 L1 <>
-      Remaining lifetime received: 1199 s Modified to: 1200 s
-      NLPID: 0xCC(IPv4)
-      Hostname: Leaf3
-      Authentication mode: Text Length: 12
-      Area addresses: 49.0001.0000
-      Interface address: 10.0.2.5
-      Interface address: 10.0.1.5
-      Interface address: 10.255.253.3
-      Interface address: 10.255.252.3
-      IS Neighbor          : Spine2.00           Metric: 10
-      IS Neighbor          : Spine1.00           Metric: 10
-      Reachability         : 10.0.2.4/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.0.1.4/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.255.253.3/32 Metric: 10 Type: 1 Up
-      Reachability         : 10.255.252.3/32 Metric: 10 Type: 1 Up
-      Router Capabilities: Router Id: 10.255.253.3 Flags: []
-        Area leader priority: 250 algorithm: 0
-    Spine1.00-00                 13   6834   818    175 L1 <>
-      Remaining lifetime received: 1199 s Modified to: 1200 s
-      NLPID: 0xCC(IPv4)
-      Hostname: Spine1
-      Authentication mode: Text Length: 12
-      Area addresses: 49.0001.0000
-      Interface address: 10.0.1.0
-      Interface address: 10.0.1.4
-      Interface address: 10.0.1.2
-      Interface address: 10.255.254.1
-      Interface address: 10.255.255.1
-      IS Neighbor          : Leaf1.00            Metric: 10
-      IS Neighbor          : Leaf3.00            Metric: 10
-      IS Neighbor          : Leaf2.00            Metric: 10
-      Reachability         : 10.0.1.0/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.0.1.4/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.0.1.2/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.255.254.1/32 Metric: 10 Type: 1 Up
-      Reachability         : 10.255.255.1/32 Metric: 10 Type: 1 Up
-      Router Capabilities: Router Id: 10.255.255.1 Flags: []
-        Area leader priority: 250 algorithm: 0
-    Spine2.00-00                 10  35129   505    175 L1 <>
-      Remaining lifetime received: 1199 s Modified to: 1200 s
-      NLPID: 0xCC(IPv4)
-      Hostname: Spine2
-      Authentication mode: Text Length: 12
-      Area addresses: 49.0001.0000
-      Interface address: 10.0.2.2
-      Interface address: 10.0.2.4
-      Interface address: 10.0.2.0
-      Interface address: 10.255.255.2
-      Interface address: 10.255.254.2
-      IS Neighbor          : Leaf3.00            Metric: 10
-      IS Neighbor          : Leaf1.00            Metric: 10
-      IS Neighbor          : Leaf2.00            Metric: 10
-      Reachability         : 10.0.2.2/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.0.2.4/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.0.2.0/31 Metric: 10 Type: 1 Up
-      Reachability         : 10.255.255.2/32 Metric: 10 Type: 1 Up
-      Reachability         : 10.255.254.2/32 Metric: 10 Type: 1 Up
-      Router Capabilities: Router Id: 10.255.255.2 Flags: []
-        Area leader priority: 250 algorithm: 0
+         Network                Next Hop            Metric  LocPref Weight  Path
+ * >     10.255.252.1/32        -                     0       0       -       i
+ * >Ec   10.255.252.2/32        10.0.2.0              0       100     0       65000 65002 i
+ *  ec   10.255.252.2/32        10.0.1.0              0       100     0       65000 65002 i
+ * >Ec   10.255.252.3/32        10.0.2.0              0       100     0       65000 65003 i
+ *  ec   10.255.252.3/32        10.0.1.0              0       100     0       65000 65003 i
+ * >     10.255.253.1/32        -                     0       0       -       i
+ * >Ec   10.255.253.2/32        10.0.2.0              0       100     0       65000 65002 i
+ *  ec   10.255.253.2/32        10.0.1.0              0       100     0       65000 65002 i
+ * >Ec   10.255.253.3/32        10.0.2.0              0       100     0       65000 65003 i
+ *  ec   10.255.253.3/32        10.0.1.0              0       100     0       65000 65003 i
+ * >     10.255.254.1/32        10.0.1.0              0       100     0       65000 i
+ * >     10.255.254.2/32        10.0.2.0              0       100     0       65000 i
+ * >     10.255.255.1/32        10.0.1.0              0       100     0       65000 i
+ * >     10.255.255.2/32        10.0.2.0              0       100     0       65000 i
 
 ```
