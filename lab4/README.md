@@ -76,15 +76,12 @@ Neighbor Status Codes: m - Under maintenance
   10.0.2.3         4  65002             36        38    0    0 00:18:01 Estab   2      2
   10.0.2.5         4  65003             34        32    0    0 00:23:38 Estab   2      2
 
-Spine2#sh bfd peers detail | i Addr|Registered
+Spine2#sh bfd peers detail | i Peer|Registered
 Peer Addr 10.0.2.1, Intf Ethernet1, Type normal, Role active, State Up
-VRF default, LAddr 10.0.2.0, LD/RD 3101114839/4001841774
 Registered protocols: bgp
 Peer Addr 10.0.2.3, Intf Ethernet2, Type normal, Role active, State Up
-VRF default, LAddr 10.0.2.2, LD/RD 1388155051/2180427675
 Registered protocols: bgp
 Peer Addr 10.0.2.5, Intf Ethernet3, Type normal, Role active, State Up
-VRF default, LAddr 10.0.2.4, LD/RD 719583684/2395430836
 Registered protocols: bgp
 ```
 Проверку таблицу маршрутизации и IP доступности будем делать с Leaf1  
