@@ -31,34 +31,17 @@ router bgp 65000
 
 Настройка eBGP на Leaf коммутаторах одинакова, меняются только соседи и номер автономной системы. Для примера ниже конфигурация коммутатора Leaf1
 ```
-router isis underlay
-   net 49.0001.0000.0000.0000.2521.00
-   is-type level-1
-   authentication mode text
-   authentication key global-pswd
-   address-family ipv4 unicast
-```
-Также настраиваем интерфейсы смотрящие в стороны SPINE коммтутаторов.
-```
-interface Ethernet1
-   description Leaf1
-   no switchport
-   ip address 10.0.1.0/31
-   isis enable underlay
-   isis bfd
-   isis network point-to-point
-   isis authentication mode text
-   isis authentication key 0 interface-pswd
-
-interface Ethernet2
-   description Leaf2
-   no switchport
-   ip address 10.0.1.2/31
-   isis enable underlay
-   isis bfd
-   isis network point-to-point
-   isis authentication mode text
-   isis authentication key 0 interface-pswd
+router bgp 65001
+   router-id 10.255.252.1
+   maximum-paths 4
+   neighbor underlay peer group
+   neighbor underlay remote-as 65000
+   neighbor underlay bfd
+   neighbor underlay password 0 еуые
+   neighbor 10.0.1.0 peer group underlay
+   neighbor 10.0.2.0 peer group underlay
+   network 10.255.252.1/32
+   network 10.255.253.1/32
 ```
 
 ### Проверка
