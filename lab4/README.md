@@ -45,42 +45,47 @@ router bgp 65001
 ```
 
 ### Проверка
-ISIS соседство удобнее проверять со стороны Spine коммутаторов  
+eBGP соседство удобнее проверять со стороны Spine коммутаторов. Заодно видно количество префиксов от каждого Leaf коммутатора (лупбек интерфейсы)  
 Spine1
 ```
-Spine1#sh isis neighbors
-Instance  VRF      System Id        Type Interface          SNPA              State Hold time   Circuit Id
-underlay  default  Leaf1            L1   Ethernet1          P2P               UP    24          0F
-underlay  default  Leaf2            L1   Ethernet2          P2P               UP    22          0F
-underlay  default  Leaf3            L1   Ethernet3          P2P               UP    26          0F
+Spine1#sh ip bgp su
+BGP summary information for VRF default
+Router identifier 10.255.254.1, local AS number 65000
+Neighbor Status Codes: m - Under maintenance
+  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  10.0.1.1         4  65001             37        37    0    0 00:17:36 Estab   2      2
+  10.0.1.3         4  65002             37        37    0    0 00:17:36 Estab   2      2
+  10.0.1.5         4  65003             36        37    0    0 00:17:36 Estab   2      2
 
-Spine1#show bfd peers protocol isis
-VRF name: default
------------------
-DstAddr       MyDisc    YourDisc  Interface/Transport    Type          LastUp  LastDown       LastDiag  State
---------- ----------- ----------- -------------------- ------- --------------- --------- -------------- -----
-10.0.1.1  2269639566  2267063155        Ethernet1(15)  normal  11/21/24 04:30        NA  No Diagnostic     Up
-10.0.1.3  1288286244  2344210618        Ethernet2(16)  normal  11/21/24 04:30        NA  No Diagnostic     Up
-10.0.1.5  2085804511  2676713411        Ethernet3(17)  normal  11/21/24 04:31        NA  No Diagnostic     Up
-
+Spine1#sh bfd peers detail | i Peer|Registered
+Peer Addr 10.0.1.1, Intf Ethernet1, Type normal, Role active, State Up
+Registered protocols: bgp
+Peer Addr 10.0.1.3, Intf Ethernet2, Type normal, Role active, State Up
+Registered protocols: bgp
+Peer Addr 10.0.1.5, Intf Ethernet3, Type normal, Role active, State Up
+Registered protocols: bgp
 ```
 Spine2
 ```
-Spine2#sh  isis neighbors
-Instance  VRF      System Id        Type Interface          SNPA              State Hold time   Circuit Id
-underlay  default  Leaf1            L1   Ethernet1          P2P               UP    25          10
-underlay  default  Leaf2            L1   Ethernet2          P2P               UP    21          10
-underlay  default  Leaf3            L1   Ethernet3          P2P               UP    28          10
+Spine2#sh ip bgp su
+BGP summary information for VRF default
+Router identifier 10.255.254.2, local AS number 65000
+Neighbor Status Codes: m - Under maintenance
+  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  10.0.2.1         4  65001             33        32    0    0 00:23:51 Estab   2      2
+  10.0.2.3         4  65002             36        38    0    0 00:18:01 Estab   2      2
+  10.0.2.5         4  65003             34        32    0    0 00:23:38 Estab   2      2
 
-Spine2#sh bfd peers protocol isis
-VRF name: default
------------------
-DstAddr       MyDisc    YourDisc  Interface/Transport    Type          LastUp  LastDown       LastDiag  State
---------- ----------- ----------- -------------------- ------- --------------- --------- -------------- -----
-10.0.2.1  4249411532   891249246        Ethernet1(15)  normal  11/21/24 04:30        NA  No Diagnostic     Up
-10.0.2.3  1804296625  3554137351        Ethernet2(16)  normal  11/21/24 04:30        NA  No Diagnostic     Up
-10.0.2.5  3791290555  2299320696        Ethernet3(17)  normal  11/21/24 04:31        NA  No Diagnostic     Up
-
+Spine2#sh bfd peers detail | i Addr|Registered
+Peer Addr 10.0.2.1, Intf Ethernet1, Type normal, Role active, State Up
+VRF default, LAddr 10.0.2.0, LD/RD 3101114839/4001841774
+Registered protocols: bgp
+Peer Addr 10.0.2.3, Intf Ethernet2, Type normal, Role active, State Up
+VRF default, LAddr 10.0.2.2, LD/RD 1388155051/2180427675
+Registered protocols: bgp
+Peer Addr 10.0.2.5, Intf Ethernet3, Type normal, Role active, State Up
+VRF default, LAddr 10.0.2.4, LD/RD 719583684/2395430836
+Registered protocols: bgp
 ```
 Проверку таблицу маршрутизации и IP доступности будем делать с Leaf1  
 
@@ -298,15 +303,4 @@ IS-IS Instance: underlay VRF: default
       Router Capabilities: Router Id: 10.255.255.2 Flags: []
         Area leader priority: 250 algorithm: 0
 
-```
-Не нашел как включить passive interface default для ISIS. Насколько понимаю надо каждый интерфейс либо включать, либо выключать. Loopback интерфейсы автоматом в passive
-```
-Leaf1#sh isis interface brief
-IS-IS Instance: underlay VRF: default
-Interface Level IPv4 Metric IPv6 Metric Type           Adjacency
---------- ----- ----------- ----------- -------------- ---------
-Loopback0 L1             10          10 loopback       (passive)
-Loopback1 L1             10          10 loopback       (passive)
-Ethernet1 L1             10          10 point-to-point         1
-Ethernet2 L1             10          10 point-to-point         1
 ```
