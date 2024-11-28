@@ -10,16 +10,24 @@
 ![Текущая топология](eve-ng_topology.png "Текущая топология")
 Топология и адресация представлена выше на схеме.   
 Все Spine коммутаторы будут находится в общей автономной системе 65000. Каждый Leaf коммутатор будет находится в своей автономной системе. Leaf1 - 65001, Leaf2 - 65002, Leaf3 - 65003 и т.д. при добавлении новых Leaf
+Настройка Leaf коммутаторов одинакова, меняются только соседи. Т.к. у нас eBGP то route-reflector не нужен. Добавим bfd и аутентификацию bgp. Для небольшого уменьшения конфигурации добавим peer group
 
 ```
-router isis underlay
-   net 49.0001.0000.0000.0000.2541.00
-   is-type level-1
-   authentication mode text
-   authentication key global-pswd
-   address-family ipv4 unicast
+router bgp 65000
+   router-id 10.255.254.1
+   maximum-paths 4
+   neighbor underlay peer group
+   neighbor underlay bfd
+   neighbor underlay password 0 test
+   neighbor 10.0.1.1 peer group underlay
+   neighbor 10.0.1.1 remote-as 65001
+   neighbor 10.0.1.3 peer group underlay
+   neighbor 10.0.1.3 remote-as 65002
+   neighbor 10.0.1.5 peer group underlay
+   neighbor 10.0.1.5 remote-as 65003
+   network 10.255.254.1/32
+   network 10.255.255.1/32
 ```
-![CSNP](CSNP.png "CSNP")   
 Включаем ISIS на интерфейсах в сторону LEAF. Задаем аутентификацию для Hello пакетов для простоты сбора через wireshark.
 ```
 interface Ethernet1
