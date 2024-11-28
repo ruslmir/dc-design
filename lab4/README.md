@@ -28,40 +28,8 @@ router bgp 65000
    network 10.255.254.1/32
    network 10.255.255.1/32
 ```
-Включаем ISIS на интерфейсах в сторону LEAF. Задаем аутентификацию для Hello пакетов для простоты сбора через wireshark.
-```
-interface Ethernet1
-   description Leaf1
-   no switchport
-   ip address 10.0.1.0/31
-   isis enable underlay
-   isis bfd
-   isis network point-to-point
-   isis authentication mode text
-   isis authentication key 0 interface-psw
 
-interface Ethernet2
-   description Leaf2
-   no switchport
-   ip address 10.0.1.2/31
-   isis enable underlay
-   isis bfd
-   isis network point-to-point
-   isis authentication mode text
-   isis authentication key 0 interface-psw
-
-interface Ethernet3
-   description Leaf3
-   no switchport
-   ip address 10.0.1.4/31
-   isis enable underlay
-   isis bfd
-   isis network point-to-point
-   isis authentication mode text
-   isis authentication key 0 interface-psw
-```
-![Hello](Hello.png "Hello")   
-Настройка ISIS на Leaf коммутаторах одинакова, меняется только net адрес. Для примера ниже конфигурация коммутатора Leaf1
+Настройка eBGP на Leaf коммутаторах одинакова, меняюятся только соседи и номер автономной системы. Для примера ниже конфигурация коммутатора Leaf1
 ```
 router isis underlay
    net 49.0001.0000.0000.0000.2521.00
