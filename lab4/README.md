@@ -37,7 +37,7 @@ router bgp 65001
    neighbor underlay peer group
    neighbor underlay remote-as 65000
    neighbor underlay bfd
-   neighbor underlay password 0 еуые
+   neighbor underlay password 0 test
    neighbor 10.0.1.0 peer group underlay
    neighbor 10.0.2.0 peer group underlay
    network 10.255.252.1/32
