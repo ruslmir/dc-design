@@ -107,3 +107,23 @@ Neighbor Status Codes: m - Under maintenance
   10.255.254.2 4 65000             26        27    0    0 00:00:30 Estab   0      0
 
 ```
+### Настройка VXLAN
+На всех Leaf коммутаторах настраиваем VTEP интерфейсы. Берем тестовый vlan 10, который будем растягивать, задаем ему VNI в VXLAN 10010. Делаем redistribute все  выученных маков в overlay evpn-bgp. route-target зададим руками, в след. лабе l3-vni попробую auto с помощью retain-target на spine. Конфигурации Leaf коммутатов одинаковые, меняются только route distinguisher.
+Leaf1
+```
+vlan 10
+   name test-l2
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 10 vni 100010
+   vxlan learn-restrict any
+!
+router bgp 65001
+   !
+   vlan 10
+      rd 65001:100010
+      route-target both 1:100010
+      redistribute learned
+```
