@@ -127,7 +127,7 @@ router bgp 65001
       route-target both 1:100010
       redistribute learned
 ```
-### Проверка VXLAN и связности
+### Проверка VXLAN
 Видим что интерфейс Vxlan1 поднялся и он видит два vtep (Leaf2, Leaf3)
 ```
 Leaf1#sh int vxlan 1
@@ -176,4 +176,13 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
                                  10.255.253.3          -       100     0       65000 65003 i
  *  ec    RD: 65003:100010 imet 10.255.253.3
                                  10.255.253.3          -       100     0       65000 65003 i
+```
+###Настройка интерфейсов пользователей и проверка связности
+Настроим все интерфейсы пользователей в 10 влане (Сlinet1, Clinet2, Clinet3, Client4)
+```
+Leaf1#sh run int e 4
+interface Ethernet4
+   switchport access vlan 10
+   spanning-tree portfast
+   spanning-tree bpduguard enable
 ```
