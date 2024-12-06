@@ -28,7 +28,7 @@ peer-filter AS-numbers
 ```
 
 На каждом коммутаторе включаем поддержку evpn вводя команду - service routing protocols model multi-agent  
-Далее настраиваем bgp evpn. Т.к. соседство по лупбекам то делаем ebgp-multihop 3. В address-family ipv4 отключаем соседство лупбеко, т.к. иначе у меня строятся соседи (или это нормальное поведение или у меня OS такая, но пока не делал через bgp listen range этого делать не надо было). Обязательно включаем community exteneded
+Далее настраиваем bgp evpn. Т.к. соседство по лупбекам то делаем ebgp-multihop 3. В address-family ipv4 отключаем соседство лупбеков, т.к. иначе у меня строятся соседи в глобальной таблице (или это нормальное поведение или у меня OS такая, но пока не делал через bgp listen range этого делать не надо было). Обязательно включаем community exteneded
 ```
 router bgp 65000
    router-id 10.255.254.1
@@ -52,7 +52,6 @@ router bgp 65000
       no neighbor evpn activate
       network 10.255.254.1/32
       network 10.255.255.1/32
-
 ```
 
 ### Проверка
