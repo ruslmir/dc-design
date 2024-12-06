@@ -239,5 +239,4 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
                                  10.255.253.3          -       100     0       65000 65003 i
  *  ec    RD: 65003:100010 mac-ip 0050.7966.6809
                                  10.255.253.3          -       100     0       65000 65003 i
-
 ```
