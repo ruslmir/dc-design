@@ -9,7 +9,7 @@
 ### Конфигурация
 ![Текущая топология](eve-ng_topology.png "Текущая топология")
 Топология и адресация представлена выше на схеме.   
-Underlay для топологии представлен eBGP (см. лабораторая работая 4 ![лабораторная работа 4]([reference_topology.avif](https://github.com/ruslmir/dc-design/tree/main/lab4) "Требуемая топология")
+Underlay для топологии представлен eBGP (см. лабораторая работая 4 ![лабораторная работа 4]([https://github.com/ruslmir/dc-design/tree/main/lab4] "лабораторная работа 4")
 ```
 router bgp 65000
    router-id 10.255.254.1
