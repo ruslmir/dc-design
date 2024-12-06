@@ -56,6 +56,31 @@ router bgp 65000
 ```
 Leaf1
 ```
+router bgp 65001
+   router-id 10.255.252.1
+   maximum-paths 4
+   neighbor evpn peer group
+   neighbor evpn remote-as 65000
+   neighbor evpn update-source Loopback0
+   neighbor evpn ebgp-multihop 3
+   neighbor evpn send-community extended
+   neighbor underlay peer group
+   neighbor underlay remote-as 65000
+   neighbor underlay bfd
+   neighbor underlay password 7 DYTHXlpndyU=
+   neighbor underlay send-community
+   neighbor 10.0.1.0 peer group underlay
+   neighbor 10.0.2.0 peer group underlay
+   neighbor 10.255.254.1 peer group evpn
+   neighbor 10.255.254.2 peer group evpn
+   !
+   address-family evpn
+      neighbor evpn activate
+   !
+   address-family ipv4
+      no neighbor evpn activate
+      network 10.255.252.1/32
+      network 10.255.253.1/32
 ```
 
 ### Проверка
