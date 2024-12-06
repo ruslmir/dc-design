@@ -27,19 +27,32 @@ peer-filter AS-numbers
    10 match as-range 65001-65099 result accept
 ```
 
-На каждом коммутаторе включаем поддержку evpn вводя команду - service routing protocols model multi-agent
+На каждом коммутаторе включаем поддержку evpn вводя команду - service routing protocols model multi-agent  
+Далее настраиваем bgp evpn. Т.к. соседство по лупбекам то делаем ebgp-multihop 3. В address-family ipv4 отключаем соседство лупбеко, т.к. иначе у меня строятся соседи (или это нормальное поведение или у меня OS такая, но пока не делал через bgp listen range этого делать не надо было). Обязательно включаем community exteneded
 ```
-router bgp 65001
-   router-id 10.255.252.1
+router bgp 65000
+   router-id 10.255.254.1
    maximum-paths 4
+   bgp listen range 10.255.252.0/24 peer-group evpn peer-filter AS-numbers
+   bgp listen range 10.0.1.0/24 peer-group underlay peer-filter AS-numbers
+   neighbor evpn peer group
+   neighbor evpn next-hop-unchanged
+   neighbor evpn update-source Loopback0
+   neighbor evpn ebgp-multihop 3
+   neighbor evpn send-community extended
    neighbor underlay peer group
-   neighbor underlay remote-as 65000
    neighbor underlay bfd
-   neighbor underlay password 0 test
-   neighbor 10.0.1.0 peer group underlay
-   neighbor 10.0.2.0 peer group underlay
-   network 10.255.252.1/32
-   network 10.255.253.1/32
+   neighbor underlay password 7 DYTHXlpndyU=
+   neighbor underlay send-community
+   !
+   address-family evpn
+      neighbor evpn activate
+   !
+   address-family ipv4
+      no neighbor evpn activate
+      network 10.255.254.1/32
+      network 10.255.255.1/32
+
 ```
 
 ### Проверка
