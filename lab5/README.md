@@ -83,9 +83,27 @@ router bgp 65001
       network 10.255.253.1/32
 ```
 
-### Проверка
-eBGP соседство удобнее проверять со стороны Spine коммутаторов. Заодно видно количество префиксов от каждого Leaf коммутатора (лупбек интерфейсы)  
+### Проверка bgp evpn 
+Пока префиксы по нулям, т.к. vxlan туннели еще не созданы и не подняты
 Spine1
 ```
+Spine1#sh bgp evpn su
+BGP summary information for VRF default
+Router identifier 10.255.254.1, local AS number 65000
+Neighbor Status Codes: m - Under maintenance
+  Neighbor     V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  10.255.252.1 4 65001             71        72    0    0 00:52:59 Estab   0      0
+  10.255.252.2 4 65002             68        67    0    0 00:50:46 Estab   0      0
+  10.255.252.3 4 65003             69        67    0    0 00:50:50 Estab   0      0
+```
+Leaf1
+```
+Leaf1#sh bgp ev su
+BGP summary information for VRF default
+Router identifier 10.255.252.1, local AS number 65001
+Neighbor Status Codes: m - Under maintenance
+  Neighbor     V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  10.255.254.1 4 65000             24        25    0    0 00:00:30 Estab   0      0
+  10.255.254.2 4 65000             26        27    0    0 00:00:30 Estab   0      0
 
 ```
