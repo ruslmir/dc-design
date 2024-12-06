@@ -27,7 +27,7 @@ peer-filter AS-numbers
    10 match as-range 65001-65099 result accept
 ```
 
-Настройка eBGP на Leaf коммутаторах одинакова, меняются только соседи и номер автономной системы. Для примера ниже конфигурация коммутатора Leaf1
+На каждом коммутаторе включаем поддержку evpn вводя команду - service routing protocols model multi-agent
 ```
 router bgp 65001
    router-id 10.255.252.1
