@@ -240,7 +240,7 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
  *  ec    RD: 65003:100010 mac-ip 0050.7966.6809
                                  10.255.253.3          -       100     0       65000 65003 i
 ```
-И смотрим таблицу мак адресов на Leaf1, из которой видно 4 мака в 10 влане. Один интернал и три прилетели через vtep интерфейс vxlan1
+И смотрим таблицу мак адресов на Leaf1, из которой видно 4 мака в 10 влане. Один через L2 подключение и три прилетели через vtep интерфейс vxlan1
 ```
 Leaf1#sh mac address-table vlan 10
           Mac Address Table
