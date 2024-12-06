@@ -254,6 +254,7 @@ Vlan    Mac Address       Type        Ports      Moves   Last Move
   10    0050.7966.6809    DYNAMIC     Vx1        1       0:09:01 ago
 Total Mac Addresses for this criterion: 4
 ```
+Посмотрим как заполняется evpn таблица с помощью bgp update. Для этого сделаем shutdown & no shutdown на Leaf1 в сторону Client1 и посмотреть wireshark dump
+![bgp-update](bgp-update.png "bgp-update")
 
 
-bgp-update.png
