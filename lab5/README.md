@@ -254,3 +254,6 @@ Vlan    Mac Address       Type        Ports      Moves   Last Move
   10    0050.7966.6809    DYNAMIC     Vx1        1       0:09:01 ago
 Total Mac Addresses for this criterion: 4
 ```
+
+
+bgp-update.png
