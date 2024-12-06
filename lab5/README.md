@@ -186,3 +186,31 @@ interface Ethernet4
    spanning-tree portfast
    spanning-tree bpduguard enable
 ```
+
+```
+Client1> ping 10.4.0.2
+84 bytes from 10.4.0.2 icmp_seq=1 ttl=64 time=15.733 ms
+84 bytes from 10.4.0.2 icmp_seq=2 ttl=64 time=15.065 ms
+84 bytes from 10.4.0.2 icmp_seq=3 ttl=64 time=21.395 ms
+84 bytes from 10.4.0.2 icmp_seq=4 ttl=64 time=16.859 ms
+84 bytes from 10.4.0.2 icmp_seq=5 ttl=64 time=14.147 ms
+
+Client1> ping 10.4.0.3
+84 bytes from 10.4.0.3 icmp_seq=1 ttl=64 time=22.722 ms
+84 bytes from 10.4.0.3 icmp_seq=2 ttl=64 time=17.635 ms
+84 bytes from 10.4.0.3 icmp_seq=3 ttl=64 time=15.151 ms
+84 bytes from 10.4.0.3 icmp_seq=4 ttl=64 time=15.517 ms
+84 bytes from 10.4.0.3 icmp_seq=5 ttl=64 time=53.612 ms
+
+Client1> ping 10.4.0.4
+84 bytes from 10.4.0.4 icmp_seq=1 ttl=64 time=17.076 ms
+84 bytes from 10.4.0.4 icmp_seq=2 ttl=64 time=15.694 ms
+84 bytes from 10.4.0.4 icmp_seq=3 ttl=64 time=15.949 ms
+84 bytes from 10.4.0.4 icmp_seq=4 ttl=64 time=38.109 ms
+84 bytes from 10.4.0.4 icmp_seq=5 ttl=64 time=16.731 ms
+
+Client1> arp
+00:50:79:66:68:07  10.4.0.2 expires in 100 seconds
+00:50:79:66:68:08  10.4.0.3 expires in 107 seconds
+00:50:79:66:68:09  10.4.0.4 expires in 113 seconds
+```
