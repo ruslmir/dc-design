@@ -214,3 +214,30 @@ Client1> arp
 00:50:79:66:68:08  10.4.0.3 expires in 107 seconds
 00:50:79:66:68:09  10.4.0.4 expires in 113 seconds
 ```
+В таблице bgp evpn это должны быть маки, route-type 2. Отфильтруем вывод по этому типу
+```
+Leaf1#sh bgp evpn route-type mac-ip
+BGP routing table information for VRF default
+Router identifier 10.255.252.1, local AS number 65001
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 65001:100010 mac-ip 0050.7966.6806
+                                 -                     -       -       0       i
+ * >Ec    RD: 65002:100010 mac-ip 0050.7966.6807
+                                 10.255.253.2          -       100     0       65000 65002 i
+ *  ec    RD: 65002:100010 mac-ip 0050.7966.6807
+                                 10.255.253.2          -       100     0       65000 65002 i
+ * >Ec    RD: 65003:100010 mac-ip 0050.7966.6808
+                                 10.255.253.3          -       100     0       65000 65003 i
+ *  ec    RD: 65003:100010 mac-ip 0050.7966.6808
+                                 10.255.253.3          -       100     0       65000 65003 i
+ * >Ec    RD: 65003:100010 mac-ip 0050.7966.6809
+                                 10.255.253.3          -       100     0       65000 65003 i
+ *  ec    RD: 65003:100010 mac-ip 0050.7966.6809
+                                 10.255.253.3          -       100     0       65000 65003 i
+
+```
