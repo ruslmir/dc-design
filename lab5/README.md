@@ -127,3 +127,23 @@ router bgp 65001
       route-target both 1:100010
       redistribute learned
 ```
+### Проверка VXLAN и связности
+Видим что интерфейс Vxlan1 поднялся и он видит два vtep (Leaf2, Leaf3)
+```
+Leaf1#sh int vxlan 1
+Vxlan1 is up, line protocol is up (connected)
+  Hardware is Vxlan
+  Source interface is Loopback1 and is active with 10.255.253.1
+  Listening on UDP port 4789
+  Replication/Flood Mode is headend with Flood List Source: EVPN
+  Remote MAC learning via EVPN
+  VNI mapping to VLANs
+  Static VLAN to VNI mapping is
+    [10, 100010]
+  Note: All Dynamic VLANs used by VCS are internal VLANs.
+        Use 'show vxlan vni' for details.
+  Static VRF to VNI mapping is not configured
+  Headend replication flood vtep list is:
+    10 10.255.253.2    10.255.253.3
+  Shared Router MAC is 0000.0000.0000
+```
