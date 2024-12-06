@@ -9,22 +9,22 @@
 ### Конфигурация
 ![Текущая топология](eve-ng_topology.png "Текущая топология")
 Топология и адресация представлена выше на схеме.   
-Underlay для топологии представлен eBGP (см. ![лабораторная работа 4](https://github.com/ruslmir/dc-design/tree/main/lab4 "лабораторная работа 4") )
+Underlay для топологии представлен eBGP (см. ![лабораторная работа 4](https://github.com/ruslmir/dc-design/tree/main/lab4 "лабораторная работа 4") ) Только в конфиге добавим настройку динамических BGP соседей.  
+Spine1
 ```
 router bgp 65000
    router-id 10.255.254.1
    maximum-paths 4
+   bgp listen range 10.0.1.0/24 peer-group underlay peer-filter AS-numbers
    neighbor underlay peer group
    neighbor underlay bfd
-   neighbor underlay password 0 test
-   neighbor 10.0.1.1 peer group underlay
-   neighbor 10.0.1.1 remote-as 65001
-   neighbor 10.0.1.3 peer group underlay
-   neighbor 10.0.1.3 remote-as 65002
-   neighbor 10.0.1.5 peer group underlay
-   neighbor 10.0.1.5 remote-as 65003
+   neighbor underlay password 7 DYTHXlpndyU=
+   neighbor underlay send-community
    network 10.255.254.1/32
    network 10.255.255.1/32
+
+peer-filter AS-numbers
+   10 match as-range 65001-65099 result accept
 ```
 
 Настройка eBGP на Leaf коммутаторах одинакова, меняются только соседи и номер автономной системы. Для примера ниже конфигурация коммутатора Leaf1
