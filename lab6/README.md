@@ -249,6 +249,38 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
  *  ec    RD: 65002:100020 mac-ip 0050.7966.6811 10.4.1.2
                                  10.255.253.2          -       100     0       65000 65002 i
 ```
+Для примера устройство подключенное к Leaf2 10.4.1.2 (mac-address 0050.7966.6811)
+```
+Leaf1#sh bgp evpn route-type mac-ip 0050.7966.6811 det
+BGP routing table information for VRF default
+Router identifier 10.255.252.1, local AS number 65001
+BGP routing table entry for mac-ip 0050.7966.6811, Route Distinguisher: 65002:100020
+ Paths: 2 available
+  65000 65002
+    10.255.253.2 from 10.255.254.2 (10.255.254.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:100020 TunnelEncap:tunnelTypeVxlan
+      VNI: 100020 ESI: 0000:0000:0000:0000:0000
+  65000 65002
+    10.255.253.2 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:100020 TunnelEncap:tunnelTypeVxlan
+      VNI: 100020 ESI: 0000:0000:0000:0000:0000
+BGP routing table entry for mac-ip 0050.7966.6811 10.4.1.2, Route Distinguisher: 65002:100020
+ Paths: 2 available
+  65000 65002
+    10.255.253.2 from 10.255.254.2 (10.255.254.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:03:37:66
+      VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0000:0000:0000
+  65000 65002
+    10.255.253.2 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:03:37:66
+      VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0000:0000:0000
+
+```
+
 У нас получилась симметричная модель Integrated Routing and Bridging. Это видно даже из wireshark dump пакетов. Добавил для удобства столбец VNI. Запустим пинг с клиента в vlan10 (за Leaf1) в vlan20 (за Leaf2)
 ![symmetric IRB](symmetric-irb.png "symmetric IRB")
 Насколько я понял в отличие от Cisco Nexus у Arista есть поддержка и symmetric и assymetric IRB. Для проверки assymetric IRB поправим немного конфигурацию на Leaf1 и Leaf2
