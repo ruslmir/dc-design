@@ -75,7 +75,7 @@ Client1_vl20> sh arp
 00:50:79:66:68:11  10.4.1.2 expires in 94 seconds
 00:50:79:66:68:09  10.4.1.3 expires in 113 seconds
 ```
-### Настройка VXLAN-EVPN L3
+### Настройка Anycast GW
 На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
 Leaf1
 ```
