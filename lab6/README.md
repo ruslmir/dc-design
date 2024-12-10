@@ -92,26 +92,36 @@ interface Vlan20
    vrf Customer1
    ip address virtual 10.4.1.254/24
 ```
-### Проверка VXLAN
-Видим что интерфейс Vxlan1 поднялся и он видит два vtep (Leaf2, Leaf3)
+### Проверка работы anycast GW  
+Clinet1 vlan 10
 ```
-Leaf1#sh int vxlan 1
-Vxlan1 is up, line protocol is up (connected)
-  Hardware is Vxlan
-  Source interface is Loopback1 and is active with 10.255.253.1
-  Listening on UDP port 4789
-  Replication/Flood Mode is headend with Flood List Source: EVPN
-  Remote MAC learning via EVPN
-  VNI mapping to VLANs
-  Static VLAN to VNI mapping is
-    [10, 100010]
-  Note: All Dynamic VLANs used by VCS are internal VLANs.
-        Use 'show vxlan vni' for details.
-  Static VRF to VNI mapping is not configured
-  Headend replication flood vtep list is:
-    10 10.255.253.2    10.255.253.3
-  Shared Router MAC is 0000.0000.0000
+Client1_vl10> ping 10.4.0.254
+
+84 bytes from 10.4.0.254 icmp_seq=1 ttl=64 time=51.371 ms
+84 bytes from 10.4.0.254 icmp_seq=2 ttl=64 time=3.842 ms
+84 bytes from 10.4.0.254 icmp_seq=3 ttl=64 time=3.831 ms
+84 bytes from 10.4.0.254 icmp_seq=4 ttl=64 time=4.909 ms
+84 bytes from 10.4.0.254 icmp_seq=5 ttl=64 time=3.009 ms
+
+Client1_vl10> sh arp
+
+00:01:00:02:00:03  10.4.0.254 expires in 113 seconds
 ```
+Client1 vlan 20
+```
+Client1_vl20> ping 10.4.1.254
+
+84 bytes from 10.4.1.254 icmp_seq=1 ttl=64 time=8.595 ms
+84 bytes from 10.4.1.254 icmp_seq=2 ttl=64 time=3.803 ms
+84 bytes from 10.4.1.254 icmp_seq=3 ttl=64 time=3.243 ms
+84 bytes from 10.4.1.254 icmp_seq=4 ttl=64 time=3.046 ms
+84 bytes from 10.4.1.254 icmp_seq=5 ttl=64 time=4.988 ms
+
+Client1_vl20> sh arp
+
+00:01:00:02:00:03  10.4.1.254 expires in 114 seconds
+```
+
 Теперь от bgp соседей (Spine1 и Spine2) видим по 2 префикса. Это наши туннели - route-type 3 маршруты
 ```
 Leaf1#sh bgp evpn summary
