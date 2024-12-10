@@ -125,7 +125,7 @@ Client1_vl20> sh arp
 Подобно нашему mac-vrf мы также для L3 анонсируем наш созданный ip-vrf Customer1. Также делаем для всех всех Leaf где находится данный vrf. И добавляем в Vxlan туннель. 
 Leaf1
 ```
-кouter bgp 65001
+router bgp 65001
    vrf Customer1
       rd 10.255.252.1:1
       route-target import evpn 1:100666
