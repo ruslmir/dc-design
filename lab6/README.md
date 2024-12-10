@@ -262,7 +262,7 @@ BGP routing table entry for mac-ip 0050.7966.6811, Route Distinguisher: 65002:10
       Extended Community: Route-Target-AS:1:100020 TunnelEncap:tunnelTypeVxlan
       VNI: 100020 ESI: 0000:0000:0000:0000:0000
   65000 65002
-    **10.255.253.2 from 10.255.254.1 (10.255.254.1)**
+    ````**10.255.253.2 from 10.255.254.1 (10.255.254.1)**
       Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
       Extended Community: Route-Target-AS:1:100020 TunnelEncap:tunnelTypeVxlan
       VNI: 100020 ESI: 0000:0000:0000:0000:0000
