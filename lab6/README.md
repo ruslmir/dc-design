@@ -10,20 +10,21 @@
 ![Текущая топология](eve-ng_topology.png "Текущая топология")
 Топология и адресация представлена выше на схеме. Добавим несколько пользовательских хостов чтобы удобнее было настраивать   
 Underlay для топологии представлен eBGP (см. ![лабораторная работа 4](https://github.com/ruslmir/dc-design/tree/main/lab4 "лабораторная работа 4") ) Настройка VXLAN-EVPN для L2 представлениа в (см. ![лабораторная работа 5](https://github.com/ruslmir/dc-design/tree/main/lab5 "лабораторная работа 5") )  
-Spine1
+Настроим еще один vlan 20 по аналогии с vlan 10 из предыдущей лабораторной работы. Делаем конфиг на все Leaf 
+Leaf 1
 ```
-
-```
-
-На каждом коммутаторе включаем поддержку evpn вводя команду - service routing protocols model multi-agent  
-Далее настраиваем bgp evpn. Т.к. соседство по лупбекам то делаем ebgp-multihop 3. В address-family ipv4 отключаем соседство лупбеков, т.к. иначе у меня строятся соседи в глобальной таблице (или это нормальное поведение или у меня OS такая, но пока не делал через bgp listen range этого делать не надо было). Обязательно включаем community exteneded  
-Spine 1
-```
-
-```
-Leaf1
-```
-
+vlan 20
+   name second-test-l2
+!
+router bgp 65001
+   vlan 20
+      rd 65001:100020
+      route-target both 1:100020
+      redistribute learned
+!
+interface Vxlan1
+   vxlan vlan 20 vni 100020
+! 
 ```
 
 ### Проверка bgp evpn 
