@@ -51,12 +51,29 @@ Client1_vl10> sh arp
 
 00:50:79:66:68:07  10.4.0.2 expires in 106 seconds
 00:50:79:66:68:08  10.4.0.3 expires in 112 seconds
-
 ```
 Client1 vlan 20
 ```
+Client1_vl20> ping 10.4.1.2
 
+84 bytes from 10.4.1.2 icmp_seq=1 ttl=64 time=14.586 ms
+84 bytes from 10.4.1.2 icmp_seq=2 ttl=64 time=15.284 ms
+84 bytes from 10.4.1.2 icmp_seq=3 ttl=64 time=15.621 ms
+84 bytes from 10.4.1.2 icmp_seq=4 ttl=64 time=15.922 ms
+84 bytes from 10.4.1.2 icmp_seq=5 ttl=64 time=15.038 ms
 
+Client1_vl20> ping 10.4.1.3
+
+84 bytes from 10.4.1.3 icmp_seq=1 ttl=64 time=25.540 ms
+84 bytes from 10.4.1.3 icmp_seq=2 ttl=64 time=16.624 ms
+84 bytes from 10.4.1.3 icmp_seq=3 ttl=64 time=13.628 ms
+84 bytes from 10.4.1.3 icmp_seq=4 ttl=64 time=14.416 ms
+84 bytes from 10.4.1.3 icmp_seq=5 ttl=64 time=15.872 ms
+
+Client1_vl20> sh arp
+
+00:50:79:66:68:11  10.4.1.2 expires in 94 seconds
+00:50:79:66:68:09  10.4.1.3 expires in 113 seconds
 ```
 ### Настройка VXLAN
 На всех Leaf коммутаторах настраиваем VTEP интерфейсы. Берем тестовый vlan 10, который будем растягивать, задаем ему VNI в VXLAN 100010. Делаем redistribute все  выученных маков в overlay evpn-bgp. route-target зададим руками, в след. лабе l3-vni попробую auto с помощью retain-target на spine. Конфигурации Leaf коммутатов одинаковые, меняются только route distinguisher.  
