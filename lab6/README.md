@@ -181,5 +181,12 @@ trace to 10.4.1.1, 8 hops max, press Ctrl+C to stop
  1   10.4.0.254   3.456 ms  2.666 ms  7.628 ms
  2   *10.4.1.1   7.251 ms (ICMP type:3, code:3, Destination port unreachable)
 ```
-У нас получилась симметричная модель Integrated Routing and Bridging. Это видно даже из wireshark dump пакетов. Добавил для удобства столбец VNI 
+У нас получилась симметричная модель Integrated Routing and Bridging. Это видно даже из wireshark dump пакетов. Добавил для удобства столбец VNI. Запустим пинг с клиента в vlan10 (за Leaf1) в vlan20 (за Leaf2)
 ![symmetric IRB](symmetric-irb.png "symmetric IRB")
+Насколько я понял в отличие от Cisco Nexus у Arista есть поддержка и symmetric и assymetric IRB. Для проверки assymetric IRB поправим немного конфигурацию на Leaf1 и Leaf2
+```
+interface VXlan1
+ no vxlan vrf Customer1 vni 100666
+```
+Теперь запустим повторно инг с клиента в vlan10 (за Leaf1) в vlan20 (за Leaf2)
+![asymmetric IRB](asymmetric-irb.png "asymmetric IRB")
