@@ -1,7 +1,7 @@
 # Лабораторная работа по теме "Построение Overlay сети VXLAN-EVPN для L3"
 
 ### Цель:
-- Настроить VXLAN-EVPN L3 для Overlay сети ;
+- Настроить VXLAN-EVPN L3 для Overlay сети;
 
 ### Топология
 ![Требуемая топология](reference_topology.avif "Требуемая топология")
