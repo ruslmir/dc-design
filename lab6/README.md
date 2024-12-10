@@ -257,12 +257,12 @@ Router identifier 10.255.252.1, local AS number 65001
 BGP routing table entry for mac-ip 0050.7966.6811, Route Distinguisher: 65002:100020
  Paths: 2 available
   65000 65002
-    **10.255.253.2 from 10.255.254.2 (10.255.254.2)**
+    10.255.253.2 from 10.255.254.2 (10.255.254.2)
       Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
       Extended Community: Route-Target-AS:1:100020 TunnelEncap:tunnelTypeVxlan
       VNI: 100020 ESI: 0000:0000:0000:0000:0000
   65000 65002
-    **10.255.253.2 from 10.255.254.1 (10.255.254.1)**
+    ***10.255.253.2 from 10.255.254.1 (10.255.254.1)***
       Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
       Extended Community: Route-Target-AS:1:100020 TunnelEncap:tunnelTypeVxlan
       VNI: 100020 ESI: 0000:0000:0000:0000:0000
