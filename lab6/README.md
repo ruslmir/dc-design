@@ -205,7 +205,38 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
  * >      RD: 10.255.252.3:1 ip-prefix 10.4.1.0/24
                                  10.255.253.3          -       100     0       65000 65003 i
 ```
+Таакже теперь при просмотре route-type 2 маршрутов видны не только мак-адреса но и ip адреса конечных хостов
+```
+Leaf1#sh bgp evpn route-type mac-ip
+BGP routing table information for VRF default
+Router identifier 10.255.252.1, local AS number 65001
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
 
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 65001:100010 mac-ip 0050.7966.6806
+                                 -                     -       -       0       i
+ * >      RD: 65001:100010 mac-ip 0050.7966.6806 10.4.0.1
+                                 -                     -       -       0       i
+ * >      RD: 65002:100010 mac-ip 0050.7966.6807
+                                 10.255.253.2          -       100     0       65000 65002 i
+ * >      RD: 65003:100010 mac-ip 0050.7966.6808
+                                 10.255.253.3          -       100     0       65000 65003 i
+ * >      RD: 65003:100020 mac-ip 0050.7966.6809
+                                 10.255.253.3          -       100     0       65000 65003 i
+ * >      RD: 65003:100020 mac-ip 0050.7966.6809 10.4.1.3
+                                 10.255.253.3          -       100     0       65000 65003 i
+ * >      RD: 65001:100020 mac-ip 0050.7966.6810
+                                 -                     -       -       0       i
+ * >      RD: 65001:100020 mac-ip 0050.7966.6810 10.4.1.1
+                                 -                     -       -       0       i
+ * >      RD: 65002:100020 mac-ip 0050.7966.6811
+                                 10.255.253.2          -       100     0       65000 65002 i
+ * >      RD: 65002:100020 mac-ip 0050.7966.6811 10.4.1.2
+                                 10.255.253.2          -       100     0       65000 65002 i
+```
 У нас получилась симметричная модель Integrated Routing and Bridging. Это видно даже из wireshark dump пакетов. Добавил для удобства столбец VNI. Запустим пинг с клиента в vlan10 (за Leaf1) в vlan20 (за Leaf2)
 ![symmetric IRB](symmetric-irb.png "symmetric IRB")
 Насколько я понял в отличие от Cisco Nexus у Arista есть поддержка и symmetric и assymetric IRB. Для проверки assymetric IRB поправим немного конфигурацию на Leaf1 и Leaf2
