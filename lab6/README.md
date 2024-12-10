@@ -27,13 +27,33 @@ interface Vxlan1
 ! 
 ```
 
-### Проверка bgp evpn 
-Пока префиксы по нулям, т.к. vxlan туннели еще не созданы и не подняты  
-Spine1
+### Проверка L2 connectivity в 10 и 20 вланах
+Cleint1 vlan 10
 ```
+Client1_vl10> ping 10.4.0.2
+
+84 bytes from 10.4.0.2 icmp_seq=1 ttl=64 time=84.736 ms
+84 bytes from 10.4.0.2 icmp_seq=2 ttl=64 time=19.903 ms
+84 bytes from 10.4.0.2 icmp_seq=3 ttl=64 time=16.654 ms
+84 bytes from 10.4.0.2 icmp_seq=4 ttl=64 time=15.899 ms
+84 bytes from 10.4.0.2 icmp_seq=5 ttl=64 time=14.192 ms
+
+Client1_vl10> ping 10.4.0.3
+
+84 bytes from 10.4.0.3 icmp_seq=1 ttl=64 time=35.149 ms
+84 bytes from 10.4.0.3 icmp_seq=2 ttl=64 time=17.945 ms
+84 bytes from 10.4.0.3 icmp_seq=3 ttl=64 time=16.972 ms
+84 bytes from 10.4.0.3 icmp_seq=4 ttl=64 time=14.811 ms
+84 bytes from 10.4.0.3 icmp_seq=5 ttl=64 time=18.923 ms
+
+Client1_vl10>
+Client1_vl10> sh arp
+
+00:50:79:66:68:07  10.4.0.2 expires in 106 seconds
+00:50:79:66:68:08  10.4.0.3 expires in 112 seconds
 
 ```
-Leaf1
+Client1 vlan 20
 ```
 
 
