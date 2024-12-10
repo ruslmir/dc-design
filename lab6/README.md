@@ -282,6 +282,51 @@ BGP routing table entry for mac-ip 0050.7966.6811 10.4.1.2, Route Distinguisher:
       VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0000:0000:0000
 
 ```
+Смотрим таблицу мак-адресов Vxlan и таблицу маршрутизации vrf Customer1
+```
+Leaf1#sh vxlan address-table
+          Vxlan Mac Address Table
+----------------------------------------------------------------------
+
+VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
+----  -----------     ----      ---  ----             -----   ---------
+  10  0050.7966.6807  EVPN      Vx1  10.255.253.2     1       0:00:38 ago
+  10  0050.7966.6808  EVPN      Vx1  10.255.253.3     1       0:00:44 ago
+  20  0050.7966.6809  EVPN      Vx1  10.255.253.3     1       0:00:52 ago
+  20  0050.7966.6811  EVPN      Vx1  10.255.253.2     1       0:00:59 ago
+4094  5000.0003.3766  EVPN      Vx1  10.255.253.2     1       1:06:40 ago
+4094  5000.0015.f4e8  EVPN      Vx1  10.255.253.3     1       1:06:40 ago
+Total Remote Mac Addresses for this criterion: 6
+Leaf1#sh vlan id 4094
+VLAN  Name                             Status    Ports
+----- -------------------------------- --------- -------------------------------
+4094* VLAN4094                         active    Cpu, Vx1
+
+* indicates a Dynamic VLAN
+
+Leaf1#sh ip route vrf Customer1
+
+VRF: Customer1
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ B E      10.4.0.2/32 [200/0] via VTEP 10.255.253.2 VNI 100666 router-mac 50:00:00:03:37:66 local-interface Vxlan1
+ C        10.4.0.0/24 is directly connected, Vlan10
+ B E      10.4.1.2/32 [200/0] via VTEP 10.255.253.2 VNI 100666 router-mac 50:00:00:03:37:66 local-interface Vxlan1
+ B E      10.4.1.3/32 [200/0] via VTEP 10.255.253.3 VNI 100666 router-mac 50:00:00:15:f4:e8 local-interface Vxlan1
+ C        10.4.1.0/24 is directly connected, Vlan20
+```
 
 У нас получилась симметричная модель Integrated Routing and Bridging. Это видно даже из wireshark dump пакетов. Добавил для удобства столбец VNI. Запустим пинг с клиента в vlan10 (за Leaf1) в vlan20 (за Leaf2)
 ![symmetric IRB](symmetric-irb.png "symmetric IRB")
