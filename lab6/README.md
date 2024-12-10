@@ -121,36 +121,19 @@ Client1_vl20> sh arp
 
 00:01:00:02:00:03  10.4.1.254 expires in 114 seconds
 ```
-
-Теперь от bgp соседей (Spine1 и Spine2) видим по 2 префикса. Это наши туннели - route-type 3 маршруты
+### Настройка VXLAN-EVPN для L3  
+Подобно нашему mac-vrf мы также для L3 анонсируем наш созданный ip-vrf Customer1. Также делаем для всех всех Leaf где находится данный vrf. И добавляем в Vxlan туннель. 
+Leaf1
 ```
-Leaf1#sh bgp evpn summary
-BGP summary information for VRF default
-Router identifier 10.255.252.1, local AS number 65001
-Neighbor Status Codes: m - Under maintenance
-  Neighbor     V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
-  10.255.254.1 4 65000            116       115    0    0 01:13:27 Estab   2      2
-  10.255.254.2 4 65000            117       115    0    0 01:13:28 Estab   2      2
-
-Leaf1#sh bgp evpn
-BGP routing table information for VRF default
-Router identifier 10.255.252.1, local AS number 65001
-Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
-                    c - Contributing to ECMP, % - Pending BGP convergence
-Origin codes: i - IGP, e - EGP, ? - incomplete
-AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
-
-          Network                Next Hop              Metric  LocPref Weight  Path
- * >      RD: 65001:100010 imet 10.255.253.1
-                                 -                     -       -       0       i
- * >Ec    RD: 65002:100010 imet 10.255.253.2
-                                 10.255.253.2          -       100     0       65000 65002 i
- *  ec    RD: 65002:100010 imet 10.255.253.2
-                                 10.255.253.2          -       100     0       65000 65002 i
- * >Ec    RD: 65003:100010 imet 10.255.253.3
-                                 10.255.253.3          -       100     0       65000 65003 i
- *  ec    RD: 65003:100010 imet 10.255.253.3
-                                 10.255.253.3          -       100     0       65000 65003 i
+кouter bgp 65001
+   vrf Customer1
+      rd 10.255.252.1:1
+      route-target import evpn 1:100666
+      route-target export evpn 1:100666
+      redistribute connected
+!
+interface Vxlan1
+   vxlan vrf Customer1 vni 100666
 ```
 ###Настройка интерфейсов пользователей и проверка связности
 Настроим все интерфейсы пользователей в 10 влане (Сlinet1, Clinet2, Clinet3, Client4)
