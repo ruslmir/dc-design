@@ -188,5 +188,5 @@ trace to 10.4.1.1, 8 hops max, press Ctrl+C to stop
 interface VXlan1
  no vxlan vrf Customer1 vni 100666
 ```
-Теперь запустим повторно инг с клиента в vlan10 (за Leaf1) в vlan20 (за Leaf2). Как видно по разным VNI происходит локальный роутинг а потом бриджинг на Leaf2 со стороны Leaf1. И также в обратную сторорну. 
+Теперь запустим повторно пинг с клиента в vlan10 (за Leaf1) в vlan20 (за Leaf2). Как видно по разным VNI происходит локальный роутинг а потом бриджинг на Leaf2 со стороны Leaf1. И также в обратную сторорну. 
 ![asymmetric IRB](asymmetric-irb.png "asymmetric IRB")
