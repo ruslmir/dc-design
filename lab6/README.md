@@ -75,7 +75,7 @@ Client1_vl20> sh arp
 00:50:79:66:68:11  10.4.1.2 expires in 94 seconds
 00:50:79:66:68:09  10.4.1.3 expires in 113 seconds
 ```
-### Настройка VXLAN
+### Настройка VXLAN-EVPN L3
 На всех Leaf коммутаторах настраиваем VTEP интерфейсы. Берем тестовый vlan 10, который будем растягивать, задаем ему VNI в VXLAN 100010. Делаем redistribute все  выученных маков в overlay evpn-bgp. route-target зададим руками, в след. лабе l3-vni попробую auto с помощью retain-target на spine. Конфигурации Leaf коммутатов одинаковые, меняются только route distinguisher.  
 Leaf1
 ```
