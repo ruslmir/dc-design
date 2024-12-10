@@ -251,7 +251,7 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
 ```
 Для примера устройство подключенное к Leaf2 10.4.1.2 (mac-address 0050.7966.6811).  
 Два маршрута для мак-адреса 0050.7966.6811 (L2) через 10.255.254.1 (Spine1) и 10.255.254.2 (Spine2). VNI: 100020, Route-target для mac-vrf 1:100020  
-Два маршрута для мак-адреса 0050.7966.6811 (L3)через 10.255.254.1 (Spine1) и 10.255.254.2 (Spine2). L3 VNI: 100666, который мы делали для vrf Customer. Route-target для ip-vrf 1:100666
+Два маршрута для мак-адреса 0050.7966.6811 (L3) через 10.255.254.1 (Spine1) и 10.255.254.2 (Spine2). L3 VNI: 100666, который мы делали для vrf Customer. Route-target для ip-vrf 1:100666
 ```ruby
 Leaf1#sh bgp evpn route-type mac-ip 0050.7966.6811 det
 BGP routing table information for VRF default
