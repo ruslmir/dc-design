@@ -76,24 +76,21 @@ Client1_vl20> sh arp
 00:50:79:66:68:09  10.4.1.3 expires in 113 seconds
 ```
 ### Настройка VXLAN-EVPN L3
-На всех Leaf коммутаторах настраиваем VTEP интерфейсы. Берем тестовый vlan 10, который будем растягивать, задаем ему VNI в VXLAN 100010. Делаем redistribute все  выученных маков в overlay evpn-bgp. route-target зададим руками, в след. лабе l3-vni попробую auto с помощью retain-target на spine. Конфигурации Leaf коммутатов одинаковые, меняются только route distinguisher.  
+На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
 Leaf1
 ```
-vlan 10
-   name test-l2
+ip virtual-router mac-address 00:01:00:02:00:03
 !
-interface Vxlan1
-   vxlan source-interface Loopback1
-   vxlan udp-port 4789
-   vxlan vlan 10 vni 100010
-   vxlan learn-restrict any
+vrf instance Customer1
+ip routing vrf Customer1
 !
-router bgp 65001
-   !
-   vlan 10
-      rd 65001:100010
-      route-target both 1:100010
-      redistribute learned
+interface Vlan10
+   vrf Customer1
+   ip address virtual 10.4.0.254/24
+!
+interface Vlan20
+   vrf Customer1
+   ip address virtual 10.4.1.254/24
 ```
 ### Проверка VXLAN
 Видим что интерфейс Vxlan1 поднялся и он видит два vtep (Leaf2, Leaf3)
