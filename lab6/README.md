@@ -12,7 +12,7 @@
 Underlay для топологии представлен eBGP (см. ![лабораторная работа 4](https://github.com/ruslmir/dc-design/tree/main/lab4 "лабораторная работа 4") ) Настройка VXLAN-EVPN для L2 представлениа в (см. ![лабораторная работа 5](https://github.com/ruslmir/dc-design/tree/main/lab5 "лабораторная работа 5") )  
 Настроим еще один vlan 20 по аналогии с vlan 10 из предыдущей лабораторной работы. Делаем конфиг на все Leaf.  
 Leaf 1
-```ruby
+```
 vlan 20
    name second-test-l2
 !
