@@ -135,15 +135,53 @@ Leaf1
 interface Vxlan1
    vxlan vrf Customer1 vni 100666
 ```
-###Настройка интерфейсов пользователей и проверка связности
-Настроим все интерфейсы пользователей в 10 влане (Сlinet1, Clinet2, Clinet3, Client4)
+###Проверка VXLAN-EVPN для L3
+Проверим с клиента с 10 влана что он видит всех клиентов в 20 влане  
+Client1 vlan 10
 ```
-Leaf1#sh run int e 4
-interface Ethernet4
-   switchport access vlan 10
-   spanning-tree portfast
-   spanning-tree bpduguard enable
+Client1_vl10> ping 10.4.0.254
+
+84 bytes from 10.4.0.254 icmp_seq=1 ttl=64 time=51.371 ms
+84 bytes from 10.4.0.254 icmp_seq=2 ttl=64 time=3.842 ms
+84 bytes from 10.4.0.254 icmp_seq=3 ttl=64 time=3.831 ms
+84 bytes from 10.4.0.254 icmp_seq=4 ttl=64 time=4.909 ms
+84 bytes from 10.4.0.254 icmp_seq=5 ttl=64 time=3.009 ms
+
+Client1_vl10> sh arp
+
+00:01:00:02:00:03  10.4.0.254 expires in 113 seconds
+
+Client1_vl10>
+Client1_vl10> ping 10.4.1.1
+
+84 bytes from 10.4.1.1 icmp_seq=1 ttl=63 time=44.841 ms
+84 bytes from 10.4.1.1 icmp_seq=2 ttl=63 time=11.876 ms
+84 bytes from 10.4.1.1 icmp_seq=3 ttl=63 time=6.151 ms
+84 bytes from 10.4.1.1 icmp_seq=4 ttl=63 time=7.444 ms
+84 bytes from 10.4.1.1 icmp_seq=5 ttl=63 time=5.877 ms
+
+Client1_vl10> ping 10.4.1.2
+
+84 bytes from 10.4.1.2 icmp_seq=1 ttl=62 time=416.485 ms
+84 bytes from 10.4.1.2 icmp_seq=2 ttl=62 time=18.645 ms
+84 bytes from 10.4.1.2 icmp_seq=3 ttl=62 time=17.733 ms
+84 bytes from 10.4.1.2 icmp_seq=4 ttl=62 time=21.969 ms
+84 bytes from 10.4.1.2 icmp_seq=5 ttl=62 time=16.910 ms
+
+Client1_vl10> ping 10.4.1.3
+
+84 bytes from 10.4.1.3 icmp_seq=1 ttl=62 time=333.860 ms
+84 bytes from 10.4.1.3 icmp_seq=2 ttl=62 time=17.116 ms
+84 bytes from 10.4.1.3 icmp_seq=3 ttl=62 time=15.435 ms
+84 bytes from 10.4.1.3 icmp_seq=4 ttl=62 time=16.703 ms
+84 bytes from 10.4.1.3 icmp_seq=5 ttl=62 time=54.828 ms
+
+Client1_vl10> trace 10.4.1.1
+trace to 10.4.1.1, 8 hops max, press Ctrl+C to stop
+ 1   10.4.0.254   3.456 ms  2.666 ms  7.628 ms
+ 2   *10.4.1.1   7.251 ms (ICMP type:3, code:3, Destination port unreachable)
 ```
+У нас получилась симметричная модель Integrated Routing and Bridging. Это видно даже из wireshark dump пакетов
 
 ```
 Client1> ping 10.4.0.2
