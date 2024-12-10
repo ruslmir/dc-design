@@ -181,5 +181,5 @@ trace to 10.4.1.1, 8 hops max, press Ctrl+C to stop
  1   10.4.0.254   3.456 ms  2.666 ms  7.628 ms
  2   *10.4.1.1   7.251 ms (ICMP type:3, code:3, Destination port unreachable)
 ```
-У нас получилась симметричная модель Integrated Routing and Bridging. Это видно даже из wireshark dump пакетов
+У нас получилась симметричная модель Integrated Routing and Bridging. Это видно даже из wireshark dump пакетов. Добавил для удобства столбец VNI 
 ![symmetric IRB](symmetric-irb.png "symmetric IRB")
