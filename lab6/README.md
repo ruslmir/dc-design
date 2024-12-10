@@ -181,7 +181,7 @@ trace to 10.4.1.1, 8 hops max, press Ctrl+C to stop
  1   10.4.0.254   3.456 ms  2.666 ms  7.628 ms
  2   *10.4.1.1   7.251 ms (ICMP type:3, code:3, Destination port unreachable)
 ```
-Теперь при создании interface Vlan у нас появились еще route-type 5 маршруты
+Теперь при создании interface Vlan у нас появились еще route-type 5 маршруты 10.4.0.0/24 и 10.4.1.0/24, которые видны со всех трех Leaf где они заведены
 ```
 Leaf1#sh bgp evpn route-type ip-prefix ipv4
 BGP routing table information for VRF default
