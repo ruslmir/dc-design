@@ -69,6 +69,35 @@ interface Ethernet1
 interface Ethernet2
    channel-group 1 mode active
 ```
+###Провека mlag
+Проверяем на Leaf, что mlag поднялся и Port-channel работает
+```
+Leaf1#sh mlag
+MLAG Configuration:
+domain-id                          :         mlag-domain
+local-interface                    :            Vlan4094
+peer-address                       :           10.1.12.2
+peer-link                          :    Port-Channel4094
+peer-config                        :          consistent
+
+MLAG Status:
+state                              :              Active
+negotiation status                 :           Connected
+peer-link status                   :                  Up
+local-int status                   :                  Up
+system-id                          :   52:00:00:03:37:66
+dual-primary detection             :            Disabled
+dual-primary interface errdisabled :               False
+
+MLAG Ports:
+Disabled                           :                   0
+Configured                         :                   0
+Inactive                           :                   0
+Active-partial                     :                   0
+**Active-full                        :                   1**
+
+```
+
 ### Настройка Anycast GW
 На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
 Leaf1
