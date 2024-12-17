@@ -39,6 +39,7 @@ interface Ethernet8
 interface Ethernet9
    channel-group 4094 mode active
 ```
+![mlag-dump](mlag-dump.png "mlag-dump")
 ### Настройка Anycast GW
 На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
 Leaf1
