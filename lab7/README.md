@@ -94,8 +94,18 @@ Disabled                           :                   0
 Configured                         :                   0
 Inactive                           :                   0
 Active-partial                     :                   0
-**Active-full                        :                   1**
-
+Active-full                        :                   1
+!
+Leaf1#sh mlag interfaces detail
+                                        local/remote
+ mlag         state   local   remote    oper    config    last change   changes
+------ ------------- ------- -------- ------- ---------- -------------- -------
+    1   active-full     Po1      Po1   up/up   ena/ena    2:05:13 ago        10
+!
+Leaf1#
+Leaf1#sh mlag interfaces members
+Mlag1 is Port-Channel1
+  Active Ports: Ethernet6 PeerEthernet6
 ```
 
 ### Настройка Anycast GW
