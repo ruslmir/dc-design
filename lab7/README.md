@@ -21,6 +21,11 @@ interface Vlan4094
    no autostate
    ip address 10.1.12.1/30
 ```
+Отключаем stp на влане 4094 чтобы он никогда не блокировался и делаем Leaf1 и Leaf2 stp root коммутаторами, чтобы не было при падении линков перестроения stp и будут теряться плюсы mlag
+```
+no spanning-tree vlan-id 4094
+spanning-tree mst 0 priority 8192
+```
 Далее настраиваем интерфейс между Leaf1 и Leaf2. Для резервирования и чтобы не было bottleneck рекомендуется делать агрегирование линков. Создаем транк и командой switchport trunk group mlag-trunk добавляем туда наш vlan 4094
 ```
 interface Port-Channel4094
