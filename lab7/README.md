@@ -1,7 +1,7 @@
-# Лабораторная работа по теме "Построение Overlay сети VXLAN-EVPN для L3"
+# Лабораторная работа по теме "Построение multihoming"
 
 ### Цель:
-- Настроить VXLAN-EVPN L3 для Overlay сети;
+- Настроить multihoming MCLAG и EVPN multihoming;
 
 ### Топология
 ![Требуемая топология](reference_topology.avif "Требуемая топология")
