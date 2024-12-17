@@ -21,9 +21,18 @@ interface Vlan4094
    no autostate
    ip address 10.1.12.1/30
 ```
-Client1 vlan 20
+Далее настраиваем интерфейс между Leaf1 и Leaf2. Для резервирования и чтобы не было bottleneck рекомендуется делать агрегирование линков. Создаем транк и командой switchport trunk group mlag-trunk добавляем туда наш vlan 4094
 ```
-
+interface Port-Channel4094
+   description mlag
+   switchport mode trunk
+   switchport trunk group mlag-trunk
+!   
+interface Ethernet8
+   channel-group 4094 mode active
+!
+interface Ethernet9
+   channel-group 4094 mode active
 ```
 ### Настройка Anycast GW
 На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
