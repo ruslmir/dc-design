@@ -144,6 +144,60 @@ lacp-neighbor-1#sh port-channel active-ports brief
 Port Channel Port-Channel1:
   Active Ports: Ethernet2
 ```
+Между между Client4_vl10 (подключен к lacp-neighbor-1) и Client3_vl20 (подключен к Leaf3) запущен постоянный ping
+```
+Client4_vl10> ping 10.4.1.3 -c 200
+
+10.4.1.3 icmp_seq=1 timeout
+84 bytes from 10.4.1.3 icmp_seq=2 ttl=63 time=490.467 ms
+84 bytes from 10.4.1.3 icmp_seq=3 ttl=63 time=386.395 ms
+84 bytes from 10.4.1.3 icmp_seq=4 ttl=63 time=425.094 ms
+84 bytes from 10.4.1.3 icmp_seq=5 ttl=63 time=410.323 ms
+84 bytes from 10.4.1.3 icmp_seq=6 ttl=63 time=348.515 ms
+84 bytes from 10.4.1.3 icmp_seq=7 ttl=63 time=318.691 ms
+84 bytes from 10.4.1.3 icmp_seq=8 ttl=63 time=451.306 ms
+84 bytes from 10.4.1.3 icmp_seq=9 ttl=63 time=331.981 ms
+84 bytes from 10.4.1.3 icmp_seq=10 ttl=62 time=30.409 ms
+84 bytes from 10.4.1.3 icmp_seq=11 ttl=62 time=25.408 ms
+84 bytes from 10.4.1.3 icmp_seq=12 ttl=62 time=30.541 ms
+84 bytes from 10.4.1.3 icmp_seq=13 ttl=62 time=39.027 ms
+84 bytes from 10.4.1.3 icmp_seq=14 ttl=62 time=22.561 ms
+84 bytes from 10.4.1.3 icmp_seq=15 ttl=62 time=269.243 ms
+84 bytes from 10.4.1.3 icmp_seq=16 ttl=63 time=497.839 ms
+84 bytes from 10.4.1.3 icmp_seq=17 ttl=62 time=67.659 ms
+84 bytes from 10.4.1.3 icmp_seq=18 ttl=62 time=27.655 ms
+84 bytes from 10.4.1.3 icmp_seq=19 ttl=62 time=32.388 ms
+84 bytes from 10.4.1.3 icmp_seq=20 ttl=62 time=36.221 ms
+84 bytes from 10.4.1.3 icmp_seq=21 ttl=62 time=28.239 ms
+84 bytes from 10.4.1.3 icmp_seq=22 ttl=62 time=27.997 ms
+84 bytes from 10.4.1.3 icmp_seq=23 ttl=62 time=39.350 ms
+84 bytes from 10.4.1.3 icmp_seq=24 ttl=62 time=38.743 ms
+84 bytes from 10.4.1.3 icmp_seq=25 ttl=62 time=30.136 ms
+84 bytes from 10.4.1.3 icmp_seq=26 ttl=62 time=52.483 ms
+84 bytes from 10.4.1.3 icmp_seq=27 ttl=62 time=30.293 ms
+84 bytes from 10.4.1.3 icmp_seq=28 ttl=62 time=31.247 ms
+84 bytes from 10.4.1.3 icmp_seq=29 ttl=62 time=34.097 ms
+84 bytes from 10.4.1.3 icmp_seq=30 ttl=62 time=30.583 ms
+84 bytes from 10.4.1.3 icmp_seq=31 ttl=62 time=28.314 ms
+84 bytes from 10.4.1.3 icmp_seq=32 ttl=62 time=29.204 ms
+84 bytes from 10.4.1.3 icmp_seq=33 ttl=62 time=81.321 ms
+84 bytes from 10.4.1.3 icmp_seq=34 ttl=62 time=51.360 ms
+84 bytes from 10.4.1.3 icmp_seq=35 ttl=62 time=29.838 ms
+84 bytes from 10.4.1.3 icmp_seq=36 ttl=62 time=34.302 ms
+84 bytes from 10.4.1.3 icmp_seq=37 ttl=62 time=76.772 ms
+84 bytes from 10.4.1.3 icmp_seq=38 ttl=62 time=30.527 ms
+84 bytes from 10.4.1.3 icmp_seq=39 ttl=62 time=41.214 ms
+84 bytes from 10.4.1.3 icmp_seq=40 ttl=62 time=180.142 ms
+10.4.1.3 icmp_seq=41 timeout
+84 bytes from 10.4.1.3 icmp_seq=42 ttl=62 time=37.867 ms
+84 bytes from 10.4.1.3 icmp_seq=43 ttl=62 time=24.507 ms
+84 bytes from 10.4.1.3 icmp_seq=44 ttl=62 time=40.480 ms
+84 bytes from 10.4.1.3 icmp_seq=45 ttl=62 time=32.993 ms
+84 bytes from 10.4.1.3 icmp_seq=46 ttl=62 time=31.790 ms
+84 bytes from 10.4.1.3 icmp_seq=47 ttl=62 time=25.891 ms
+84 bytes from 10.4.1.3 icmp_seq=48 ttl=62 time=24.044 ms
+^C
+```
 ### Настройка EVPN multihoming
 На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
 Leaf1
