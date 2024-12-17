@@ -107,7 +107,21 @@ Leaf1#sh mlag interfaces members
 Mlag1 is Port-Channel1
   Active Ports: Ethernet6 PeerEthernet6
 ```
-
+Со стороны lacp-neighbor-1 оба порта в транке и активны
+```
+lacp-neighbor-1#sh port-channel active-ports brief
+Port Channel Port-Channel1:
+  Active Ports: Ethernet1 Ethernet2
+```
+Проверяем connectivity между Client4_vl10 (подключен к lacp-neighbor-1) и Client3_vl20 (подключен к Leaf3)
+```
+Client4_vl10> ping 10.4.1.3
+84 bytes from 10.4.1.3 icmp_seq=1 ttl=63 time=302.309 ms
+84 bytes from 10.4.1.3 icmp_seq=2 ttl=63 time=297.517 ms
+84 bytes from 10.4.1.3 icmp_seq=3 ttl=63 time=294.466 ms
+84 bytes from 10.4.1.3 icmp_seq=4 ttl=63 time=347.514 ms
+84 bytes from 10.4.1.3 icmp_seq=5 ttl=63 time=321.830 ms
+```
 ### Настройка Anycast GW
 На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
 Leaf1
