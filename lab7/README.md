@@ -144,7 +144,7 @@ lacp-neighbor-1#sh port-channel active-ports brief
 Port Channel Port-Channel1:
   Active Ports: Ethernet2
 ```
-Между между Client4_vl10 (подключен к lacp-neighbor-1) и Client3_vl20 (подключен к Leaf3) запущен постоянный ping
+Между между Client4_vl10 (подключен к lacp-neighbor-1) и Client3_vl20 (подключен к Leaf3) запущен постоянный ping. Тоже самое происходит если отключить один из Leaf.
 ```
 Client4_vl10> ping 10.4.1.3 -c 200
 
