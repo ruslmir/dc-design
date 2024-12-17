@@ -49,6 +49,26 @@ mlag configuration
 ```
 Описания не нашел, но насколько понял tcp для синхронизации, а udp для изучения мак-адресов и пересылки трафика. 
 ![mlag-dump](mlag-dump.png "mlag-dump")
+Далее настраиваем агрегирование на коммутатор lacp-neighbor-1, включаем LACP и ассоциируем Portchannel с mlag id 1.
+```
+interface Port-Channel1
+   switchport mode trunk
+   mlag 1
+!
+interface Ethernet6
+   channel-group 1 mode active
+```
+Со стороны коммутатора lacp-neighbor-1 это обычная настройка агрегирования, коммутатор ничего "не знает" про mlag.
+```
+interface Port-Channel1
+   switchport mode trunk
+!
+interface Ethernet1
+   channel-group 1 mode active
+!
+interface Ethernet2
+   channel-group 1 mode active
+```
 ### Настройка Anycast GW
 На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
 Leaf1
