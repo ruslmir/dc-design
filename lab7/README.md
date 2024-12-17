@@ -39,6 +39,14 @@ interface Ethernet8
 interface Ethernet9
    channel-group 4094 mode active
 ```
+Настройка самого mlag. Указываем наш SVI 4094 и соседа с которым будем обмениваться информацией. Ну и указываем сам peer-link через который это будет происходить. 
+```
+mlag configuration
+   domain-id mlag-domain
+   local-interface Vlan4094
+   peer-address 10.1.12.2
+   peer-link Port-Channel4094
+```
 Описания не нашел, но насколько понял tcp для синхронизации, а udp для изучения мак-адресов и пересылки трафика. 
 ![mlag-dump](mlag-dump.png "mlag-dump")
 ### Настройка Anycast GW
