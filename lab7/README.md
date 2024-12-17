@@ -122,56 +122,9 @@ Client4_vl10> ping 10.4.1.3
 84 bytes from 10.4.1.3 icmp_seq=4 ttl=63 time=347.514 ms
 84 bytes from 10.4.1.3 icmp_seq=5 ttl=63 time=321.830 ms
 ```
-### Настройка Anycast GW
+### Настройка EVPN multihoming
 На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
 Leaf1
 ```
-
-```
-### Проверка работы anycast GW  
-Clinet1 vlan 10
-```
-
-```
-Client1 vlan 20
-```
-
-```
-
-Таакже теперь при просмотре route-type 2 маршрутов видны не только мак-адреса но и ip адреса конечных хостов
-```
-
-```
-Для примера устройство подключенное к Leaf2 10.4.1.2 (mac-address 0050.7966.6811).  
-Два маршрута для мак-адреса 0050.7966.6811 (L2) через 10.255.254.1 (Spine1) и 10.255.254.2 (Spine2). VNI: 100020, Route-target для mac-vrf 1:100020  
-Два маршрута для мак-адреса 0050.7966.6811 (L3) через 10.255.254.1 (Spine1) и 10.255.254.2 (Spine2). L3 VNI: 100666, который мы делали для vrf Customer. Route-target для ip-vrf 1:100666
-```ruby
-Leaf1#sh bgp evpn route-type mac-ip 0050.7966.6811 det
-BGP routing table information for VRF default
-Router identifier 10.255.252.1, local AS number 65001
-BGP routing table entry for mac-ip 0050.7966.6811, Route Distinguisher: 65002:100020
- Paths: 2 available
-  65000 65002
-    10.255.253.2 from 10.255.254.2 (10.255.254.2)
-      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
-      Extended Community: Route-Target-AS:1:100020 TunnelEncap:tunnelTypeVxlan
-      VNI: 100020 ESI: 0000:0000:0000:0000:0000
-  65000 65002
-    10.255.253.2 from 10.255.254.1 (10.255.254.1)
-      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
-      Extended Community: Route-Target-AS:1:100020 TunnelEncap:tunnelTypeVxlan
-      VNI: 100020 ESI: 0000:0000:0000:0000:0000
-BGP routing table entry for mac-ip 0050.7966.6811 10.4.1.2, Route Distinguisher: 65002:100020
- Paths: 2 available
-  65000 65002
-    10.255.253.2 from 10.255.254.2 (10.255.254.2)
-      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
-      Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:03:37:66
-      VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0000:0000:0000
-  65000 65002
-    10.255.253.2 from 10.255.254.1 (10.255.254.1)
-      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
-      Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:03:37:66
-      VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0000:0000:0000
 
 ```
