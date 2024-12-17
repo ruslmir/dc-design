@@ -71,7 +71,7 @@ interface Ethernet2
 ```
 ###Провека mlag
 Проверяем на Leaf, что mlag поднялся и Port-channel работает
-```
+```ruby
 Leaf1#sh mlag
 MLAG Configuration:
 domain-id                          :         mlag-domain
