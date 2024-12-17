@@ -122,6 +122,28 @@ Client4_vl10> ping 10.4.1.3
 84 bytes from 10.4.1.3 icmp_seq=4 ttl=63 time=347.514 ms
 84 bytes from 10.4.1.3 icmp_seq=5 ttl=63 time=321.830 ms
 ```
+Поочередно отключим интерфейс Ethernet6 на Leaf2, а затем Leaf1 (shutdown)
+```ruby
+!оба линка работают, со стороны коммутатора lacp-neighbor-1 оба порта активные
+lacp-neighbor-1#sh port-channel active-ports brief
+Port Channel Port-Channel1:
+  Active Ports: Ethernet1 Ethernet2
+!
+!Опускаем интерфейс на Leaf2, видно что Ethernet2 пропал из агрегированного канала
+lacp-neighbor-1#sh port-channel active-ports brief
+Port Channel Port-Channel1:
+  Active Ports: Ethernet1
+!
+!Подняли оба интерфейса
+lacp-neighbor-1#sh port-channel active-ports brief
+Port Channel Port-Channel1:
+  Active Ports: Ethernet1 Ethernet2
+!
+!Опустили интерефейс на Leaf1, видно что Ethernet2 пропал из агрегированного канала
+lacp-neighbor-1#sh port-channel active-ports brief
+Port Channel Port-Channel1:
+  Active Ports: Ethernet2
+```
 ### Настройка EVPN multihoming
 На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
 Leaf1
