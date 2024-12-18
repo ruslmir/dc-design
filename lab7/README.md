@@ -296,7 +296,7 @@ route-target import нужа для того, чтобы только ESI ком
 lacp system-id должен быть одинаковый, чтобы downstream коммутатор смог lacp агрегированный канал собрать, иначе он будет считать что подключен в разные коммутаторы и не соберет. Так сказать обманываем downstrem коммутатор. Генерируем также \<leaf3\>.\<leaf4\>.\<port-channel number\>. Итого выходит 0003.0004.0001  
 
 route-type 1 в EVPN нужны для сигнализирования о Port-channel`ах. В данном примере видно что 2 multihoming 10.255.253.3:1 (Leaf3) и 10.255.253.4:1 (Leaf4). Они оба принадлежат к одному ethernet сегменту т.к. одинаковый id 0000:0000:0003:0004:0001, т.е. подключены к одному downstream коммутатору. 65003:100010, 65004:100010, 65003:100020, 65004:100020 это соответственно вланы в транках 10 и 20 с Leaf3 и Leaf4 (switchport trunk allowed vlan 10,20). Если удалить или добавить влан к транку, то записи будут изменятся в evpn таблице. 
-```ruby
+```
 Leaf3#sh bgp evpn route-type auto-discovery
 BGP routing table information for VRF default
 Router identifier 10.255.252.3, local AS number 65003
@@ -318,5 +318,53 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
                                  -                     -       -       0       i
  * >      RD: 10.255.253.4:1 auto-discovery 0000:0000:0003:0004:0001
                                  10.255.253.4          -       100     0       65000 65004 i
+
+```
+Настроим коммутатор lacp-neighbor-2 как обычный коммутатора lacp
+```
+interface Port-Channel1
+   switchport trunk allowed vlan 10,20
+   switchport mode trunk
+!
+interface Ethernet1
+   channel-group 1 mode active
+!
+interface Ethernet2
+   channel-group 1 mode active
+```
+Проверяем, что коммутатор lacp-neighbor-2 поднял port-channel и добавил туда два линка 
+```
+lacp-neighbor-2#sh port-channel active-ports brief
+Port Channel Port-Channel1:
+  Active Ports: Ethernet1 Ethernet2
+```
+Запускаем пинг с компьютера 10.4.1.4 (00:50:79:66:68:0e) подключенного за коммутатором lacp-neighbor-2 до 10.4.1.1 (00:50:79:66:68:10) подключенного к Leaf1. 
+
+
+```ruby
+Leaf1#sh bgp evpn route-type mac-ip 0050.7966.680e vni 100020 detail
+BGP routing table information for VRF default
+Router identifier 10.255.252.1, local AS number 65001
+BGP routing table entry for mac-ip 0050.7966.680e, Route Distinguisher: 65003:100020
+ Paths: 1 available
+  65000 65003
+    10.255.253.3 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100020 TunnelEncap:tunnelTypeVxlan
+      VNI: 100020 ESI: 0000:0000:0003:0004:0001
+BGP routing table entry for mac-ip 0050.7966.680e 10.4.1.4, Route Distinguisher: 65003:100020
+ Paths: 1 available
+  65000 65003
+    10.255.253.3 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:15:f4:e8
+      VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0003:0004:0001
+BGP routing table entry for mac-ip 0050.7966.680e 10.4.1.4, Route Distinguisher: 65004:100020
+ Paths: 1 available
+  65000 65004
+    10.255.253.4 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:af:d3:f6 EvpnNdFlags:pflag
+      VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0003:0004:0001
 
 ```
