@@ -454,3 +454,42 @@ BGP routing table entry for ethernet-segment 0000:0000:0003:0004:0001 10.255.253
       Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:00:04:00:01 DF Election: Preference 50
 
 ```
+И со стороны Leaf3 и Leaf4 можно посмотреть информацию в vlan instance которые участвуют в ethernet segment 
+Leaf3
+```python
+Leaf3#sh bgp evpn instance
+EVPN instance: VLAN 10
+  Route distinguisher: 65003:100010
+  Route target import: Route-Target-AS:1:100010
+  Route target export: Route-Target-AS:1:100010
+  Service interface: VLAN-based
+  Local VXLAN IP address: 10.255.253.3
+  VXLAN: enabled
+  MPLS: disabled
+  Local ethernet segment:
+    ESI: 0000:0000:0003:0004:0001
+      Interface: Port-Channel1
+      Mode: all-active
+      State: up
+      ES-Import RT: 00:03:00:04:00:01
+      DF election algorithm: preference
+      Designated forwarder: 10.255.253.3
+      Non-Designated forwarder: 10.255.253.4
+EVPN instance: VLAN 20
+  Route distinguisher: 65003:100020
+  Route target import: Route-Target-AS:1:100020
+  Route target export: Route-Target-AS:1:100020
+  Service interface: VLAN-based
+  Local VXLAN IP address: 10.255.253.3
+  VXLAN: enabled
+  MPLS: disabled
+  Local ethernet segment:
+    ESI: 0000:0000:0003:0004:0001
+      Interface: Port-Channel1
+      Mode: all-active
+      State: up
+      ES-Import RT: 00:03:00:04:00:01
+      DF election algorithm: preference
+      Designated forwarder: 10.255.253.3
+      Non-Designated forwarder: 10.255.253.4
+```
