@@ -69,6 +69,7 @@ interface Ethernet1
 interface Ethernet2
    channel-group 1 mode active
 ```
+
 ###Провека mlag
 Проверяем на Leaf, что mlag поднялся и Port-channel работает
 ```ruby
