@@ -502,7 +502,6 @@ link tracking group EVPN-MH
 !
 !
 interface Ethernet1
-   no isis bfd
    link tracking group EVPN-MH upstream
 !
 interface Ethernet2
