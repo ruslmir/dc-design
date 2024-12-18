@@ -276,7 +276,7 @@ Leaf1(config-if-Vl4094)#shut
 ```
 
 ### Настройка EVPN multihoming
-Настроим EVPN multihoming. В отличие от mclag тут не нужны линки между Leaf (peerlink) и можно подключать агрегирование больше чем к двум лифам (в лабе 2, но выключив все и на 3х линках тестировал, мощности в лабе не хватает). Конфиг для Leaf3 приведен ниже
+Настроим EVPN multihoming. В отличие от mclag тут не нужны линки между Leaf (peerlink) и можно подключать агрегирование больше чем к двум лифам (в лабе 2, но выключив все и на 3х линках тестировал, мощности в лабе не хватает). Строим между Leaf3 и Leaf4. Конфиг для Leaf3 приведен ниже
 Leaf3
 ```
 interface Port-Channel1
@@ -290,4 +290,31 @@ interface Port-Channel1
 !   
 interface Ethernet6
    channel-group 1 mode active
+```
+Создаем Port-channel, указываем что агрегирование evpn multihoming. identifier уникально идентифицирует принадлежность к ethernet segment. Формат 0000:0000:<Leaf3>:<Leaf4>:<port-channel number>. Leaf3 - 0003, Leaf4 - 0004, port-channel 1 - 0001. Итого выходит идентификатор 0000:0000:0003:0004:0001  
+route-target import нужа для того, чтобы только ESI коммутаторы импортировали маршруты. Формат <Leaf3>:<Leaf4>:<port-channel number>. Итого выходит 00:03:00:04:00:01.
+route-type 1 в EVPN нужны для 
+```
+Leaf3#sh bgp evpn route-type auto-discovery
+BGP routing table information for VRF default
+Router identifier 10.255.252.3, local AS number 65003
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 65003:100010 auto-discovery 0 0000:0000:0003:0004:0001
+                                 -                     -       -       0       i
+ * >      RD: 65003:100020 auto-discovery 0 0000:0000:0003:0004:0001
+                                 -                     -       -       0       i
+ * >      RD: 65004:100010 auto-discovery 0 0000:0000:0003:0004:0001
+                                 10.255.253.4          -       100     0       65000 65004 i
+ * >      RD: 65004:100020 auto-discovery 0 0000:0000:0003:0004:0001
+                                 10.255.253.4          -       100     0       65000 65004 i
+ * >      RD: 10.255.253.3:1 auto-discovery 0000:0000:0003:0004:0001
+                                 -                     -       -       0       i
+ * >      RD: 10.255.253.4:1 auto-discovery 0000:0000:0003:0004:0001
+                                 10.255.253.4          -       100     0       65000 65004 i
+
 ```
