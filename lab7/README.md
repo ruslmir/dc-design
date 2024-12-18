@@ -276,8 +276,18 @@ Leaf1(config-if-Vl4094)#shut
 ```
 
 ### Настройка EVPN multihoming
-На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
-Leaf1
+Настроим EVPN multihoming. В отличие от mclag тут не нужны линки между Leaf (peerlink) и можно подключать агрегирование больше чем к двум лифам (в лабе 2, но выключив все и на 3х линках тестировал, мощности в лабе не хватает). Конфиг для Leaf3 приведен ниже
+Leaf3
 ```
-
+interface Port-Channel1
+   switchport trunk allowed vlan 10,20
+   switchport mode trunk
+   !
+   evpn ethernet-segment
+      identifier 0000:0000:0003:0004:0001
+      route-target import 00:03:00:04:00:01
+   lacp system-id 0003.0004.0001
+!   
+interface Ethernet6
+   channel-group 1 mode active
 ```
