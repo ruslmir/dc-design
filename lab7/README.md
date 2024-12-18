@@ -294,7 +294,7 @@ interface Ethernet6
 Создаем Port-channel, указываем что агрегирование evpn multihoming. identifier уникально идентифицирует принадлежность к ethernet segment. Формат 0000:0000:<Leaf3>:<Leaf4>:<port-channel number>. Leaf3 - 0003, Leaf4 - 0004, port-channel 1 - 0001. Итого выходит идентификатор 0000:0000:0003:0004:0001  
 route-target import нужа для того, чтобы только ESI коммутаторы импортировали маршруты. Формат <Leaf3>:<Leaf4>:<port-channel number>. Итого выходит 00:03:00:04:00:01.
 route-type 1 в EVPN нужны для 
-```
+```ruby
 Leaf3#sh bgp evpn route-type auto-discovery
 BGP routing table information for VRF default
 Router identifier 10.255.252.3, local AS number 65003
