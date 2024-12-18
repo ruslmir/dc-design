@@ -511,3 +511,76 @@ interface Port-Channel1
    link tracking group EVPN-MH downstream 
 ```
 ### Проверка EVPN multihoming
+Опускаем интерфейс Ethernet6 на Leaf4 который является частью Port-channel1. Видим что коммутатор lacp-neighbor-2 сразу исключил его, что логично там lacp. И в bgp таблице route-type 1 ведет только на Leaf3 теперь
+```
+lacp-neighbor-2#sh port-channel active-ports
+Port Channel Port-Channel1:
+  Active Ports: Ethernet1
+Leaf1#sh bgp evpn route-type auto-discovery
+BGP routing table information for VRF default
+Router identifier 10.255.252.1, local AS number 65001
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 65003:100010 auto-discovery 0 0000:0000:0003:0004:0001
+                                 10.255.253.3          -       100     0       65000 65003 i
+ * >      RD: 65003:100020 auto-discovery 0 0000:0000:0003:0004:0001
+                                 10.255.253.3          -       100     0       65000 65003 i
+ * >      RD: 10.255.253.3:1 auto-discovery 0000:0000:0003:0004:0001
+                                 10.255.253.3          -       100     0       65000 65003 i
+
+```
+Пинг остается
+```
+Client4_vl20> ping 10.4.1.1
+84 bytes from 10.4.1.1 icmp_seq=1 ttl=64 time=67.838 ms
+84 bytes from 10.4.1.1 icmp_seq=2 ttl=64 time=27.106 ms
+84 bytes from 10.4.1.1 icmp_seq=3 ttl=64 time=22.499 ms
+84 bytes from 10.4.1.1 icmp_seq=4 ttl=64 time=19.337 ms
+84 bytes from 10.4.1.1 icmp_seq=5 ttl=64 time=90.358 ms
+```
+Вернули рабочее состояние. Дальше проверим tracking, со стороны Spine1 и Spine2 отключим интерфейсы в сторону Leaf3. Как видно интерфейсы упали, положили за собой Port-channel1 в errdisabled
+```
+Leaf3#sh int des | i down
+Et1                            down           down               Spine1
+Et2                            down           down               Spine2
+Et6                            down           down
+Po1                            down           down
+
+Leaf3#sh link tracking group
+   Link State Group    Status
+---------------------- ------
+   EVPN-MH               down
+
+Leaf3#sh int port-c 1
+Port-Channel1 is down, line protocol is down (errdisabled)
+  Hardware is Port-Channel, address is 5000.0005.0006
+  Ethernet MTU 9214 bytes
+  Full-duplex, Unconfigured
+  Active members in this channel: 0
+  Fallback mode is: off
+  Down 3 minutes, 28 seconds
+  5 link status changes since last clear
+  Last clearing of "show interface" counters never
+  5 minutes input rate 0 bps (- with framing overhead), 0 packets/sec
+  5 minutes output rate 0 bps (- with framing overhead), 0 packets/sec
+     629 packets input, 90523 bytes
+     Received 19 broadcasts, 552 multicast
+     0 input errors, 0 input discards
+     4680 packets output, 587066 bytes
+     Sent 0 broadcasts, 4635 multicast
+     0 output errors, 0 output discards
+```
+Пинг все также не пропал
+```
+Client4_vl20> ping 10.4.1.1
+84 bytes from 10.4.1.1 icmp_seq=1 ttl=64 time=67.838 ms
+84 bytes from 10.4.1.1 icmp_seq=2 ttl=64 time=27.106 ms
+84 bytes from 10.4.1.1 icmp_seq=3 ttl=64 time=22.499 ms
+84 bytes from 10.4.1.1 icmp_seq=4 ttl=64 time=19.337 ms
+84 bytes from 10.4.1.1 icmp_seq=5 ttl=64 time=90.358 ms
+```
+Далее поднимаем интерфейсы со стороны Spine1 и Spine2, ждем 60 секунд восстановления сервиса на Leaf3. Далее выключаем Leaf3. К сожалению тут виртуализация быструю сходимость не показала, при выключении Leaf3 интерфейс на lacp-neighbor-2 в его сторону остался в состоянии link up, пришлось порядка 20 секунд ждать пока по lacp выкинет из агрегированного каналал этот интерфейс, после чего пинг вернулся. 
