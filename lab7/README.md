@@ -349,6 +349,29 @@ Client4_vl20> ping 10.4.1.1
 ```
 Смотрим со стороны Leaf1 маршруты в evpn
 ```ruby
+Leaf1#sh bgp evpn route-type mac-ip 0050.7966.680e vni 100020
+BGP routing table information for VRF default
+Router identifier 10.255.252.1, local AS number 65001
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >Ec    RD: 65003:100020 mac-ip 0050.7966.680e
+                                 10.255.253.3          -       100     0       65000 65003 i
+ *  ec    RD: 65003:100020 mac-ip 0050.7966.680e
+                                 10.255.253.3          -       100     0       65000 65003 i
+ * >Ec    RD: 65003:100020 mac-ip 0050.7966.680e 10.4.1.4
+                                 10.255.253.3          -       100     0       65000 65003 i
+ *  ec    RD: 65003:100020 mac-ip 0050.7966.680e 10.4.1.4
+                                 10.255.253.3          -       100     0       65000 65003 i
+ * >Ec    RD: 65004:100020 mac-ip 0050.7966.680e 10.4.1.4
+                                 10.255.253.4          -       100     0       65000 65004 i
+ *  ec    RD: 65004:100020 mac-ip 0050.7966.680e 10.4.1.4
+                                 10.255.253.4          -       100     0       65000 65004 i
+
+
 Leaf1#sh bgp evpn route-type mac-ip 0050.7966.680e vni 100020 detail
 BGP routing table information for VRF default
 Router identifier 10.255.252.1, local AS number 65001
