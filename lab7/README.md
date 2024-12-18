@@ -493,3 +493,20 @@ EVPN instance: VLAN 20
       Designated forwarder: 10.255.253.3
       Non-Designated forwarder: 10.255.253.4
 ```
+Ну и в отличие от mclag у нас нет peerlink между коммутаторами, поэтому если упадут все uplink интерфейсы то надо как-то сообщить downlink агрегированным каналам об этом, чтобы отключить их на этом коммутаторе. Иначе будет потеря трафика если трафик пойдет через проблемный Leaf с коммутатора lacp-neighbor-2  
+Создаем track, который будет отслеживать интерфейсы Ethernet1, Ethernet2 (наши uplink интерфейсы в фабрику). И при падении обоих из них он опустит интерфейс Port-channel1. При восстановлении он поднимет через 60 секунд (чтобы bgp успел сойтись)
+```
+link tracking group EVPN-MH
+   recovery delay 60
+!
+!
+interface Ethernet1
+   no isis bfd
+   link tracking group EVPN-MH upstream
+!
+interface Ethernet2
+   link tracking group EVPN-MH upstream
+!   
+interface Port-Channel1
+   link tracking group EVPN-MH downstream 
+```
