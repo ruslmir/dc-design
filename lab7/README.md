@@ -348,7 +348,7 @@ Client4_vl20> ping 10.4.1.1
 84 bytes from 10.4.1.1 icmp_seq=5 ttl=64 time=20.268 ms
 ```
 Смотрим со стороны Leaf1 маршруты в evpn
-```python
+```ruby
 Leaf1#sh bgp evpn route-type mac-ip 0050.7966.680e vni 100020
 BGP routing table information for VRF default
 Router identifier 10.255.252.1, local AS number 65001
