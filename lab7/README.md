@@ -412,3 +412,14 @@ BGP routing table entry for mac-ip 0050.7966.680e 10.4.1.4, Route Distinguisher:
       Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:af:d3:f6 EvpnNdFlags:pflag
       VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0003:0004:0001
 ```
+В указанном выше примере видно, что физический адрес 0050.7966.680e выучен через Leaf3 (Ну записи две, но это балансировка Spine1 и Spine2, фактически vtep до Leaf3). Но тем не менее в таблице мак адресов для vxlan этот адрес достигается через два vtep Leaf3 и Leaf4
+```
+Leaf1#sh vxlan address-table address 0050.7966.680e
+          Vxlan Mac Address Table
+----------------------------------------------------------------------
+
+VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
+----  -----------     ----      ---  ----             -----   ---------
+  20  0050.7966.680e  EVPN      Vx1  10.255.253.3     1       0:00:52 ago
+                                     10.255.253.4
+```
