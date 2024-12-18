@@ -198,6 +198,62 @@ Client4_vl10> ping 10.4.1.3 -c 200
 84 bytes from 10.4.1.3 icmp_seq=48 ttl=62 time=24.044 ms
 ^C
 ```
+Для предотавращения падения peer-link и чтобы оба коммутатора не стали primary (защита от split brain) можно настроить отдельным линком management между коммутаторами heartbeat (к сожалению не смог этого сделать в underlay сети до лупбеков, т.к. нельзя в heartbeat настройки указывать source адрес). 
+```
+interface Management1
+   vrf management
+   ip address 10.2.12.1/30
+!
+mlag configuration
+   peer-address heartbeat 10.255.252.2
+   dual-primary detection delay 10 action errdisable all-interfaces
+
+```
+В итоге при падении  peer-link мы это обнаружим через heartbeat и secondary переведет все свои интерфейсы в состояние errdisable (агрегированные, orphen портов это не касается). К сожалению этого всего в лабе я проверить не смог. как минимум не могу recovery errdisable настроить 
+```
+Leaf1#sh errdisable recovery
+   Errdisable Reason              Timer Status   Timer Interval
+------------------------------ ----------------- --------------
+   acl                            Disabled                  300
+   arp-inspection                 Disabled                  300
+   bgp-session-tracking           Disabled                  N/A
+   bpduguard                      Disabled                  300
+   dot1x                          Disabled                  300
+   dot1x-session-replace          Disabled                  300
+   evpn-sa-mh                     Disabled                  N/A
+   fabric-link-failure            Disabled                  N/A
+   fabric-link-flap               Disabled                  N/A
+   hitless-reload-down            Disabled                  300
+   lacp-no-portid                 Disabled                  N/A
+   lacp-rate-limit                Disabled                  300
+   license-enforce                Disabled                  N/A
+   link-flap                      Disabled                  300
+   mlagasu                        Disabled                  N/A
+   mlagdualprimary                Disabled                  N/A
+   mlagissu                       Disabled                  N/A
+   mlagmaintdown                  Disabled                  N/A
+   no-internal-vlan               Disabled                  300
+   portchannelguard               Disabled                  300
+   portsec                        Disabled                  300
+   stp-no-portid                  Disabled                  N/A
+   tapagg                         Disabled                  300
+   uplink-failure-detection       Disabled                  300
+
+eaf1(config)#errdisable recovery cause ?
+  acl                       Enable the acl cause
+  arp-inspection            Enable the arp-inspection cause
+  bpduguard                 Enable the bpduguard cause
+  dot1x                     Enable the dot1x cause
+  dot1x-session-replace     Enable the dot1x-session-replace cause
+  hitless-reload-down       Enable the hitless-reload-down cause
+  lacp-rate-limit           Enable the lacp-rate-limit cause
+  link-flap                 Enable the link-flap cause
+  no-internal-vlan          Enable the no-internal-vlan cause
+  portchannelguard          Enable the portchannelguard cause
+  portsec                   Enable the portsec cause
+  tapagg                    Enable the tapagg cause
+  uplink-failure-detection  Enable the uplink-failure-detection cause
+```
 ### Настройка EVPN multihoming
 На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
 Leaf1
