@@ -339,8 +339,15 @@ Port Channel Port-Channel1:
   Active Ports: Ethernet1 Ethernet2
 ```
 Запускаем пинг с компьютера 10.4.1.4 (00:50:79:66:68:0e) подключенного за коммутатором lacp-neighbor-2 до 10.4.1.1 (00:50:79:66:68:10) подключенного к Leaf1. 
-
-
+```
+Client4_vl20> ping 10.4.1.1
+84 bytes from 10.4.1.1 icmp_seq=1 ttl=64 time=60.995 ms
+84 bytes from 10.4.1.1 icmp_seq=2 ttl=64 time=27.017 ms
+84 bytes from 10.4.1.1 icmp_seq=3 ttl=64 time=19.801 ms
+84 bytes from 10.4.1.1 icmp_seq=4 ttl=64 time=19.264 ms
+84 bytes from 10.4.1.1 icmp_seq=5 ttl=64 time=20.268 ms
+```
+Смотрим со стороны Leaf1 маршруты в evpn
 ```ruby
 Leaf1#sh bgp evpn route-type mac-ip 0050.7966.680e vni 100020 detail
 BGP routing table information for VRF default
