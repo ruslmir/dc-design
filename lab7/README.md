@@ -292,7 +292,8 @@ interface Ethernet6
    channel-group 1 mode active
 ```
 Создаем Port-channel, указываем что агрегирование evpn multihoming. identifier уникально идентифицирует принадлежность к ethernet segment. Формат 0000:0000:\<Leaf3\>:\<Leaf4\>:\<port-channel number\>. Leaf3 - 0003, Leaf4 - 0004, port-channel 1 - 0001. Итого выходит идентификатор 0000:0000:0003:0004:0001  
-route-target import нужа для того, чтобы только ESI коммутаторы импортировали маршруты. Формат \<Leaf3\>:\<Leaf4\>:\<port-channel number\>. Итого выходит 00:03:00:04:00:01.  
+route-target import нужа для того, чтобы только ESI коммутаторы импортировали маршруты. Формат \<Leaf3\>:\<Leaf4\>:\<port-channel number\>. Итого выходит 00:03:00:04:00:01. 
+lacp system-id должен быть одинаковый, чтобы downstream коммутатор смог lacp агрегированный канал собрать, иначе он будет считать что подключен в разные коммутаторы и не соберет. Так сказать обманываем downstrem коммутатор. Генерируем также \<leaf3\>.\<leaf4\>.\<port-channel number\>. Итого выходит 0003.0004.0001
 route-type 1 в EVPN нужны для 
 ```ruby
 Leaf3#sh bgp evpn route-type auto-discovery
