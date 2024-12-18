@@ -510,3 +510,4 @@ interface Ethernet2
 interface Port-Channel1
    link tracking group EVPN-MH downstream 
 ```
+### Проверка EVPN multihoming
