@@ -511,7 +511,7 @@ interface Port-Channel1
    link tracking group EVPN-MH downstream 
 ```
 ### Проверка EVPN multihoming
-Опускаем интерфейс Ethernet6 на Leaf4 который является частью Port-channel1. Видим что коммутатор lacp-neighbor-2 сразу исключил его, что логично там lacp. И в bgp таблице route-type 1 ведет только на Leaf3 теперь
+Опускаем интерфейс Ethernet6 на Leaf4 который является частью Port-channel1. Видим что коммутатор lacp-neighbor-2 сразу исключил его, что логично так как прямое падение линка. И в bgp таблице route-type 1 ведет только на Leaf3 теперь
 ```
 lacp-neighbor-2#sh port-channel active-ports
 Port Channel Port-Channel1:
