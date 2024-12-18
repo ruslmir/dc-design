@@ -353,25 +353,39 @@ Leaf1#sh bgp evpn route-type mac-ip 0050.7966.680e vni 100020 detail
 BGP routing table information for VRF default
 Router identifier 10.255.252.1, local AS number 65001
 BGP routing table entry for mac-ip 0050.7966.680e, Route Distinguisher: 65003:100020
- Paths: 1 available
+ Paths: 2 available
+  65000 65003
+    10.255.253.3 from 10.255.254.2 (10.255.254.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:100020 TunnelEncap:tunnelTypeVxlan
+      VNI: 100020 ESI: 0000:0000:0003:0004:0001
   65000 65003
     10.255.253.3 from 10.255.254.1 (10.255.254.1)
-      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
       Extended Community: Route-Target-AS:1:100020 TunnelEncap:tunnelTypeVxlan
       VNI: 100020 ESI: 0000:0000:0003:0004:0001
 BGP routing table entry for mac-ip 0050.7966.680e 10.4.1.4, Route Distinguisher: 65003:100020
- Paths: 1 available
+ Paths: 2 available
+  65000 65003
+    10.255.253.3 from 10.255.254.2 (10.255.254.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:15:f4:e8
+      VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0003:0004:0001
   65000 65003
     10.255.253.3 from 10.255.254.1 (10.255.254.1)
-      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
       Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:15:f4:e8
       VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0003:0004:0001
 BGP routing table entry for mac-ip 0050.7966.680e 10.4.1.4, Route Distinguisher: 65004:100020
- Paths: 1 available
+ Paths: 2 available
   65000 65004
-    10.255.253.4 from 10.255.254.1 (10.255.254.1)
-      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+    10.255.253.4 from 10.255.254.2 (10.255.254.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
       Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:af:d3:f6 EvpnNdFlags:pflag
       VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0003:0004:0001
-
+  65000 65004
+    10.255.253.4 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:af:d3:f6 EvpnNdFlags:pflag
+      VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0003:0004:0001
 ```
