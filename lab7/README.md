@@ -423,3 +423,34 @@ VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
   20  0050.7966.680e  EVPN      Vx1  10.255.253.3     1       0:00:52 ago
                                      10.255.253.4
 ```
+Чтобы не было петли для BUM трафика надо выбрать Designated forwarder (тот кто будет пересылать этот трафик). Большеше значение делает коммутатор DF. Сделаем Leaf3 DF задав ему значение 100, Leaf4 зададим 50
+```
+!Leaf3
+interface Port-Channel1
+     evpn ethernet-segment
+        designated-forwarder election algorithm preference 100
+!Leaf4
+interface Port-Channel1
+     evpn ethernet-segment
+        designated-forwarder election algorithm preference 50
+```
+Информацию о DF и non DF переносят маршруты route-type 4  
+Leaf1
+```python
+Leaf1#sh bgp evpn route-type ethernet-segment detail
+BGP routing table information for VRF default
+Router identifier 10.255.252.1, local AS number 65001
+BGP routing table entry for ethernet-segment 0000:0000:0003:0004:0001 10.255.253.3, Route Distinguisher: 10.255.253.3:1
+ Paths: 1 available
+  65000 65003
+    10.255.253.3 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:00:04:00:01 DF Election: Preference 100
+BGP routing table entry for ethernet-segment 0000:0000:0003:0004:0001 10.255.253.4, Route Distinguisher: 10.255.253.4:1
+ Paths: 1 available
+  65000 65004
+    10.255.253.4 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:00:04:00:01 DF Election: Preference 50
+
+```
