@@ -413,7 +413,7 @@ BGP routing table entry for mac-ip 0050.7966.680e 10.4.1.4, Route Distinguisher:
       Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:af:d3:f6 EvpnNdFlags:pflag
       VNI: 100020 L3 VNI: 100666 ESI: 0000:0000:0003:0004:0001
 ```
-В указанном выше примере видно, что физический адрес 0050.7966.680e выучен через Leaf3 (Ну записи две, но это балансировка Spine1 и Spine2, фактически vtep до Leaf3). Но тем не менее в таблице мак адресов для vxlan этот адрес достигается через два vtep Leaf3 и Leaf4
+В указанном выше примере видно, что физический адрес 0050.7966.680e выучен через Leaf3 (Ну записи две, но это балансировка Spine1 и Spine2, фактически vtep до Leaf3). Но тем не менее в таблице мак адресов для vxlan этот адрес достигается через два vtep Leaf3 и Leaf4. Тоже самое в vrf
 ```
 Leaf1#sh vxlan address-table address 0050.7966.680e
           Vxlan Mac Address Table
@@ -423,6 +423,22 @@ VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
 ----  -----------     ----      ---  ----             -----   ---------
   20  0050.7966.680e  EVPN      Vx1  10.255.253.3     1       0:00:52 ago
                                      10.255.253.4
+
+VRF: Customer1
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+ B E      10.4.1.4/32 [200/0] via VTEP 10.255.253.4 VNI 100666 router-mac 50:00:00:af:d3:f6 local-interface Vxlan1
+                              via VTEP 10.255.253.3 VNI 100666 router-mac 50:00:00:15:f4:e8 local-interface Vxlan1
 ```
 Чтобы не было петли для BUM трафика надо выбрать Designated forwarder (тот кто будет пересылать этот трафик). Большее значение делает коммутатор DF. Сделаем Leaf3 DF задав ему значение 100, Leaf4 зададим 50
 ```
