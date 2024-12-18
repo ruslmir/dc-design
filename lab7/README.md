@@ -239,7 +239,7 @@ Leaf1#sh errdisable recovery
    tapagg                         Disabled                  300
    uplink-failure-detection       Disabled                  300
 
-eaf1(config)#errdisable recovery cause ?
+Leaf1(config)#errdisable recovery cause ?
   acl                       Enable the acl cause
   arp-inspection            Enable the arp-inspection cause
   bpduguard                 Enable the bpduguard cause
