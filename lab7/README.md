@@ -254,6 +254,27 @@ eaf1(config)#errdisable recovery cause ?
   tapagg                    Enable the tapagg cause
   uplink-failure-detection  Enable the uplink-failure-detection cause
 ```
+Также мне никак не опустить peerlink. Даже когда на горячуюю удаляю линки между Leaf1 и Leaf2 то трафик ходит на интерфейсек (через wireshark проверял) до тех пор пока не выключишь и включишь, но тогда уже mlag не соберется после включения. 
+```
+Leaf1(config)#int port-c 4094
+! Interface Port-Channel4094 is configured as the MLAG peer link
+Leaf1(config-if-Po4094)#no    switchport trunk group mlag-trunk
+% Interface Port-Channel4094 is configured as the MLAG peer link, Mlag Trunk Group mlag-trunk is not deleted
+!
+Leaf1(config-if-Po4094)#shut
+% Interface Port-Channel4094 is configured as the MLAG peer link; no interface was shutdown
+!
+Leaf1(config)#int e 8
+! Interface Ethernet8 is a member of the MLAG peer link Port-Channel4094
+Leaf1(config-if-Et8)#shut
+% Interface Ethernet8 is a member of the MLAG peer link Port-Channel4094; no interface was shutdown
+!
+Leaf1(config)#int vl 4094
+! Vlan4094 is configured as the MLAG local interface
+Leaf1(config-if-Vl4094)#shut
+% Vlan4094 is configured as the MLAG local interface; no interface was shutdown
+```
+
 ### Настройка EVPN multihoming
 На всех Leaf настраиваем anycast gateway. Делаем виртуальный мак, который будет одинаковый для всех Leaf`ов. Создаем vrf Customer1 куда помещаем interface vlan10 и interface vlan 20 (шлюзы для вланов 10 и 20)
 Leaf1
