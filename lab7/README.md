@@ -533,6 +533,7 @@ interface Port-Channel1
 lacp-neighbor-2#sh port-channel active-ports
 Port Channel Port-Channel1:
   Active Ports: Ethernet1
+
 Leaf1#sh bgp evpn route-type auto-discovery
 BGP routing table information for VRF default
 Router identifier 10.255.252.1, local AS number 65001
