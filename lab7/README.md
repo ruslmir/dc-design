@@ -472,7 +472,7 @@ BGP routing table entry for ethernet-segment 0000:0000:0003:0004:0001 10.255.253
       Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:00:04:00:01 DF Election: Preference 50
 
 ```
-И со стороны Leaf3 и Leaf4 можно посмотреть информацию в vlan instance которые участвуют в ethernet segment 
+И со стороны Leaf3 и Leaf4 можно посмотреть информацию в vlan instance которые участвуют в ethernet segment и также информацию о DF
 Leaf3
 ```python
 Leaf3#sh bgp evpn instance
