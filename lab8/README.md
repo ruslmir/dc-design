@@ -568,3 +568,71 @@ Gateway of last resort:
                                  via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
 
 ```
+Сделаем теперь агрегирование маршрутов на Branch оставив только суммарный маршрут, для уменьшения таблиц маршрутизации. 
+```
+router bgp 64999
+ address-family ipv4 vrf test
+  aggregate-address 10.100.8.0 255.255.252.0 summary-only
+```
+Проверяем и убеждаемся что пришел только суммарный маршрут
+Leaf3
+```
+Leaf3#sh ip route vrf Customer1
+
+VRF: Customer1
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort:
+ B E      0.0.0.0/0 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                            via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+
+ C        10.4.0.0/24 is directly connected, Vlan10
+ B E      10.100.8.0/22 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      172.16.1.0/30 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+ B E      172.16.1.4/30 [200/0] via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      172.16.1.8/30 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      172.16.1.12/30 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                 via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+```
+Ну и проверка доступности
+```
+Client1_vl10> sh ip
+
+NAME        : Client1_vl10[1]
+IP/MASK     : 10.4.0.1/24
+GATEWAY     : 10.4.0.254
+DNS         :
+MAC         : 00:50:79:66:68:06
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+Client1_vl10>
+Client1_vl10>
+Client1_vl10> ping 10.100.10.1
+
+84 bytes from 10.100.10.1 icmp_seq=1 ttl=253 time=66.835 ms
+84 bytes from 10.100.10.1 icmp_seq=2 ttl=253 time=25.417 ms
+84 bytes from 10.100.10.1 icmp_seq=3 ttl=253 time=29.919 ms
+84 bytes from 10.100.10.1 icmp_seq=4 ttl=253 time=33.270 ms
+84 bytes from 10.100.10.1 icmp_seq=5 ttl=253 time=29.177 ms
+
+Client1_vl10> trace 10.100.10.1
+trace to 10.100.10.1, 8 hops max, press Ctrl+C to stop
+ 1   10.4.0.254   4.576 ms  3.004 ms  3.717 ms
+ 2   172.16.1.1   21.280 ms  17.757 ms  20.613 ms
+ 3   *172.16.1.2   27.343 ms (ICMP type:3, code:3, Destination port unreachable)  *
+
+```
