@@ -217,6 +217,7 @@ router bgp 64999
   neighbor 172.16.1.9 activate
   neighbor 172.16.1.13 remote-as 65099
   neighbor 172.16.1.13 activate
+  maximum-paths 4
  exit-address-family
 
 ```
