@@ -246,7 +246,7 @@ Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
 172.16.1.13     4 65099      29      45       43    0    0 00:10:08        2
 
 
-sh bgp vpnv4 unicast vrf test
+Branch#sh bgp vpnv4 unicast vrf test
 BGP table version is 22, local router ID is 10.100.12.1
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
               r RIB-failure, S Stale
