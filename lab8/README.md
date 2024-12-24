@@ -363,3 +363,13 @@ B       10.4.1.0 [20/0] via 172.16.1.13, 00:01:04
                  [20/0] via 172.16.1.9, 00:01:04
 
 ```
+Теперь добавим override на Branch чтобы перезаписать автономные системы соседей своими, иначе они не будут принимать маршруты между vrf т.к. подумают что петля.  
+Branch
+```
+router bgp 64999
+ address-family ipv4 vrf test
+  neighbor 172.16.1.1 as-override
+  neighbor 172.16.1.5 as-override
+  neighbor 172.16.1.9 as-override
+  neighbor 172.16.1.13 as-override
+```
