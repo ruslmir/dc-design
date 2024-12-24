@@ -203,3 +203,84 @@ router bgp 64999
  neighbor 172.16.1.13 remote-as 65099
  maximum-paths 4
 ```
+### Проверка сходимости на роутере Branch
+Смотрим что сессии поднялись и что таблица маршрутов заполнилась из vrf Customer1 и vrf Customer2 от BorderLeaf`ов
+```
+Branch#sh ip bgp su
+BGP router identifier 10.100.12.1, local AS number 64999
+BGP table version is 14, main routing table version 14
+9 network entries using 1080 bytes of memory
+11 path entries using 572 bytes of memory
+2 multipath network entries and 4 multipath paths
+7/5 BGP path/bestpath attribute entries using 868 bytes of memory
+5 BGP AS-PATH entries using 120 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+Bitfield cache entries: current 1 (at peak 1) using 32 bytes of memory
+BGP using 2672 total bytes of memory
+BGP activity 29/20 prefixes, 48/37 paths, scan interval 60 secs
+
+Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+172.16.1.1      4 65098     102     107       14    0    0 00:08:34        2
+172.16.1.5      4 65099     102     107       14    0    0 00:08:34        2
+172.16.1.9      4 65098      50      63       14    0    0 00:08:34        2
+172.16.1.13     4 65099      48      60       14    0    0 00:08:34        2
+
+Branch#sh ip bgp
+BGP table version is 22, local router ID is 10.100.12.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*  10.4.0.0/24      172.16.1.5                             0 65099 65000 65001 i
+*>                  172.16.1.1                             0 65098 65000 65002 i
+*  10.4.0.1/32      172.16.1.1                             0 65098 65000 65002 i
+*>                  172.16.1.5                             0 65099 65000 65002 i
+*  10.4.0.2/32      172.16.1.1                             0 65098 65000 65002 i
+*>                  172.16.1.5                             0 65099 65000 65002 i
+*  10.4.1.0/24      172.16.1.13                            0 65099 65000 65001 i
+*>                  172.16.1.9                             0 65098 65000 65001 i
+*  10.4.1.1/32      172.16.1.13                            0 65099 65000 65001 i
+*>                  172.16.1.9                             0 65098 65000 65002 i
+*  10.4.1.2/32      172.16.1.13                            0 65099 65000 65002 i
+*>                  172.16.1.9                             0 65098 65000 65002 i
+*> 10.100.10.0/24   0.0.0.0                  0         32768 i
+*> 10.100.11.0/24   0.0.0.0                  0         32768 i
+*> 10.100.12.0/24   0.0.0.0                  0         32768 i
+r> 172.16.1.0/30    172.16.1.1                             0 65098 i
+r> 172.16.1.4/30    172.16.1.5                             0 65099 i
+r> 172.16.1.8/30    172.16.1.9                             0 65098 i
+r> 172.16.1.12/30   172.16.1.13                            0 65099 i
+
+Branch#sh ip route
+Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     172.16.0.0/30 is subnetted, 4 subnets
+C       172.16.1.12 is directly connected, FastEthernet0/1.1001
+C       172.16.1.8 is directly connected, FastEthernet0/0.1000
+C       172.16.1.4 is directly connected, FastEthernet0/1.999
+C       172.16.1.0 is directly connected, FastEthernet0/0.998
+     10.0.0.0/8 is variably subnetted, 9 subnets, 2 masks
+B       10.4.0.2/32 [20/0] via 172.16.1.5, 00:01:12
+                    [20/0] via 172.16.1.1, 00:01:12
+B       10.4.1.2/32 [20/0] via 172.16.1.13, 00:01:04
+                    [20/0] via 172.16.1.9, 00:01:05
+B       10.4.1.1/32 [20/0] via 172.16.1.13, 00:01:17
+                    [20/0] via 172.16.1.9, 00:01:17
+B       10.4.0.0/24 [20/0] via 172.16.1.5, 00:13:51
+                    [20/0] via 172.16.1.1, 00:13:51
+B       10.4.1.0/24 [20/0] via 172.16.1.13, 00:13:52
+                    [20/0] via 172.16.1.9, 00:13:52
+B       10.4.0.1/32 [20/0] via 172.16.1.5, 00:00:54
+                    [20/0] via 172.16.1.1, 00:00:54
+```
+
