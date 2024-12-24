@@ -109,3 +109,33 @@ trace to 10.4.1.3, 8 hops max, press Ctrl+C to stop
 
 ```
 Сделаем стык BorderLeaf1 и BorderLeaf2 с роутером Branch (попытка сэмулировать удаленный филиал, поэтому там не l3 интерфейсы делаем, а подинтерфейсы, а interface Vlan ограниченное количество, поэтому по возможности лучше их не занимать). 
+BLeaf1
+```
+interface Ethernet3
+   no switchport
+!
+interface Ethernet3.998
+   encapsulation dot1q vlan 998
+   vrf Customer1
+   ip address 172.16.1.1/30
+!
+interface Ethernet3.1000
+   encapsulation dot1q vlan 1000
+   vrf Customer2
+   ip address 172.16.1.9/30
+!
+router bgp 65098
+   vrf Customer1
+      neighbor 172.16.1.2 remote-as 64999
+      redistribute connected
+      !
+     
+   !
+   vrf Customer2
+      neighbor 172.16.1.10 remote-as 64999
+      redistribute connected
+```
+
+BLeaf2
+```
+```
