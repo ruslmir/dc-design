@@ -138,4 +138,68 @@ router bgp 65098
 
 BLeaf2
 ```
+interface Ethernet3
+   no switchport
+!
+interface Ethernet3.999
+   encapsulation dot1q vlan 999
+   vrf Customer1
+   ip address 172.16.1.5/30
+!
+interface Ethernet3.1001
+   encapsulation dot1q vlan 1001
+   vrf Customer2
+   ip address 172.16.1.13/30
+!
+router bgp 65099
+   vrf Customer1
+      rd 10.255.252.99:1
+      route-target import evpn 1:100666
+      route-target export evpn 1:100666
+      neighbor 172.16.1.6 remote-as 64999
+      redistribute connected
+   !
+   vrf Customer2
+      rd 10.255.252.99:2
+      route-target import evpn 1:100667
+      route-target export evpn 1:100667
+      neighbor 172.16.1.14 remote-as 64999
+      redistribute connected
+```
+На Branch добавим команду  bgp bestpath as-path multipath-relax чтобы  балансировать с разными  путями (у нас будет два пути через 2 BLeaf`а через AS 65098 и AS 65099)
+```
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.998
+ encapsulation dot1Q 998
+ ip address 172.16.1.2 255.255.255.252
+!
+interface FastEthernet0/0.1000
+ encapsulation dot1Q 1000
+ ip address 172.16.1.10 255.255.255.252
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1.999
+ encapsulation dot1Q 999
+ ip address 172.16.1.6 255.255.255.252
+!
+interface FastEthernet0/1.1001
+ encapsulation dot1Q 1001
+ ip address 172.16.1.14 255.255.255.252
+!
+router bgp 64999
+ bgp log-neighbor-changes
+ bgp bestpath as-path multipath-relax
+ neighbor 172.16.1.1 remote-as 65098
+ neighbor 172.16.1.5 remote-as 65099
+ neighbor 172.16.1.9 remote-as 65098
+ neighbor 172.16.1.13 remote-as 65099
+ maximum-paths 4
 ```
