@@ -284,7 +284,7 @@ B       10.4.0.1/32 [20/0] via 172.16.1.5, 00:00:54
                     [20/0] via 172.16.1.1, 00:00:54
 ```
 Как видим у нас слишком много /32 маршрутов (evpn-hosts), которые нам тут не нужны. Отфильтруем их со стороны BorderLeaf1 и BorderLeaf2. Примеер как это на BLeaf1  
-Bleaf1
+BLeaf1
 ```
 ip prefix-list deny-evpn-hosts seq 10 deny 0.0.0.0/0 eq 32
 ip prefix-list deny-evpn-hosts seq 20 permit 0.0.0.0/0 le 32
