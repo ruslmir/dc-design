@@ -27,3 +27,45 @@ router bgp 650xx
       route-target export evpn 1:100667
       redistribute connected
 ```
+
+Проверим посмотрив в таблицу evpn для двух хостов 10.4.0.2 (vrf Customer1) и 10.4.1.2 (vrf Customer2)
+
+```python
+Leaf3#sh bgp evpn route-type mac-ip 10.4.0.2 detail
+BGP routing table information for VRF default
+Router identifier 10.255.252.3, local AS number 65003
+BGP routing table entry for mac-ip 0050.7966.6807 10.4.0.2, Route Distinguisher: 65001:100010
+ Paths: 1 available
+  65000 65001
+    10.255.253.1 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100010 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:d5:5d:c0
+      VNI: 100010 L3 VNI: 100666 ESI: 0000:0000:0000:0000:0000
+BGP routing table entry for mac-ip 0050.7966.6807 10.4.0.2, Route Distinguisher: 65002:100010
+ Paths: 1 available
+  65000 65002
+    10.255.253.1 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100010 Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:03:37:66
+      VNI: 100010 L3 VNI: 100666 ESI: 0000:0000:0000:0000:0000
+
+
+Leaf3#sh bgp evpn route-type mac-ip 10.4.1.2 detail
+BGP routing table information for VRF default
+Router identifier 10.255.252.3, local AS number 65003
+BGP routing table entry for mac-ip 0050.7966.6811 10.4.1.2, Route Distinguisher: 65001:100020
+ Paths: 1 available
+  65000 65001
+    10.255.253.1 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100667 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:d5:5d:c0
+      VNI: 100020 L3 VNI: 100667 ESI: 0000:0000:0000:0000:0000
+BGP routing table entry for mac-ip 0050.7966.6811 10.4.1.2, Route Distinguisher: 65002:100020
+ Paths: 1 available
+  65000 65002
+    10.255.253.1 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100020 Route-Target-AS:1:100667 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:03:37:66
+      VNI: 100020 L3 VNI: 100667 ESI: 0000:0000:0000:0000:0000
+
+```
