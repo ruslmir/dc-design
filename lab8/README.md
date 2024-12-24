@@ -473,3 +473,4 @@ Gateway of last resort:
  B E      172.16.1.8/30 [200/0] via VTEP 10.255.253.98 VNI 100667 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
  B E      172.16.1.12/30 [200/0] via VTEP 10.255.253.99 VNI 100667 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
 ```
+Видим 4 default маршрута. Два для vrf Customer1 (VNI: 100666 через BLeaf1 и BLeaf2) и два для vrf Customer2 (VNI: 100667 через BLeaf1 и Bleaf2). 
