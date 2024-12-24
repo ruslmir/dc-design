@@ -503,4 +503,68 @@ Client1_vl10> ping 10.4.1.3
 84 bytes from 10.4.1.3 icmp_seq=4 ttl=59 time=45.338 ms
 84 bytes from 10.4.1.3 icmp_seq=5 ttl=59 time=48.553 ms
 ```
-По трассировке видим, что хост 10.4.0.1 вышел с Leaf1, далее пошел на на BLeaf1, затем на Branch и оттуда на BLeaf2 и в конечном счете на Leaf3 где находится хост 10.4.1.3, и последний хоп это сам хост 10.4.1.3
+По трассировке видим, что хост 10.4.0.1 вышел с Leaf1, далее пошел на на BLeaf1, затем на Branch и оттуда на BLeaf2 и в конечном счете на Leaf3 где находится хост 10.4.1.3, и последний хоп это сам хост 10.4.1.3  
+###Анонс суммированного маршрута
+Создадим на Branch роутере несколько сетей, эмуляцию филиальных сетей
+```
+interface Loopback8
+ ip vrf forwarding test
+ ip address 10.100.8.1 255.255.255.0
+!
+interface Loopback9
+ ip vrf forwarding test
+ ip address 10.100.9.1 255.255.255.0
+!
+interface Loopback10
+ ip vrf forwarding test
+ ip address 10.100.10.1 255.255.255.0
+!
+interface Loopback11
+ ip vrf forwarding test
+ ip address 10.100.11.1 255.255.255.0
+!
+router bgp 64999
+ address-family ipv4 vrf test
+  network 10.100.8.0 mask 255.255.255.0
+  network 10.100.9.0 mask 255.255.255.0
+  network 10.100.10.0 mask 255.255.255.0
+  network 10.100.11.0 mask 255.255.255.0
+```
+Проверим, что маршруты пришли на Leaf3
+```
+Leaf3#sh ip route vrf Customer1
+
+VRF: Customer1
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort:
+ B E      0.0.0.0/0 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                            via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+
+ C        10.4.0.0/24 is directly connected, Vlan10
+ B E      10.100.8.0/24 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      10.100.9.0/24 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      10.100.10.0/24 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                 via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      10.100.11.0/24 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                 via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      172.16.1.0/30 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+ B E      172.16.1.4/30 [200/0] via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      172.16.1.8/30 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      172.16.1.12/30 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                 via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+
+```
