@@ -385,3 +385,91 @@ router bgp 65098
    vrf Customer2
       network 0.0.0.0/0
 ```
+Проверим что default маршруты пришли в evpn и раскинулись в таблицы  маршрутизации по vrf Customer1 и Customer2
+```python
+Leaf3>sh bgp evpn route-type ip-prefix 0.0.0.0/0
+BGP routing table information for VRF default
+Router identifier 10.255.252.3, local AS number 65003
+BGP routing table entry for ip-prefix 0.0.0.0/0, Route Distinguisher: 10.255.252.98:1
+ Paths: 1 available
+  65000 65098
+    10.255.253.98 from 10.255.254.1 (10.255.254.1)
+      Origin INCOMPLETE, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:ae:f7:03
+      VNI: 100666
+BGP routing table entry for ip-prefix 0.0.0.0/0, Route Distinguisher: 10.255.252.98:2
+ Paths: 1 available
+  65000 65098
+    10.255.253.98 from 10.255.254.1 (10.255.254.1)
+      Origin INCOMPLETE, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100667 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:ae:f7:03
+      VNI: 100667
+BGP routing table entry for ip-prefix 0.0.0.0/0, Route Distinguisher: 10.255.252.99:1
+ Paths: 1 available
+  65000 65099
+    10.255.253.99 from 10.255.254.1 (10.255.254.1)
+      Origin INCOMPLETE, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:88:fe:27
+      VNI: 100666
+BGP routing table entry for ip-prefix 0.0.0.0/0, Route Distinguisher: 10.255.252.99:2
+ Paths: 1 available
+  65000 65099
+    10.255.253.99 from 10.255.254.1 (10.255.254.1)
+      Origin INCOMPLETE, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100667 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:88:fe:27
+      VNI: 100667
+
+Leaf3>sh ip route vrf Customer1
+
+VRF: Customer1
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort:
+ B E      0.0.0.0/0 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                            via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+
+ C        10.4.0.0/24 is directly connected, Vlan10
+ B E      172.16.1.0/30 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+ B E      172.16.1.4/30 [200/0] via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      172.16.1.8/30 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      172.16.1.12/30 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                 via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+
+Leaf3>sh ip route vrf Customer2
+
+VRF: Customer2
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort:
+ B E      0.0.0.0/0 [200/0] via VTEP 10.255.253.98 VNI 100667 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                            via VTEP 10.255.253.99 VNI 100667 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+
+ C        10.4.1.0/24 is directly connected, Vlan20
+ B E      172.16.1.0/30 [200/0] via VTEP 10.255.253.98 VNI 100667 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                via VTEP 10.255.253.99 VNI 100667 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      172.16.1.4/30 [200/0] via VTEP 10.255.253.98 VNI 100667 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                                via VTEP 10.255.253.99 VNI 100667 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+ B E      172.16.1.8/30 [200/0] via VTEP 10.255.253.98 VNI 100667 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+ B E      172.16.1.12/30 [200/0] via VTEP 10.255.253.99 VNI 100667 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+```
