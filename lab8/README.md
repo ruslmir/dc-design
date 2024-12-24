@@ -28,7 +28,7 @@ router bgp 650xx
       redistribute connected
 ```
 
-Проверим посмотрив в таблицу evpn для двух хостов 10.4.0.2 (vrf Customer1) и 10.4.1.2 (vrf Customer2)
+Проверим посмотрив в таблицу evpn для двух хостов 10.4.0.2 (vrf Customer1) и 10.4.1.2 (vrf Customer2). Видим что VNI: 100666 и VNI: 100667 соответственно. 
 
 ```python
 Leaf3#sh bgp evpn route-type mac-ip 10.4.0.2 detail
