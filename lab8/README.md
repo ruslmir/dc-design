@@ -373,3 +373,15 @@ router bgp 64999
   neighbor 172.16.1.9 as-override
   neighbor 172.16.1.13 as-override
 ```
+И заодно на BLeaf1 и BLeaf2 сделаем default, т.к. все-равно выход должен быть через них. Зададим через network.  
+BLeaf1
+```
+ip route vrf Customer1 0.0.0.0/0 Null0
+ip route vrf Customer2 0.0.0.0/0 Null0
+router bgp 65098
+ vrf Customer1
+      network 0.0.0.0/0
+   !
+   vrf Customer2
+      network 0.0.0.0/0
+```
