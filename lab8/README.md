@@ -69,3 +69,42 @@ BGP routing table entry for mac-ip 0050.7966.6811 10.4.1.2, Route Distinguisher:
       VNI: 100020 L3 VNI: 100667 ESI: 0000:0000:0000:0000:0000
 
 ```
+Каждая сеть видит  себя в пределах фабрики, но не видит друг друга, т.к. в разных vrf, т.е. отдельные таблицы маршрутизации
+```
+Client1_vl10> sh ip
+
+NAME        : Client1_vl10[1]
+IP/MASK     : 10.4.0.1/24
+GATEWAY     : 10.4.0.254
+DNS         :
+MAC         : 00:50:79:66:68:06
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+Client1_vl10> ping 10.4.0.2
+84 bytes from 10.4.0.2 icmp_seq=1 ttl=64 time=121.194 ms
+84 bytes from 10.4.0.2 icmp_seq=2 ttl=64 time=13.113 ms
+84 bytes from 10.4.0.2 icmp_seq=3 ttl=64 time=11.029 ms
+84 bytes from 10.4.0.2 icmp_seq=4 ttl=64 time=10.563 ms
+84 bytes from 10.4.0.2 icmp_seq=5 ttl=64 time=16.888 ms
+
+Client1_vl10> ping 10.4.0.3
+84 bytes from 10.4.0.3 icmp_seq=1 ttl=64 time=55.888 ms
+84 bytes from 10.4.0.3 icmp_seq=2 ttl=64 time=17.925 ms
+84 bytes from 10.4.0.3 icmp_seq=3 ttl=64 time=25.817 ms
+84 bytes from 10.4.0.3 icmp_seq=4 ttl=64 time=44.057 ms
+84 bytes from 10.4.0.3 icmp_seq=5 ttl=64 time=18.067 ms
+
+Client1_vl10> ping 10.4.1.3
+*10.4.0.254 icmp_seq=1 ttl=64 time=14.997 ms (ICMP type:3, code:0, Destination network unreachable)
+*10.4.0.254 icmp_seq=2 ttl=64 time=21.239 ms (ICMP type:3, code:0, Destination network unreachable)
+*10.4.0.254 icmp_seq=3 ttl=64 time=4.950 ms (ICMP type:3, code:0, Destination network unreachable)
+*10.4.0.254 icmp_seq=4 ttl=64 time=4.477 ms (ICMP type:3, code:0, Destination network unreachable)
+*10.4.0.254 icmp_seq=5 ttl=64 time=7.579 ms (ICMP type:3, code:0, Destination network unreachable)
+
+Client1_vl10> trace 10.4.1.3
+trace to 10.4.1.3, 8 hops max, press Ctrl+C to stop
+ 1   *10.4.0.254   13.148 ms (ICMP type:3, code:0, Destination network unreachable)  *
+
+```
