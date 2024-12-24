@@ -108,3 +108,4 @@ trace to 10.4.1.3, 8 hops max, press Ctrl+C to stop
  1   *10.4.0.254   13.148 ms (ICMP type:3, code:0, Destination network unreachable)  *
 
 ```
+Сделаем стык BorderLeaf1 и BorderLeaf2 с роутером Branch (попытка сэмулировать удаленный филиал, поэтому там не l3 интерфейсы делаем, а подинтерфейсы, а interface Vlan ограниченное количество, поэтому по возможности лучше их не занимать). 
