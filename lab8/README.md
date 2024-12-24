@@ -166,18 +166,25 @@ router bgp 65099
       neighbor 172.16.1.14 remote-as 64999
       redistribute connected
 ```
-На Branch добавим команду  bgp bestpath as-path multipath-relax чтобы  балансировать с разными  путями (у нас будет два пути через 2 BLeaf`а через AS 65098 и AS 65099)
+На Branch добавим команду  bgp bestpath as-path multipath-relax чтобы  балансировать с разными  путями (у нас будет два пути через 2 BLeaf`а через AS 65098 и AS 65099). Делаем все это в vrf test, к сожалению без этого у меня команда as-override недоступна. 
 ```
+ip vrf test
+ rd 1:1
+ route-target export 1:1
+ route-target import 1:1
+!
 interface FastEthernet0/0
  no ip address
  duplex auto
  speed auto
 !
 interface FastEthernet0/0.998
+ ip vrf forwarding test
  encapsulation dot1Q 998
  ip address 172.16.1.2 255.255.255.252
 !
 interface FastEthernet0/0.1000
+ ip vrf forwarding test
  encapsulation dot1Q 1000
  ip address 172.16.1.10 255.255.255.252
 !
@@ -187,46 +194,58 @@ interface FastEthernet0/1
  speed auto
 !
 interface FastEthernet0/1.999
+ ip vrf forwarding test
  encapsulation dot1Q 999
  ip address 172.16.1.6 255.255.255.252
 !
 interface FastEthernet0/1.1001
+ ip vrf forwarding test
  encapsulation dot1Q 1001
  ip address 172.16.1.14 255.255.255.252
 !
 router bgp 64999
  bgp log-neighbor-changes
  bgp bestpath as-path multipath-relax
- neighbor 172.16.1.1 remote-as 65098
- neighbor 172.16.1.5 remote-as 65099
- neighbor 172.16.1.9 remote-as 65098
- neighbor 172.16.1.13 remote-as 65099
  maximum-paths 4
+ !
+ address-family ipv4 vrf test
+  neighbor 172.16.1.1 remote-as 65098
+  neighbor 172.16.1.1 activate
+  neighbor 172.16.1.5 remote-as 65099
+  neighbor 172.16.1.5 activate
+  neighbor 172.16.1.9 remote-as 65098
+  neighbor 172.16.1.9 activate
+  neighbor 172.16.1.13 remote-as 65099
+  neighbor 172.16.1.13 activate
+ exit-address-family
+
 ```
 ### Проверка сходимости на роутере Branch
 Смотрим что сессии поднялись и что таблица маршрутов заполнилась из vrf Customer1 и vrf Customer2 от BorderLeaf`ов
 ```
-Branch#sh ip bgp su
+Branch#sh bgp vpnv4 unicast vrf test
+Branch#sh bgp vpnv4 unicast vrf test su
 BGP router identifier 10.100.12.1, local AS number 64999
-BGP table version is 14, main routing table version 14
-9 network entries using 1080 bytes of memory
-11 path entries using 572 bytes of memory
-2 multipath network entries and 4 multipath paths
-7/5 BGP path/bestpath attribute entries using 868 bytes of memory
-5 BGP AS-PATH entries using 120 bytes of memory
+BGP table version is 43, main routing table version 43
+6 network entries using 840 bytes of memory
+8 path entries using 544 bytes of memory
+14/3 BGP path/bestpath attribute entries using 1736 bytes of memory
+8 BGP AS-PATH entries using 192 bytes of memory
+1 BGP extended community entries using 24 bytes of memory
 0 BGP route-map cache entries using 0 bytes of memory
 0 BGP filter-list cache entries using 0 bytes of memory
-Bitfield cache entries: current 1 (at peak 1) using 32 bytes of memory
-BGP using 2672 total bytes of memory
-BGP activity 29/20 prefixes, 48/37 paths, scan interval 60 secs
+Bitfield cache entries: current 1 (at peak 2) using 32 bytes of memory
+BGP using 3368 total bytes of memory
+BGP activity 54/45 prefixes, 256/245 paths, scan interval 15 secs
 
 Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-172.16.1.1      4 65098     102     107       14    0    0 00:08:34        2
-172.16.1.5      4 65099     102     107       14    0    0 00:08:34        2
-172.16.1.9      4 65098      50      63       14    0    0 00:08:34        2
-172.16.1.13     4 65099      48      60       14    0    0 00:08:34        2
+172.16.1.1      4 65098      30      45       43    0    0 00:10:01        2
+172.16.1.5      4 65099      32      44       43    0    0 00:09:50        2
+172.16.1.9      4 65098      30      45       43    0    0 00:10:09        2
+172.16.1.13     4 65099      29      45       43    0    0 00:10:08        2
 
-Branch#sh ip bgp
+
+sh bgp vpnv4 unicast vrf test
 BGP table version is 22, local router ID is 10.100.12.1
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
               r RIB-failure, S Stale
@@ -253,7 +272,7 @@ r> 172.16.1.4/30    172.16.1.5                             0 65099 i
 r> 172.16.1.8/30    172.16.1.9                             0 65098 i
 r> 172.16.1.12/30   172.16.1.13                            0 65099 i
 
-Branch#sh ip route
+Branch#sh ip route vrf test
 Codes: C - connected, S - static, R - RIP, M - mobile, B - BGP
        D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
        N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
