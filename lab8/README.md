@@ -126,12 +126,18 @@ interface Ethernet3.1000
 !
 router bgp 65098
    vrf Customer1
+      rd 10.255.252.98:1
+      route-target import evpn 1:100666
+      route-target export evpn 1:100666
       neighbor 172.16.1.2 remote-as 64999
       redistribute connected
       !
      
    !
    vrf Customer2
+      rd 10.255.252.98:2
+      route-target import evpn 1:100667
+      route-target export evpn 1:100667
       neighbor 172.16.1.10 remote-as 64999
       redistribute connected
 ```
