@@ -473,4 +473,33 @@ Gateway of last resort:
  B E      172.16.1.8/30 [200/0] via VTEP 10.255.253.98 VNI 100667 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
  B E      172.16.1.12/30 [200/0] via VTEP 10.255.253.99 VNI 100667 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
 ```
-Видим 4 default маршрута. Два для vrf Customer1 (VNI: 100666 через BLeaf1 и BLeaf2) и два для vrf Customer2 (VNI: 100667 через BLeaf1 и Bleaf2). 
+Видим 4 default маршрута. Два для vrf Customer1 (VNI: 100666 через BLeaf1 и BLeaf2) и два для vrf Customer2 (VNI: 100667 через BLeaf1 и Bleaf2). Дальше проверим связность между vrf Customer1 и vrf Customer2.
+```
+Client1_vl10> sh ip
+
+NAME        : Client1_vl10[1]
+IP/MASK     : 10.4.0.1/24
+GATEWAY     : 10.4.0.254
+DNS         :
+MAC         : 00:50:79:66:68:06
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+Client1_vl10> trace 10.4.1.3
+trace to 10.4.1.3, 8 hops max, press Ctrl+C to stop
+ 1   10.4.0.254   86.331 ms  *  3.940 ms  3.588 ms
+ 2   172.16.1.1   30.095 ms  18.183 ms  45.067 ms
+ 3   172.16.1.2   32.338 ms  29.353 ms  29.754 ms
+ 4   172.16.1.13   31.919 ms  39.889 ms  39.503 ms
+ 5   10.4.1.254   45.006 ms  50.874 ms  44.273 ms
+ 6     **10.4.1.3   45.215 ms (ICMP type:3, code:3, Destination port unreachable)
+
+Client1_vl10> ping 10.4.1.3
+
+84 bytes from 10.4.1.3 icmp_seq=1 ttl=59 time=52.755 ms
+84 bytes from 10.4.1.3 icmp_seq=2 ttl=59 time=48.127 ms
+84 bytes from 10.4.1.3 icmp_seq=3 ttl=59 time=46.107 ms
+84 bytes from 10.4.1.3 icmp_seq=4 ttl=59 time=45.338 ms
+84 bytes from 10.4.1.3 icmp_seq=5 ttl=59 time=48.553 ms
+```
