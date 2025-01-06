@@ -180,3 +180,13 @@ VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
 Total Remote Mac Addresses for this criterion: 1
 
 ```
+Далее делаем связность по L3 между ЦОДами. После настроки будет обмен route-type 5 маршрутами. Включаем обмен между маршрутами между Бордерлифами
+```
+router bgp 65098
+   address-family evpn
+      neighbor default next-hop-self received-evpn-routes route-type ip-prefix inter-domain
+
+interface Vxlan1
+   vxlan vrf Customer1 vni 100666
+
+```
