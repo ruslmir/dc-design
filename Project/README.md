@@ -245,3 +245,41 @@ BGP routing table entry for ip-prefix 10.4.2.0/24 remote, Route Distinguisher: 1
       VNI: 100666
 
 ```
+На Leaf3 эта сеть будет видна через BLeaf1
+```
+Leaf3#sh bgp evpn route-type ip-prefix  10.4.2.0/24
+BGP routing table information for VRF default
+Router identifier 10.255.252.3, local AS number 65003
+BGP routing table entry for ip-prefix 10.4.2.0/24, Route Distinguisher: 10.254.252.1:1
+ Paths: 1 available
+  65000 65098 65198 65100 65101
+    10.255.253.98 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:ae:f7:03
+      VNI: 100666
+BGP routing table entry for ip-prefix 10.4.2.0/24, Route Distinguisher: 10.254.252.2:1
+ Paths: 1 available
+  65000 65098 65198 65100 65102
+    10.255.253.98 from 10.255.254.1 (10.255.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, best
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:ae:f7:03
+      VNI: 100666
+
+Leaf3#sh ip rout vrf Customer1 10.4.2.0
+
+VRF: Customer1
+Codes: C - connected, S - static, K - kernel, 
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+ B E      10.4.2.0/24 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+
+```
