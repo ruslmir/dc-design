@@ -366,3 +366,17 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
 DC2-BLeaf1#
 
 ```
+И проверяем еще раз VXLAN туннели, видно, что они строятся в ЦОД1 только до двух бордеров и лифов в пределах сайта
+```
+Leaf3#sh vxlan vtep
+Remote VTEPS for Vxlan1:
+
+VTEP                Tunnel Type(s)
+------------------- --------------
+10.255.253.1        flood, unicast
+10.255.253.4        flood, unicast
+10.255.253.98       flood, unicast
+10.255.253.99       flood, unicast
+
+Total number of remote VTEPS:  4
+```
