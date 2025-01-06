@@ -283,3 +283,33 @@ Codes: C - connected, S - static, K - kernel,
  B E      10.4.2.0/24 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
 
 ```
+Ну и для проверки делаем ping и trace из ЦОД1 10.4.1.0/24 до ЦОД2 10.4.2.0/24
+```
+Client3_vl20> sh ip 
+
+NAME        : Client3_vl20[1]
+IP/MASK     : 10.4.1.3/24
+GATEWAY     : 10.4.1.254
+DNS         : 
+MAC         : 00:50:79:66:68:09
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+Client3_vl20> ping 10.4.2.21
+
+84 bytes from 10.4.2.21 icmp_seq=1 ttl=60 time=720.686 ms
+84 bytes from 10.4.2.21 icmp_seq=2 ttl=60 time=29.270 ms
+84 bytes from 10.4.2.21 icmp_seq=3 ttl=60 time=28.133 ms
+84 bytes from 10.4.2.21 icmp_seq=4 ttl=60 time=27.657 ms
+84 bytes from 10.4.2.21 icmp_seq=5 ttl=60 time=26.889 ms
+
+Client3_vl20> trace 10.4.2.21
+trace to 10.4.2.21, 8 hops max, press Ctrl+C to stop
+ 1   10.4.1.254   3.243 ms  3.192 ms  3.877 ms
+ 2   1.1.1.1   11.454 ms  15.198 ms  16.057 ms
+ 3   2.2.2.1   13.919 ms  13.117 ms  19.122 ms
+ 4   10.4.2.254   24.536 ms  25.534 ms  25.523 ms
+ 5   *10.4.2.21   30.759 ms (ICMP type:3, code:3, Destination port unreachable)
+
+```
