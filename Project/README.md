@@ -190,7 +190,7 @@ interface Vxlan1
    vxlan vrf Customer1 vni 100666
 
 ```
-Для проверки смотрим маршрут 10.4.2.0/24 который должен прийти из ЦОД1, ищем его на BLeaf1
+Для проверки смотрим маршрут 10.4.2.0/24 который должен прийти из ЦОД1, ищем его на BLeaf1. Маршруты прилетели с DC2-Leaf1 и DC2-Leaf2 через 2 спайна и сгенерированные remote маршруты. 
 ```python
 C2-BLeaf1#sh bgp evpn route-type ip-prefix 10.4.2.0/24
 BGP routing table information for VRF default
