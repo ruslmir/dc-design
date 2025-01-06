@@ -190,3 +190,58 @@ interface Vxlan1
    vxlan vrf Customer1 vni 100666
 
 ```
+Для проверки смотрим маршрут 10.4.2.0/24 который должен прийти из ЦОД1, ищем его на BLeaf1
+```python
+C2-BLeaf1#sh bgp evpn route-type ip-prefix 10.4.2.0/24
+BGP routing table information for VRF default
+Router identifier 10.254.252.98, local AS number 65198
+BGP routing table entry for ip-prefix 10.4.2.0/24, Route Distinguisher: 10.254.252.1:1
+ Paths: 2 available
+  65100 65101
+    10.254.253.1 from 10.254.254.1 (10.254.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:f9:04:67
+      VNI: 100666
+  65100 65101
+    10.254.253.1 from 10.254.254.2 (10.254.254.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:f9:04:67
+      VNI: 100666
+BGP routing table entry for ip-prefix 10.4.2.0/24, Route Distinguisher: 10.254.252.2:1
+ Paths: 2 available
+  65100 65102
+    10.254.253.2 from 10.254.254.1 (10.254.254.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:a1:33:1a
+      VNI: 100666
+  65100 65102
+    10.254.253.2 from 10.254.254.2 (10.254.254.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:a1:33:1a
+      VNI: 100666
+BGP routing table entry for ip-prefix 10.4.2.0/24 remote, Route Distinguisher: 10.254.252.1:1
+ Paths: 2 available
+  65100 65101
+    10.254.253.1 from - (0.0.0.0)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:f9:04:67
+      VNI: 100666
+  65100 65101
+    10.254.253.1 from - (0.0.0.0)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:f9:04:67
+      VNI: 100666
+BGP routing table entry for ip-prefix 10.4.2.0/24 remote, Route Distinguisher: 10.254.252.2:1
+ Paths: 2 available
+  65100 65102
+    10.254.253.2 from - (0.0.0.0)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:a1:33:1a
+      VNI: 100666
+  65100 65102
+    10.254.253.2 from - (0.0.0.0)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:100666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:a1:33:1a
+      VNI: 100666
+
+```
