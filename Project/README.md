@@ -380,3 +380,61 @@ VTEP                Tunnel Type(s)
 
 Total number of remote VTEPS:  4
 ```
+### Анонс маршрута по умолчанию через Интернет сервис провайдеров. 
+В каждом из ЦОД реализован выход в Интернет через двух провайдеров. ЦОД1 - ISP1 основной, ISP2 резервный. ЦОД2 - ISP3 - основной, ISP4 - резервный. В каждом ЦОД есть Nat устройство. Входящие интерфейсы смотрят в vrf Customer1, исходящие отдельные влан в сторону Интернет провайдеров через BGP_Border`ы. Внешняя сеть 82.1.1.0/24 в ЦОД1 (закрывает 10.4.0.0/24 и 10.4.1.0/24 сети). Внешняя сеть 82.1.1.0/24 в ЦОД2 (закрывает 10.4.2.0/24). Но в случае падения провайдеров в ЦОД1 трафик в Интернет идет через ЦОД2. В сторону провайдеров анонсируем только внешние сети, в сторону фабрик дефолты. 
+для примера NAT в ЦОД1
+```
+ip nat pool EXT_NET83 83.1.1.20 83.1.1.100 netmask 255.255.255.0
+ip nat pool EXT_NET82 82.1.1.20 82.1.1.100 netmask 255.255.255.0
+ip nat inside source list Net_10.4.0.0 pool EXT_NET82
+ip nat inside source list Net_10.4.2.0 pool EXT_NET83
+!
+ip access-list extended Net_10.4.0.0
+ permit ip 10.4.0.0 0.0.0.255 any
+ permit ip 10.4.1.0 0.0.0.255 any
+ip access-list extended Net_10.4.2.0
+ permit ip 10.4.2.0 0.0.0.255 any
+```
+Если смотреть на Leaf1 то виден маршрут по умолчанию в vrf Customer1 через BorderLeaf1 и BorderLeaf2 (которые смотрят в сторону NAT). 
+```
+Leaf3#sh ip route vrf Customer1 0.0.0.0
+
+VRF: Customer1
+Codes: C - connected, S - static, K - kernel, 
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort:
+ B E      0.0.0.0/0 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
+                            via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
+```
+В данном случае ISP1 и ISP2 по bgp, маршрут через ISP2 идет с local preference 75, плюс анонсиится сеть с as-prepend чтобы исходящий и входящий трафик был более приоритенен. 
+```
+//route-map в сторону провайдера ISP1 на BGP1_Border
+ip prefix-list NET83 seq 5 permit 83.1.1.0/24
+!
+route-map ISP1-out permit 10
+ match ip address prefix-list NET83
+ set as-path prepend 10 10 10 10 10
+route-map ISP1-out permit 20
+
+//route-map в сторону ISP2 на BGP2_Border, тут и делаем меньше local pref
+ip prefix-list NET83 seq 5 permit 83.1.1.0/24
+!
+route-map ISP2-out permit 5
+ match ip address prefix-list NET83
+ set as-path prepend 10 10 10 10 10
+route-map ISP2-out permit 10
+ set as-path prepend 10 10 10
+!
+route-map ISP2-in permit 10
+ set local-preference 75
+```
