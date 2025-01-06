@@ -565,4 +565,65 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
 
 
 ```
-Если положить первых провайдеров в каждом ЦОД, то выход будет через вторых провайдеров. Но более интересен случай, когда падают оба провайдера в одном ЦОД, для примера отключим провайдеров в ЦОД1. В итоге дефолт будут анонсировать только провайдеры с ЦОД2. 
+Если положить первых провайдеров в каждом ЦОД, то выход будет через вторых провайдеров. Но более интересен случай, когда падают оба провайдера в одном ЦОД, для примера отключим провайдеров в ЦОД1. В итоге дефолт будут анонсировать только провайдеры с ЦОД2. По трассировке клиента из ЦОД1 видно, что в Интернет он пошел через ЦОД2
+```
+Client3_vl10> sh ip        
+
+NAME        : Client3_vl10[1]
+IP/MASK     : 10.4.0.3/24
+GATEWAY     : 10.4.0.254
+DNS         : 
+MAC         : 00:50:79:66:68:08
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+Client3_vl10> ping 8.8.8.8
+
+84 bytes from 8.8.8.8 icmp_seq=1 ttl=250 time=112.798 ms
+84 bytes from 8.8.8.8 icmp_seq=2 ttl=250 time=112.626 ms
+84 bytes from 8.8.8.8 icmp_seq=3 ttl=250 time=109.973 ms
+84 bytes from 8.8.8.8 icmp_seq=4 ttl=250 time=98.662 ms
+84 bytes from 8.8.8.8 icmp_seq=5 ttl=250 time=103.647 ms
+
+Client3_vl10> trace 8.8.8.8
+trace to 8.8.8.8, 8 hops max, press Ctrl+C to stop
+ 1   10.4.0.254   9.194 ms  11.233 ms  14.840 ms
+ 2   1.1.1.2   28.223 ms  18.580 ms  25.409 ms
+ 3   2.2.2.2   40.568 ms  34.903 ms  35.989 ms
+ 4   172.16.1.14   41.276 ms  35.557 ms  42.548 ms
+ 5   83.1.1.2   63.636 ms  73.634 ms  60.083 ms
+ 6   12.2.1.2   98.072 ms  86.400 ms  89.085 ms
+ 7   *14.1.1.1   95.111 ms (ICMP type:3, code:3, Destination port unreachable)  *
+
+Leaf3#sh bgp evpn route-type ip-prefix ipv4
+BGP routing table information for VRF default
+Router identifier 10.255.252.3, local AS number 65003
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 10.254.252.98:1 ip-prefix 0.0.0.0/0
+                                 10.255.253.99         -       100     0       65000 65099 65199 65100 65198 10 22 i
+ * >      RD: 10.254.252.99:1 ip-prefix 0.0.0.0/0
+                                 10.255.253.98         -       100     0       65000 65098 65198 65100 65199 10 22 i
+
+//и как видим Интернет начал знать о наших сетях 82.1.1.0 и 83.1.1.0 через увеличенные AS-path . AS 22 это ISP3
+Internet#sh ip bgp
+BGP table version is 38, local router ID is 8.8.8.8
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 3.3.3.3/32       0.0.0.0                  0         32768 i
+*> 4.4.4.4/32       0.0.0.0                  0         32768 i
+*> 8.8.8.8/32       0.0.0.0                  0         32768 i
+*  82.1.1.0/24      14.1.1.3                               0 23 10 10 10 10 10 10 i
+*>                  14.1.1.2                               0 22 10 10 10 10 10 10 i
+*> 83.1.1.0/24      14.1.1.2                               0 22 10 i
+
+
+```
