@@ -86,6 +86,10 @@ BLeaf1#sh bgp evpn su | i 65198
       route-target import export evpn domain all 1:100010
       redistribute learned
 
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 10 vni 100010
 ```
 Проверяем L2 связность между ЦОДами. 10.4.0.3 подключен к Leaf3 в ЦОД1, а 10.4.0.21 подключен к DC2-Leaf1 в ЦОД1. Пинг есть. 
 ```
