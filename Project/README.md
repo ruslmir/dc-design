@@ -313,3 +313,56 @@ trace to 10.4.2.21, 8 hops max, press Ctrl+C to stop
  5   *10.4.2.21   30.759 ms (ICMP type:3, code:3, Destination port unreachable)
 
 ```
+Убедимся, что route-type 1 и 4 нужные для esi lag не распространяются между ЦОДами. Видим что эти маршруты долетают до BLeaf1 в ЦОД1, но на DC2-BLeaf1 их уже нет
+```
+Leaf1#sh bgp evpn route-type auto-discovery
+BGP routing table information for VRF default
+Router identifier 10.255.252.98, local AS number 65098
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 65003:100010 auto-discovery 0 0000:0000:0003:0004:0001
+                                 10.255.253.3          -       100     0       65000 65003 i
+ * >      RD: 65003:100020 auto-discovery 0 0000:0000:0003:0004:0001
+                                 10.255.253.3          -       100     0       65000 65003 i
+ * >      RD: 10.255.253.3:1 auto-discovery 0000:0000:0003:0004:0001
+                                 10.255.253.3          -       100     0       65000 65003 i
+BLeaf1#sh bgp evpn route-type ethernet-segment 
+BGP routing table information for VRF default
+Router identifier 10.255.252.98, local AS number 65098
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 10.255.253.3:1 ethernet-segment 0000:0000:0003:0004:0001 10.255.253.3
+                                 10.255.253.3          -       100     0       65000 65003 i
+
+
+C2-BLeaf1#sh bgp evpn route-type auto-discovery 
+BGP routing table information for VRF default
+Router identifier 10.254.252.98, local AS number 65198
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+DC2-BLeaf1#
+DC2-BLeaf1#
+DC2-BLeaf1#sh bgp evpn route-type ethernet-segment 
+BGP routing table information for VRF default
+Router identifier 10.254.252.98, local AS number 65198
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+DC2-BLeaf1#
+
+```
