@@ -438,3 +438,112 @@ route-map ISP2-out permit 10
 route-map ISP2-in permit 10
  set local-preference 75
 ```
+Как это видит провайер 1, провайдер 2 и весь "Интернет"
+```
+//таблица на провайдере 1 (небольшая эмуляция full view)
+
+ISP1#sh ip bgp
+BGP table version is 6, local router ID is 12.1.1.5
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 3.3.3.3/32       12.1.1.6                 0             0 14 i
+*> 4.4.4.4/32       12.1.1.6                 0             0 14 i
+*> 8.8.8.8/32       12.1.1.6                 0             0 14 i
+*> 82.1.1.0/24      12.1.1.1                               0 10 i
+*  83.1.1.0/24      12.1.1.1                               0 10 10 10 10 10 10 i
+*>                  12.1.1.6                               0 14 22 10 i
+
+//таблица на провайдере 2 (небольшая эмуляция full view)
+SP2#sh ip  bgp 
+BGP table version is 6, local router ID is 13.1.1.5
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 3.3.3.3/32       13.1.1.6                 0             0 14 i
+*> 4.4.4.4/32       13.1.1.6                 0             0 14 i
+*> 8.8.8.8/32       13.1.1.6                 0             0 14 i
+*> 82.1.1.0/24      13.1.1.6                               0 14 12 10 i
+*                   13.1.1.1                               0 10 10 10 10 i
+*> 83.1.1.0/24      13.1.1.6                               0 14 22 10 i
+*                   13.1.1.1                               0 10 10 10 10 10 10 i
+
+//сеть интернет видит сети через ЦОД1 и ЦОД2 через провайдеров ISP1 и ISP3 т.к. bgp анонсирует только лучшие маршруты
+Internet#sh ip bgp
+BGP table version is 36, local router ID is 8.8.8.8
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 3.3.3.3/32       0.0.0.0                  0         32768 i
+*> 4.4.4.4/32       0.0.0.0                  0         32768 i
+*> 8.8.8.8/32       0.0.0.0                  0         32768 i
+*> 82.1.1.0/24      12.1.1.5                               0 12 10 i
+*> 83.1.1.0/24      14.1.1.2                               0 22 10 i
+```
+Клиент в ЦОД1 выходит в Интернет через ISP1, Клиент в ЦОД2 выходит в Интернет через ISP3
+```
+Client3_vl10> sh ip 
+
+NAME        : Client3_vl10[1]
+IP/MASK     : 10.4.0.3/24
+GATEWAY     : 10.4.0.254
+DNS         : 
+MAC         : 00:50:79:66:68:08
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+Client3_vl10> ping 8.8.8.8
+
+84 bytes from 8.8.8.8 icmp_seq=1 ttl=250 time=414.853 ms
+84 bytes from 8.8.8.8 icmp_seq=2 ttl=250 time=240.198 ms
+84 bytes from 8.8.8.8 icmp_seq=3 ttl=250 time=240.490 ms
+84 bytes from 8.8.8.8 icmp_seq=4 ttl=250 time=258.033 ms
+84 bytes from 8.8.8.8 icmp_seq=5 ttl=250 time=157.789 ms
+
+Client3_vl10> trace 8.8.8.8
+trace to 8.8.8.8, 8 hops max, press Ctrl+C to stop
+ 1   10.4.0.254   3.887 ms  4.147 ms  8.625 ms
+ 2   1.1.1.2   62.094 ms  142.803 ms  89.082 ms
+ 3   172.16.1.6   89.872 ms  195.486 ms  172.807 ms
+ 4   82.1.1.2   177.711 ms  154.777 ms  97.512 ms
+ 5   12.1.1.2   183.049 ms  247.057 ms  150.204 ms
+ 6   *12.1.1.6   159.014 ms (ICMP type:3, code:3, Destination port unreachable)  *
+
+
+VPCS> sh ip 
+
+NAME        : VPCS[1]
+IP/MASK     : 10.4.2.21/24
+GATEWAY     : 10.4.2.254
+DNS         : 
+MAC         : 00:50:79:66:68:1d
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+VPCS> ping 8.8.8.8
+
+84 bytes from 8.8.8.8 icmp_seq=1 ttl=250 time=187.406 ms
+84 bytes from 8.8.8.8 icmp_seq=2 ttl=250 time=142.526 ms
+84 bytes from 8.8.8.8 icmp_seq=3 ttl=250 time=183.730 ms
+84 bytes from 8.8.8.8 icmp_seq=4 ttl=250 time=166.560 ms
+84 bytes from 8.8.8.8 icmp_seq=5 ttl=250 time=260.181 ms
+
+VPCS> trace 8.8.8.8
+trace to 8.8.8.8, 8 hops max, press Ctrl+C to stop
+ 1   10.4.2.254   11.731 ms  8.775 ms  7.006 ms
+ 2   2.2.2.2   83.756 ms  35.748 ms  15.996 ms
+ 3   172.16.1.14   58.222 ms  75.763 ms  57.260 ms
+ 4   83.1.1.2   142.112 ms  197.483 ms  166.278 ms
+ 5   12.2.1.2   114.154 ms  170.785 ms  138.497 ms
+ 6   *14.1.1.1   155.300 ms (ICMP type:3, code:3, Destination port unreachable)  *
+
+```
+Если положить первых провайдеров в каждом ЦОД, то выход будет через вторых провайдеров. Но более интересен случай, когда падают оба провайдера в одном ЦОД, для примера отключим провайдеров в ЦОД1. В итоге дефолт будут анонсировать только провайдеры с ЦОД2. 
