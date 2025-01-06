@@ -487,7 +487,7 @@ Origin codes: i - IGP, e - EGP, ? - incomplete
 *> 83.1.1.0/24      14.1.1.2                               0 22 10 i
 ```
 Клиент в ЦОД1 выходит в Интернет через ISP1, Клиент в ЦОД2 выходит в Интернет через ISP3
-```
+```python
 Client3_vl10> sh ip 
 
 NAME        : Client3_vl10[1]
@@ -544,6 +544,25 @@ trace to 8.8.8.8, 8 hops max, press Ctrl+C to stop
  4   83.1.1.2   142.112 ms  197.483 ms  166.278 ms
  5   12.2.1.2   114.154 ms  170.785 ms  138.497 ms
  6   *14.1.1.1   155.300 ms (ICMP type:3, code:3, Destination port unreachable)  *
+
+Leaf3#sh bgp evpn route-type ip-prefix ipv4
+BGP routing table information for VRF default
+Router identifier 10.255.252.3, local AS number 65003
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 10.254.252.98:1 ip-prefix 0.0.0.0/0
+                                 10.255.253.99         -       100     0       65000 65099 65199 65100 65198 10 22 i
+ * >      RD: 10.254.252.99:1 ip-prefix 0.0.0.0/0
+                                 10.255.253.98         -       100     0       65000 65098 65198 65100 65199 10 22 i
+ * >      RD: 10.255.252.98:1 ip-prefix 0.0.0.0/0
+                                 10.255.253.98         -       100     0       65000 65098 10 12 i
+ * >      RD: 10.255.252.99:1 ip-prefix 0.0.0.0/0
+                                 10.255.253.99         -       100     0       65000 65099 10 12 i
+
 
 ```
 Если положить первых провайдеров в каждом ЦОД, то выход будет через вторых провайдеров. Но более интересен случай, когда падают оба провайдера в одном ЦОД, для примера отключим провайдеров в ЦОД1. В итоге дефолт будут анонсировать только провайдеры с ЦОД2. 
