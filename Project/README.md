@@ -79,7 +79,7 @@ BLeaf1#sh bgp evpn su | i 65198
   10.254.252.98 4 65198          32074     32079    0    0 00:00:21 Estab   0     0
 
 ```
-Далее растягиываем влан 10 между ЦОДами. К существующим командам rd добавляется rd evpn domain remote или можно заменить общей строкой rd evpn domain all. Тоже самое с import/export
+Далее растягиваем влан 10 между ЦОДами. К существующим командам rd добавляется rd evpn domain remote или можно заменить общей строкой rd evpn domain all. Тоже самое с import/export
 ```
    vlan 10
       rd evpn domain all 65098:100010
