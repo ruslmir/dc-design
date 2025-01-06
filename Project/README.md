@@ -59,22 +59,22 @@ BLeaf1#sh ip bgp | i 65198
  * >      10.254.253.98/32       172.16.0.1            0       -          100     0       65198 i
 ```
 
-
+Теперь делаем BGP overlay на лупбеках. Ключевое слово domain remote дает понять, что пир является отдельным доменом
 ```
-vrf instance Customer2
-ip routing vrf Customer2
-!
-interface Vlan20
-   vrf Customer2
-   ip address virtual 10.4.1.254/24
-! 
-int vxl1   
-vxlan vrf Customer2 vni 100667   
-!
-router bgp 650xx
- vrf Customer2
-      rd 10.255.252.xx:2
-      route-target import evpn 1:100667
-      route-target export evpn 1:100667
-      redistribute connected
+router bgp 65098
+   neighbor evpn-dci peer group
+   neighbor evpn-dci remote-as 65198
+   neighbor evpn-dci next-hop-unchanged
+   neighbor evpn-dci update-source Loopback0
+   neighbor evpn-dci ebgp-multihop 3
+   neighbor evpn-dci send-community extended  
+   neighbor 10.254.252.98 peer group evpn-dci
+
+address-family evpn
+      neighbor evpn-dci activate
+      neighbor evpn-dci domain remote
+
+BLeaf1#sh bgp evpn su | i 65198
+  10.254.252.98 4 65198          32074     32079    0    0 00:00:21 Estab   0     0
+
 ```
