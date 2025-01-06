@@ -34,7 +34,30 @@ PING 172.16.0.1 (172.16.0.1) from 172.16.0.0 : 72(100) bytes of data.
 80 bytes from 172.16.0.1: icmp_seq=5 ttl=64 time=5.61 ms
 ```
    
-Строим bgp между BLeaf1 и DC2-BLeaf1
+Строим underlay bgp между BLeaf1 и DC2-BLeaf1 и анонсируем Loopback для построения overlay. Вешаем prefix-list чтобы между фабриками двух ЦОД не получать лупбеки всех лифов и спайнов, т.к. все-равно нужны только лупбеки БордерЛифов
+```
+ip prefix-list Border-loopback
+   seq 10 permit 10.255.252.98/32
+   seq 20 permit 10.255.253.98/32
+
+router bgp 65098
+   router-id 10.255.252.98
+   neighbor underlay-dci peer group
+   neighbor underlay-dci remote-as 65198
+   neighbor underlay-dci bfd
+   neighbor underlay-dci password 7 qBOkfTkALkc=
+   neighbor 172.16.0.1 peer group underlay-dci
+   address-family ipv4
+      no neighbor evpn activate
+      no neighbor evpn-dci activate
+      neighbor underlay-dci prefix-list Border-loopback out
+      network 10.255.252.98/32
+      network 10.255.253.98/32
+
+BLeaf1#sh ip bgp | i 65198
+ * >      10.254.252.98/32       172.16.0.1            0       -          100     0       65198 i
+ * >      10.254.253.98/32       172.16.0.1            0       -          100     0       65198 i
+```
 
 
 ```
