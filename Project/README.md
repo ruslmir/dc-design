@@ -79,3 +79,100 @@ BLeaf1#sh bgp evpn su | i 65198
   10.254.252.98 4 65198          32074     32079    0    0 00:00:21 Estab   0     0
 
 ```
+Далее растягиываем влан 10 между ЦОДами. К существующим командам rd добавляется rd evpn domain remote или можно заменить общей строкой rd evpn domain all. Тоже самое с import/export
+```
+   vlan 10
+      rd evpn domain all 65098:100010
+      route-target import export evpn domain all 1:100010
+      redistribute learned
+
+```
+Проверяем L2 связность между ЦОДами. 10.4.0.3 подключен к Leaf3 в ЦОД1, а 10.4.0.21 подключен к DC2-Leaf1 в ЦОД1. Пинг есть. 
+```
+lient3_vl10> sh ip 
+
+NAME        : Client3_vl10[1]
+IP/MASK     : 10.4.0.3/24
+GATEWAY     : 10.4.0.254
+DNS         : 
+MAC         : 00:50:79:66:68:08
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+Client3_vl10> ping 10.4.0.21
+
+84 bytes from 10.4.0.21 icmp_seq=1 ttl=64 time=431.914 ms
+84 bytes from 10.4.0.21 icmp_seq=2 ttl=64 time=196.976 ms
+84 bytes from 10.4.0.21 icmp_seq=3 ttl=64 time=88.632 ms
+84 bytes from 10.4.0.21 icmp_seq=4 ttl=64 time=72.214 ms
+84 bytes from 10.4.0.21 icmp_seq=5 ttl=64 time=169.343 ms
+
+Client3_vl10> sh arp
+00:50:79:66:68:1c  10.4.0.21 expires in 120 seconds
+
+```
+Проверяем, что правда строится vxlan туннель до бордера, а с бордера туннель до бордера в ЦОД2 и оттуда уже туннель до DC2-Leaf1, т.е. 3  туннеля а не одирн как в случае с multipod. Также на бордерах появляется запись remote при просмотре route-type 3 в таблице evpn.
+```python
+Leaf3#sh vxlan address-table vlan 10
+          Vxlan Mac Address Table
+----------------------------------------------------------------------
+
+VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
+----  -----------     ----      ---  ----             -----   ---------
+  10  0050.7966.681c  EVPN      Vx1  10.255.253.98    2       0:03:37 ago
+Total Remote Mac Addresses for this criterion: 1
+
+BLeaf1#sh vxlan address-table vlan 10
+          Vxlan Mac Address Table
+----------------------------------------------------------------------
+
+VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
+----  -----------     ----      ---  ----             -----   ---------
+  10  0050.7966.6808  EVPN      Vx1  10.255.253.3     1       0:05:45 ago //туннель на Leaf3 до 10.4.0.3
+  10  0050.7966.681c  EVPN      Vx1  10.254.253.98    2       0:05:45 ago //туннель до DC2-BLeaf1 
+Total Remote Mac Addresses for this criterion: 2
+
+BLeaf1#sh bgp evpn route-type mac-ip 0050.7966.681c
+BGP routing table information for VRF default
+Router identifier 10.255.252.98, local AS number 65098
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 65098:100010 mac-ip 0050.7966.681c
+                                 -                     -       100     0       65198 65100 65101 i
+ * >      RD: 65099:100010 mac-ip 0050.7966.681c
+                                 10.255.253.99         -       100     0       65000 65099 65199 65100 65101 i
+ * >      RD: 65098:100010 mac-ip 0050.7966.681c 10.4.0.21
+                                 -                     -       100     0       65198 65100 65101 i
+ * >      RD: 65099:100010 mac-ip 0050.7966.681c 10.4.0.21
+                                 10.255.253.99         -       100     0       65000 65099 65199 65100 65101 i
+ * >      RD: 65198:100010 mac-ip 0050.7966.681c remote
+                                 10.254.253.98         -       100     0       65198 65100 65101 i
+ * >      RD: 65198:100010 mac-ip 0050.7966.681c 10.4.0.21 remote
+                                 10.254.253.98         -       100     0       65198 65100 65101 i
+
+DC2-BLeaf1#sh vxlan address-table vlan 10
+          Vxlan Mac Address Table
+----------------------------------------------------------------------
+
+VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
+----  -----------     ----      ---  ----             -----   ---------
+  10  0050.7966.6808  EVPN      Vx1  10.255.253.98    346     0:00:16 ago
+  10  0050.7966.681c  EVPN      Vx1  10.254.253.1     3       0:09:16 ago
+Total Remote Mac Addresses for this criterion: 2
+DC2-BLeaf1#C2-BLeaf1#sh vxlan address-table vlan 10
+
+C2-Leaf1#sh vxlan address-table vlan 10
+          Vxlan Mac Address Table
+----------------------------------------------------------------------
+
+VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
+----  -----------     ----      ---  ----             -----   ---------
+  10  0050.7966.6808  EVPN      Vx1  10.254.253.98    210     0:01:07 ago
+Total Remote Mac Addresses for this criterion: 1
+
+```
