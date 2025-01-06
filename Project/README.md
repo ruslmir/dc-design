@@ -395,7 +395,7 @@ ip access-list extended Net_10.4.0.0
 ip access-list extended Net_10.4.2.0
  permit ip 10.4.2.0 0.0.0.255 any
 ```
-Если смотреть на Leaf1 то виден маршрут по умолчанию в vrf Customer1 через BorderLeaf1 и BorderLeaf2 (которые смотрят в сторону NAT). 
+Если смотреть на Leaf3 то виден маршрут по умолчанию в vrf Customer1 через BorderLeaf1 и BorderLeaf2 (которые смотрят в сторону NAT). 
 ```
 Leaf3#sh ip route vrf Customer1 0.0.0.0
 
