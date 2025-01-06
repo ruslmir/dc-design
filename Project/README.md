@@ -283,7 +283,7 @@ Codes: C - connected, S - static, K - kernel,
  B E      10.4.2.0/24 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
 
 ```
-Ну и для проверки делаем ping и trace из ЦОД1 10.4.1.0/24 до ЦОД2 10.4.2.0/24
+Ну и для проверки делаем ping и trace из ЦОД1 10.4.1.0/24 до ЦОД2 10.4.2.0/24. На бордерах развесил адреса для удобства BLeaf1 - 1.1.1.1/32, BLeaf2 - 1.1.1.2/32, DC2-BLeaf1 - 2.2.2.1/32, DC2-BLeaf - 2.2.2.2/32
 ```
 Client3_vl20> sh ip 
 
