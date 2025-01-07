@@ -165,7 +165,7 @@ DC2-BLeaf1#sh vxlan address-table vlan 10
 
 VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
 ----  -----------     ----      ---  ----             -----   ---------
-  10  0050.7966.6808  EVPN      Vx1  10.255.253.98    346     0:00:16 ago //на второй фабрике в ЦОД2 видно, что 10.4.0.3 доступен через BLeaf1
+  10  0050.7966.6808  EVPN      Vx1  10.255.253.98    346     0:00:16 ago //В ЦОД2 видно, что 10.4.0.3 доступен через BLeaf1
   10  0050.7966.681c  EVPN      Vx1  10.254.253.1     3       0:09:16 ago //адрес 10.4.0.21 ведет на DC2_Leaf1
 Total Remote Mac Addresses for this criterion: 2
 DC2-BLeaf1#C2-BLeaf1#sh vxlan address-table vlan 10
