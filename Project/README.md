@@ -381,7 +381,7 @@ Gateway of last resort:
  B E      0.0.0.0/0 [200/0] via VTEP 10.255.253.98 VNI 100666 router-mac 50:00:00:ae:f7:03 local-interface Vxlan1
                             via VTEP 10.255.253.99 VNI 100666 router-mac 50:00:00:88:fe:27 local-interface Vxlan1
 ```
-В данном случае ISP1 и ISP2 по bgp, маршрут через ISP2 идет с local preference 75, плюс анонсиится сеть с as-prepend чтобы исходящий и входящий трафик был более приоритенен. 
+В данном случае ISP1 и ISP2 по bgp, маршрут через ISP2 идет с local preference 75, плюс анонсиится сеть с as-prepend чтобы исходящий и входящий трафик менее приоритенен. Для сети 83.1.1.0/24 делаем еще хуже анонс, т.к. эта сеть основаная для ЦОД2 поэтому она работает только когда более лучшие маршруты пропадают. 
 ```
 //route-map в сторону провайдера ISP1 на BGP1_Border
 ip prefix-list NET83 seq 5 permit 83.1.1.0/24
