@@ -280,7 +280,7 @@ trace to 10.4.2.21, 8 hops max, press Ctrl+C to stop
 ```
 Убедимся, что route-type 1 и 4 нужные для esi lag не распространяются между ЦОДами. Видим что эти маршруты долетают до BLeaf1 в ЦОД1, но на DC2-BLeaf1 их уже нет
 ```
-Leaf1#sh bgp evpn route-type auto-discovery
+BLeaf1#sh bgp evpn route-type auto-discovery
 BGP routing table information for VRF default
 Router identifier 10.255.252.98, local AS number 65098
 Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
