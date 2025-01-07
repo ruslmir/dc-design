@@ -308,7 +308,7 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
                                  10.255.253.3          -       100     0       65000 65003 i
 
 
-C2-BLeaf1#sh bgp evpn route-type auto-discovery 
+DC2-BLeaf1#sh bgp evpn route-type auto-discovery 
 BGP routing table information for VRF default
 Router identifier 10.254.252.98, local AS number 65198
 Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
