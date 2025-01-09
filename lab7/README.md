@@ -255,7 +255,7 @@ Leaf1(config)#errdisable recovery cause ?
   tapagg                    Enable the tapagg cause
   uplink-failure-detection  Enable the uplink-failure-detection cause
 ```
-Также мне никак не опустить peerlink. Даже когда на горячую удаляю линки между Leaf1 и Leaf2 то трафик ходит на интерфейсек (через wireshark проверял) до тех пор пока не выключишь и включишь, но тогда уже mlag не соберется после включения. 
+Также мне никак не опустить peerlink. Даже когда на горячую удаляю линки между Leaf1 и Leaf2 то трафик ходит на интерфейсе (через wireshark проверял) до тех пор пока не выключишь и включишь, но тогда уже mlag не соберется после включения. 
 ```
 Leaf1(config)#int port-c 4094
 ! Interface Port-Channel4094 is configured as the MLAG peer link
